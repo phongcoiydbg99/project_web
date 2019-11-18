@@ -60,8 +60,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <ul class="navbar-nav">
             <li class="nav-item ">
                 <?= $this->Html->link(
-                    '<i class="fas fa-user"></i> Login ',
-                    '/login',
+                    '<i class="fas fa-power-off"></i> Logout ',
+                    '/logout',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
               <!--<a class="nav-link" href="#"><i class="fa fa-home"></i><?= $this->fetch('title')?></a> -->

@@ -46,10 +46,48 @@ class AppController extends Controller
         ]);
         $this->loadComponent('Flash');
 
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'], // Added this line
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password'
+                    ]
+                ]
+            ],
+            'loginAction' => ['\login'],
+            'loginRedirect' => ['controller' => 'Users', 'action' => 'index'],
+            'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
+        ]);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+    }
+    public function isAuthorized($user = null)
+    {
+        // Any registered user can access public functions
+        if (!$this->request->getParam('prefix')) {
+            return true;
+        }
+        // Only admins can access admin functions
+        if ($this->request->getParam('prefix') === 'admin') {
+            return (bool)($user['role'] === 'admin');
+        }
+
+        // Default deny
+        return false;
+    }
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        //dd($this->Auth->user('username'));
+        if($this->Auth->user('role') === 'admin')
+        {
+            $this->viewBuilder()->setLayout('admin');
+        }
+        else $this->viewBuilder()->setLayout('user');
     }
 }

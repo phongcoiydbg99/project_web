@@ -19,7 +19,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
 
-$this->layout = false;
+//$this->layout = false;
 
 if (!Configure::read('debug')) :
     throw new NotFoundException(
