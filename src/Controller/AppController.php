@@ -87,7 +87,8 @@ class AppController extends Controller
         if($this->Auth->user('role') === 'admin')
         {
             $this->viewBuilder()->setLayout('admin');
+           // return $this->redirect($this->Auth->redirectUrl('/login'));
         }
-        else $this->viewBuilder()->setLayout('user');
+        
     }
 }

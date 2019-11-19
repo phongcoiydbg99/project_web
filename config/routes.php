@@ -93,6 +93,15 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
 
+Router::prefix('admin', function (RouteBuilder $routes) {
+    // Because you are in the admin scope,
+    // you do not need to include the /admin prefix
+    // or the admin route element.
+    $routes->connect('/', ['controller' => 'users', 'action' => 'index']);
+    // $routes->connect('/users/import', ['controller' => 'users', 'action' => 'import']);
+    
+    $routes->fallbacks(DashedRoute::class);
+});
 /**
  * If you need a different set of middleware or none at all,
  * open new scope and define routes there.

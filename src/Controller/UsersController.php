@@ -20,7 +20,11 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
         $this->Auth->allow(['login']);
-        
+        if($this->Auth->user('role') === 'user')
+        {
+            $this->viewBuilder()->setLayout('user');
+           // return $this->redirect($this->Auth->redirectUrl('/login'));
+        }
     }
     public function index()
     {
@@ -132,7 +136,11 @@ class UsersController extends AppController
                     $cuser = $this->Auth->identify();
                     if ($cuser) {
                         $this->Auth->setUser($cuser);
-                        return $this->redirect($this->Auth->redirectUrl());
+                        if($this->Auth->user('role') === 'admin')
+                        {
+                           return $this->redirect($this->Auth->redirectUrl('/admin'));
+                        }
+                        else return $this->redirect($this->Auth->redirectUrl('/login'));
                     }
                     $this->Flash->error("Mật khẩu của bạn chưa đúng!");
                 }
