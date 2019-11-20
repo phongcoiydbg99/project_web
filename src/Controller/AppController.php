@@ -47,7 +47,6 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $this->loadComponent('Auth', [
-            'authorize' => ['Controller'], // Added this line
             'authenticate' => [
                 'Form' => [
                     'fields' => [
@@ -59,6 +58,7 @@ class AppController extends Controller
             'loginAction' => ['\login'],
             'loginRedirect' => ['controller' => 'Users', 'action' => 'index'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
+            'authorize' => 'Controller', // Added this line
         ]);
         /*
          * Enable the following component for recommended CakePHP security settings.

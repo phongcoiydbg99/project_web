@@ -16,6 +16,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    // 
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -23,13 +24,23 @@ class UsersController extends AppController
         if($this->Auth->user('role') === 'user')
         {
             $this->viewBuilder()->setLayout('user');
-           // return $this->redirect($this->Auth->redirectUrl('/login'));
         }
     }
+    // public function isAuthorized($user = null)
+    // {
+    //     // All registered users can add articles
+    //     // Admin can access every action
+    //     // 
+    //     if (isset($user['role']) && $user['role'] === 'user') {
+    //         return true;
+    //     }
+
+    //     $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
+    //     return parent::isAuthorized($user);
+    // }
     public function index()
     {
         $users = $this->paginate($this->Users);
-
         $this->set(compact('users'));
     }
 
@@ -153,4 +164,5 @@ class UsersController extends AppController
     {
         return $this->redirect($this->Auth->logout());
     }
+   
 }

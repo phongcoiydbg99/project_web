@@ -2,7 +2,11 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
+require '../vendor/autoload.php';
 /**
  * Users Controller
  *
@@ -150,7 +154,6 @@ class UsersController extends AppController
             ])) {
               die("Invalid file type");
             }
-            require '../vendor/autoload.php';
             
             if (pathinfo($check_import['csv']['name'], PATHINFO_EXTENSION) == 'csv') {
               $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
@@ -189,6 +192,49 @@ class UsersController extends AppController
 
         }
         return $this->redirect(['controller' => 'users', 'action' => 'index']);
+    }
+    public function export()
+    {
+        //dd($this->Auth->user());
         
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Id');
+        $sheet->setCellValue('B1', 'Username');
+        $sheet->setCellValue('C1', 'password');
+        $sheet->setCellValue('D1', 'Role');
+        $sheet->setCellValue('E1', 'FistName');
+        $sheet->setCellValue('F1', 'LastName');
+        $query = $this->Users->find();
+        $i =2;
+        foreach ($query as $user)
+        {
+          $sheet->setCellValue('A'.$i, $user->id);
+          $sheet->setCellValue('B'.$i, $user->username);
+          $sheet->setCellValue('C'.$i, $user->password);
+          $sheet->setCellValue('D'.$i, $user->role);
+          $sheet->setCellValue('E'.$i, $user->first_name);
+          $sheet->setCellValue('F'.$i, $user->last_name);
+          $i++;
+        }
+        $filename = 'sample-'.time().'.xls';
+        // Redirect output to a client's web browser (Xlsx)
+        $writer = new Xls($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Fri, 11 Nov 2011 11:11:11 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+        $writer->save('php://output');
+   
+        // $writer->save(ROOT_UPLOAD_PATH.$fileName); 
+        // //redirect(HTTP_UPLOAD_PATH.$fileName); 
+        // $filepath = file_get_contents(ROOT_UPLOAD_PATH.$fileName);
+        // force_download($fileName, $filepath);
+        exit;
+        return $this->redirect(['controller' => 'users', 'action' => 'index']);
     }
 }

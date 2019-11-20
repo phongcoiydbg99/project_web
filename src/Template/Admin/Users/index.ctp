@@ -9,6 +9,7 @@
     <div>
     <h3 class="float-left"><?= __('Users') ?></h3>
     <a href="#" class="btn btn-primary float-right" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-square"></i></a> 
+    <?= $this->Form->postLink('<i class="fas fa-download"></i>', ['action' => 'export'], ['class' => 'btn btn-primary float-right', 'escape' => false]) ?>
     <!-- The Modal -->
     <div class="modal fade" id="myModal">
         <div class="modal-dialog">
