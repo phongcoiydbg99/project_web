@@ -32,47 +32,65 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
     <?= $this->Html->script('popper.min.js') ?>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-light navbar-light">
-      <?= $this->Html->link(
-                '<i class="fa fa-home"></i> Admin ',
-                '/',
-                ['class' => 'navbar-brand', 'escape' => false]
-            ) ?>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item active">
-            <?= $this->Html->link(
-                'About',
-                '/Users/Home',
-                ['class' => 'nav-link', 'escape' => false]
-            ) ?>
-            </li> --> 
-        </ul>
-        <ul class="navbar-nav">
-            <li class="nav-item ">
+    <div>
+        <nav class="navbar navbar-expand-md bg-light navbar-light shadow-sm">
+          <?= $this->Html->link(
+                    '<i class="fa fa-home"></i> Admin ',
+                    '/',
+                    ['class' => 'navbar-brand', 'escape' => false]
+                ) ?>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav mr-auto">
+                <!-- <li class="nav-item active">
                 <?= $this->Html->link(
-                    '<i class="fas fa-power-off"></i> Logout ',
-                    '/logout',
+                    'About',
+                    '/Users/Home',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
-              <!--<a class="nav-link" href="#"><i class="fa fa-home"></i><?= $this->fetch('title')?></a> -->
-            </li>
-        </ul>
-      </div>  
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
+                </li> --> 
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    <?= $this->Html->link(
+                        '<i class="fas fa-power-off"></i> Logout ',
+                        '/logout',
+                        ['class' => 'nav-link', 'escape' => false]
+                    ) ?>
+                  <!--<a class="nav-link" href="#"><i class="fa fa-home"></i><?= $this->fetch('title')?></a> -->
+                </li>
+            </ul>
+          </div>  
+        </nav>
     </div>
+    <div class="row">
+        <div class="col-lg-2 mt-md-1 border border-top-0 border-bottom-0 border-left-0 ">
+            <div class="list-group list-group-flush">
+              <a href="#" class="list-group-item list-group-item-action">First item</a>
+              <a href="#" class="list-group-item list-group-item-action">Second item</a>
+              <a href="#" class="list-group-item list-group-item-action">Third item</a>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <?= $this->Flash->render() ?>
+            <div class="container clearfix">
+                <?= $this->fetch('content') ?>
+            </div>  
+        </div>
+    </div>
+    
     <footer>
     </footer>
 </body>

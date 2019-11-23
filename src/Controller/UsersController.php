@@ -21,10 +21,6 @@ class UsersController extends AppController
     {
         parent::beforeFilter($event);
         $this->Auth->allow(['login']);
-        if($this->Auth->user('role') === 'user')
-        {
-            $this->viewBuilder()->setLayout('user');
-        }
     }
     // public function isAuthorized($user = null)
     // {
@@ -130,28 +126,27 @@ class UsersController extends AppController
             // user already login
             return $this->redirect($this->Auth->redirectUrl());
         }
-        else{     
+        else{
             $login = $this->Users->newEntity();
 
             if ($this->request->is('post') AND !empty($this->request->getData())) {
                 $check_login = $this->Users->patchEntity($login, $this->request->getData(),['validate' => 'login']);
-                
                 $validator = $check_login->errors();
-                
+
                 if (!empty($validator))
-                { 
+                {
                    $this->Flash->error("Bạn chưa điền đủ thông tin");
                 }
                 else
-                {  
+                {
                     $cuser = $this->Auth->identify();
                     if ($cuser) {
                         $this->Auth->setUser($cuser);
                         if($this->Auth->user('role') === 'admin')
                         {
-                           return $this->redirect($this->Auth->redirectUrl('/admin'));
+                           return $this->redirect(['controller' => 'users', 'action' => 'index','prefix'=>'admin']);
                         }
-                        else return $this->redirect($this->Auth->redirectUrl('/login'));
+                        else return $this->redirect($this->Auth->redirectUrl());
                     }
                     $this->Flash->error("Mật khẩu của bạn chưa đúng!");
                 }
@@ -164,5 +159,4 @@ class UsersController extends AppController
     {
         return $this->redirect($this->Auth->logout());
     }
-   
 }

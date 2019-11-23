@@ -13,8 +13,8 @@
         <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Subjects'), ['controller' => 'Subjects', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Subject'), ['controller' => 'Subjects', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Test Times'), ['controller' => 'TestTimes', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Test Time'), ['controller' => 'TestTimes', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List Tests'), ['controller' => 'Tests', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Test'), ['controller' => 'Tests', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="users view large-9 medium-8 columns content">
@@ -59,13 +59,19 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
+                <th scope="col"><?= __('Code') ?></th>
                 <th scope="col"><?= __('Name') ?></th>
+                <th scope="col"><?= __('Test Day') ?></th>
+                <th scope="col"><?= __('Time') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($user->subjects as $subjects): ?>
             <tr>
                 <td><?= h($subjects->id) ?></td>
+                <td><?= h($subjects->code) ?></td>
                 <td><?= h($subjects->name) ?></td>
+                <td><?= h($subjects->test_day) ?></td>
+                <td><?= h($subjects->time) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Subjects', 'action' => 'view', $subjects->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Subjects', 'action' => 'edit', $subjects->id]) ?>
@@ -77,22 +83,28 @@
         <?php endif; ?>
     </div>
     <div class="related">
-        <h4><?= __('Related Test Times') ?></h4>
-        <?php if (!empty($user->test_times)): ?>
+        <h4><?= __('Related Tests') ?></h4>
+        <?php if (!empty($user->tests)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Time') ?></th>
+                <th scope="col"><?= __('Subject Id') ?></th>
+                <th scope="col"><?= __('Test Room Id') ?></th>
+                <th scope="col"><?= __('Start Time') ?></th>
+                <th scope="col"><?= __('Last Time') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($user->test_times as $testTimes): ?>
+            <?php foreach ($user->tests as $tests): ?>
             <tr>
-                <td><?= h($testTimes->id) ?></td>
-                <td><?= h($testTimes->time) ?></td>
+                <td><?= h($tests->id) ?></td>
+                <td><?= h($tests->subject_id) ?></td>
+                <td><?= h($tests->test_room_id) ?></td>
+                <td><?= h($tests->start_time) ?></td>
+                <td><?= h($tests->last_time) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'TestTimes', 'action' => 'view', $testTimes->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'TestTimes', 'action' => 'edit', $testTimes->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'TestTimes', 'action' => 'delete', $testTimes->id], ['confirm' => __('Are you sure you want to delete # {0}?', $testTimes->id)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Tests', 'action' => 'view', $tests->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Tests', 'action' => 'edit', $tests->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Tests', 'action' => 'delete', $tests->id], ['confirm' => __('Are you sure you want to delete # {0}?', $tests->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

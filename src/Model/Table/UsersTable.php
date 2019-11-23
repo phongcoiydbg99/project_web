@@ -36,16 +36,17 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-
+        
         $this->belongsToMany('Subjects', [
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'subject_id',
             'joinTable' => 'users_subjects'
         ]);
-        $this->belongsToMany('TestTimes', [
+        
+        $this->belongsToMany('Tests', [
             'foreignKey' => 'user_id',
-            'targetForeignKey' => 'test_time_id',
-            'joinTable' => 'users_test_times'
+            'targetForeignKey' => 'test_id',
+            'joinTable' => 'users_tests'
         ]);
     }
 

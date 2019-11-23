@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Cake\I18n;
 
 require '../vendor/autoload.php';
 /**
@@ -40,7 +41,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Subjects', 'TestTimes']
+            'contain' => ['Subjects', 'Tests']
         ]);
 
         $this->set('user', $user);
@@ -64,8 +65,8 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
-        $testTimes = $this->Users->TestTimes->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'subjects', 'testTimes'));
+        $tests = $this->Users->Tests->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'subjects', 'tests'));
     }
 
     /**
@@ -78,7 +79,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Subjects', 'TestTimes']
+            'contain' => ['Subjects', 'Tests']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -90,8 +91,8 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
-        $testTimes = $this->Users->TestTimes->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'subjects', 'testTimes'));
+        $tests = $this->Users->Tests->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'subjects', 'tests'));
     }
 
     /**
@@ -164,7 +165,7 @@ class UsersController extends AppController
             $worksheet = $spreadsheet->getActiveSheet();
             $i = 0;
             $dem = 0;
-            foreach ($worksheet->getRowIterator() as $row) {
+            foreach ($worksheet->getRowIterator(2) as $row) {
             // Fetch data
               $i++;
               $cellIterator = $row->getCellIterator();
@@ -206,6 +207,8 @@ class UsersController extends AppController
         $sheet->setCellValue('D1', 'Role');
         $sheet->setCellValue('E1', 'FistName');
         $sheet->setCellValue('F1', 'LastName');
+        $sheet->setCellValue('G1', 'Date birth');
+        $sheet->setCellValue('H1', 'Class');
         $query = $this->Users->find();
         $i =2;
         foreach ($query as $user)
@@ -216,6 +219,8 @@ class UsersController extends AppController
           $sheet->setCellValue('D'.$i, $user->role);
           $sheet->setCellValue('E'.$i, $user->first_name);
           $sheet->setCellValue('F'.$i, $user->last_name);
+          $sheet->setCellValue('G'.$i, $user->date_birth);
+          $sheet->setCellValue('H'.$i, $user->class);
           $i++;
         }
         $filename = 'sample-'.time().'.xls';

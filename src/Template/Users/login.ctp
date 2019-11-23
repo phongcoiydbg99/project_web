@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-lg-4"></div>
-	<div class="col-lg-4 mt-sm-5 mt-md-5 border border-light rounded shadow-lg p-3 mb-5">
+	<div class="col-lg-4 mt-sm-5 mt-md-5 border border-light rounded p-3 mb-5">
 			<?php 
 				echo $this->Flash->render();
 

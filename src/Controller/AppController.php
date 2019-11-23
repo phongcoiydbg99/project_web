@@ -55,8 +55,8 @@ class AppController extends Controller
                     ]
                 ]
             ],
-            'loginAction' => ['\login'],
-            'loginRedirect' => ['controller' => 'Users', 'action' => 'index'],
+            'loginAction' => ['/login'],
+            'loginRedirect' => ['controller' => 'subjects', 'action' => 'index'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
             'authorize' => 'Controller', // Added this line
         ]);
@@ -83,12 +83,10 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        //dd($this->Auth->user('username'));
+        
         if($this->Auth->user('role') === 'admin')
         {
             $this->viewBuilder()->setLayout('admin');
-           // return $this->redirect($this->Auth->redirectUrl('/login'));
         }
-        
     }
 }

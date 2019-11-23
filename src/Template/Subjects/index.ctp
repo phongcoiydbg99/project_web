@@ -1,0 +1,132 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Subject[]|\Cake\Collection\CollectionInterface $subjects
+ */
+?>
+<nav class="large-3 medium-4 columns mt-5" id="actions-sidebar">
+    <ul class="side-nav h4">
+        <li class="heading"><?= $this->getRequest()->getSession()->read('Auth.User.first_name') . ' ' . $this->getRequest()->getSession()->read('Auth.User.last_name') ?></li>
+        <li><?= $this->Html->link(__('New Subject'), ['action' => 'add']) ?></li>
+
+    </ul>
+</nav>
+
+<div class="subjects index large-9 medium-8 columns content">
+    <div class="card">
+        <div class="card-header"><h3><?= __('Subjects') ?></h3></div>
+        <div class="card-body table-responsive p-0" style="height:250px">
+            <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" colspan=></th>
+                    <th scope="col" colspan=><?= $this->Paginator->sort('code') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
+                    <th scope="col" class="text-primary">Phòng thi</th>
+                    <th scope="col" class="text-primary">Thời gian thi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($subjects as $subject): ?>
+                    <?php $i = 0; ?>
+                    <?php foreach ($subject->tests as $key): ?>
+                    <tr>
+                            <td><input type="checkbox" class="checkBox" onclick="testCheckBox(this,<?=$subject->id?>,<?= $key->test_room_id ?>,<?= $key->id ?>)"></td>
+                            <td class='subject_code'><?= $subject->code?></td>
+                            <td><?= $subject->name?></td>
+                            <td class='test_day'><?= $subject->test_day?></td>
+                            <td><?= $subject['test_rooms'][$i]['name']?></td>
+                            <td class="test_time"><?= date('H:i',strtotime($key->start_time)).' - '.date('H:i',strtotime($key->last_time)) ?></td>
+                    </tr>
+                    <?php $i++; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="subjects index large-9 medium-8 columns content">
+    <div class="card">
+        <?=$this->Form->create()?>
+        <div class="card-body table-responsive p-0" style="height:300px">
+            <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" colspan=></th>
+                    <th scope="col" class="text-primary">Code</th>
+                    <th scope="col" class="text-primary">Name</th>
+                    <th scope="col" class="text-primary">Test day</th>
+                    <th scope="col" class="text-primary">Phòng thi</th>
+                    <th scope="col" class="text-primary">Thời gian thi</th>
+                    <th scope="col" class="actions text-primary"><?= __('Actions') ?></th>
+                </tr>
+                </thead>
+                <tbody class="check_content">
+                
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+        </div>
+        <?= $this->Form->end()?>
+    </div>
+</div>
+<script>
+    var arrCheck = new Array();
+    function testCheckBox(check,subject_id,test_room_id,id) {
+        if ($(check).is(':checked'))
+        {
+            var subject_code = $(check).parent().parent().find('.subject_code').text();
+            var test_day = $(check).parent().parent().find('.test_day').text();
+            var test_time = $(check).parent().parent().find('.test_time').text();
+            arrCheck.push([subject_code,test_day,test_time.slice(0,5),test_time.slice(-5)]);
+            console.log(arrCheck);
+                $( ".checkBox" ).each(function(index) {
+                    var check_code = $(this).parent().parent().find('.subject_code').text();
+                    var check_day = $(this).parent().parent().find('.test_day').text();
+                    var check_time = $(this).parent().parent().find('.test_time').text();
+                    var start_time = check_time.slice(0,5);
+                    var last_time = check_time.slice(-5);
+                    if ( subject_code == check_code)
+                    {
+                        $(this).prop('disabled',true);
+                    }
+                    else {
+                        for (var i =0 ; i < arrCheck.length;i++)
+                        {
+                            if (check_day == arrCheck[i][1])
+                            {
+                                if ((start_time >= arrCheck[i][2]&& start_time <= arrCheck[i][3])||(last_time >= arrCheck[i][2]&& last_time <= arrCheck[i][3]))
+                                    $(this).prop('disabled',true);
+                            }
+                        }
+                    }
+                    // $(check).prop('disabled',false);
+                });
+            $.ajax({
+                url: baseUrl + '/subjects/checkBox',
+                type: 'post',
+                data: {
+                    subject_id: subject_id,
+                    test_room_id: test_room_id,
+                    id : id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                dataType: 'html',
+                success: function (res) {
+                    $('.check_content').append(res);
+                },
+                error: function () {
+
+                }
+            })
+        }
+        
+    }
+
+</script>

@@ -10,8 +10,8 @@
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Subjects'), ['controller' => 'Subjects', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Subject'), ['controller' => 'Subjects', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Test Times'), ['controller' => 'TestTimes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Test Time'), ['controller' => 'TestTimes', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Tests'), ['controller' => 'Tests', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Test'), ['controller' => 'Tests', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
@@ -27,7 +27,7 @@
             echo $this->Form->control('date_birth');
             echo $this->Form->control('class');
             echo $this->Form->control('subjects._ids', ['options' => $subjects]);
-            echo $this->Form->control('test_times._ids', ['options' => $testTimes]);
+            echo $this->Form->control('tests._ids', ['options' => $tests]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
