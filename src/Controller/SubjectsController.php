@@ -6,6 +6,7 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
+use Cake\Datasource\ConnectionManager;
 /**
  * Subjects Controller
  *
@@ -21,23 +22,49 @@ class SubjectsController extends AppController
      */
     public function index()
     {
-        $subjects = $this->paginate($this->Subjects->find()->contain(['Users','Tests','TestRooms'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        }));
+        $query = $this->Subjects->find()->contain(['TestRooms','Tests','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        });
+        $subjects = $this->paginate($query);
+        $id = $this->Auth->user('id');
+        // $query = TableRegistry::getTableLocator()->get('users_tests');
+        // dd($users_tests);
+        foreach ( $subjects as $subject)
+        {
+            $i = 0;
+            foreach ($subject->tests as $tests)
+            {
+                
+                // dump($tests['users'][0]['_joinData']['id']);
+                // dd($this->paginate($this->Subjects->find()->contain(['TestRooms','Tests'])->join([
+                //     'u' => [
+                //         'table' => 'users_tests',
+                //         'type' => 'LEFT',
+                //         'conditions' => 'u.test_id = Tests.id',
+                //     ]
+                // ])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);})->matching('Tests')
+                // ));
+                $i++;
+            }
+        }
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
+        $tests = TableRegistry::getTableLocator()->get('tests');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             foreach ($data['subject'] as $index => $value) {
-                $users_test = $users_tests->newEntity();
-                $users_test->user_id = $this->Auth->user('id');
-                $users_test->test_id = $index;
-                if ($users_tests->save($users_test)) {
-                $this->Flash->success(__('The subject has been saved.'));
-                }
-                else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
+                $q = $users_tests->find()->where(['user_id'=> $this->Auth->user('id'),'test_id' => $index]);
+                if (empty($q->toArray())){
+                    $users_test = $users_tests->newEntity();
+                    $users_test->user_id = $this->Auth->user('id');
+                    $users_test->test_id = $index;
+                    if ($users_tests->save($users_test)) {
+                    $this->Flash->success(__('The subject has been saved.'));
+                    }
+                    else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
+                } 
             }
             return $this->redirect(['action' => 'index']);
         }
-        $this->set(compact(['subjects']));
+        $this->set(compact(['subjects','id']));
     }
 
     public function beforeFilter(Event $event)
@@ -126,7 +153,19 @@ class SubjectsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function deleteTest($id = null)
+    {
+        $users_tests = TableRegistry::getTableLocator()->get('users_tests');
+        $this->request->allowMethod(['post', 'delete']);
+        $users_test = $users_tests->get($id);
+        if ($users_tests->delete($users_test)) {
+            $this->Flash->success(__('The subject has been deleted.'));
+        } else {
+            $this->Flash->error(__('The subject could not be deleted. Please, try again.'));
+        }
 
+        return $this->redirect(['action' => 'index']);
+    }
     public function checkBox()
     {
         $this->layout = false;
