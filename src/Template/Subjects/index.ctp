@@ -29,16 +29,22 @@
                 </thead>
                 <tbody>
                 <?php foreach ($subjects as $subject): ?>
-                    <?php $i = 0; ?>
+                    <?php $i = 0; $disabled = ''; $checked = '';?>
                     <?php foreach ($subject->test_rooms as $test_rooms): ?>
                         <tr>
                             <?php 
-                             if (!empty($subject->tests[$i]['users']))
+                            if (!empty($subject->tests[$i]['users']))
                                 {
-                                    if($subject->tests[$i]['users'][0]['id'] == $id){
-                                    $disabled = 'disabled';
-                                    $checked = 'checked';}
-                                } else {$disabled = '';
+                                    foreach ($subject->tests[$i]['users'] as $users)
+                                    {
+                                        if($users['id'] == $id){
+                                            $disabled = 'disabled';
+                                            $checked = 'checked';
+                                        }
+                                    }
+                                } 
+                            else{
+                                    $disabled = '';
                                     $checked = '';
                                 } 
                             ?>
@@ -81,19 +87,21 @@
                             <?php 
                              if (!empty($subject->tests[$i]['users']))
                                 {
-                                    if($subject->tests[$i]['users'][0]['id'] == $id)
-                                    {?>
-                                                <td style="width: 44px"></td>
-                                                <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][code]" value="<?= $subject->code?>" style="width:50px" readonly></td>
-                                                <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][name]" value="<?= $subject->name?>" style="width:50px"readonly></td>
-                                                <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][test_day]" value="<?= $subject->test_day?>" style="width:80px"readonly></td>
-                                                <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][room]" value="<?= $test_rooms->name?>" style="width:50px"readonly></td>
-                                                <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][time]" value="<?= date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time))?>" style="width:100px"readonly></td>
-                                                
-                                                <td class="actions">
-                                                <?= $this->Form->postLink('Delete', ['action' => 'delete_test', $subject['tests'][$i]['users'][0]['_joinData']['id']], ['confirm' => __('Are you sure you want to delete # {0}?', $subject['tests'][$i]['users'][0]['_joinData']['id'])]) ?>
-                                                </td>
+                                    foreach ($subject->tests[$i]['users'] as $users)
+                                    {
+                                        if($users['id'] == $id){?>
+                                            <td style="width: 44px"></td>
+                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][code]" value="<?= $subject->code?>" style="width:50px" readonly></td>
+                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][name]" value="<?= $subject->name?>" style="width:50px"readonly></td>
+                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][test_day]" value="<?= $subject->test_day?>" style="width:80px"readonly></td>
+                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][room]" value="<?= $test_rooms->name?>" style="width:50px"readonly></td>
+                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][time]" value="<?= date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time))?>" style="width:100px"readonly></td>
+                                            
+                                            <td class="actions">
+                                            <?= $this->Form->postLink('Delete', ['action' => 'delete_test', $subject['tests'][$i]['users'][0]['_joinData']['id']], ['confirm' => __('Are you sure you want to delete # {0}?', $subject['tests'][$i]['users'][0]['_joinData']['id'])]) ?>
+                                            </td>
                              <?php       }
+                                    }
                                 }
                             ?>
                                
