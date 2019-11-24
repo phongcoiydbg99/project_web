@@ -35,7 +35,7 @@ class SubjectsController extends AppController
             {
                 foreach ($subject->tests[$i]['users'] as $test_rooms)
                 
-                 // dump($test_rooms);
+                 // dump($subject->tests[$i]['users']);
                 // dd($this->paginate($this->Subjects->find()->contain(['TestRooms','Tests'])->join([
                 //     'u' => [
                 //         'table' => 'users_tests',

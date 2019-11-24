@@ -29,10 +29,11 @@
                 </thead>
                 <tbody>
                 <?php foreach ($subjects as $subject): ?>
-                    <?php $i = 0; $disabled = ''; $checked = '';?>
+                    <?php $i = 0; ?>
                     <?php foreach ($subject->test_rooms as $test_rooms): ?>
                         <tr>
                             <?php 
+                            $disabled = ''; $checked = '';
                             if (!empty($subject->tests[$i]['users']))
                                 {
                                     foreach ($subject->tests[$i]['users'] as $users)
@@ -98,7 +99,7 @@
                                             <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][time]" value="<?= date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time))?>" style="width:100px"readonly></td>
                                             
                                             <td class="actions">
-                                            <?= $this->Form->postLink('Delete', ['action' => 'delete_test', $subject['tests'][$i]['users'][0]['_joinData']['id']], ['confirm' => __('Are you sure you want to delete # {0}?', $subject['tests'][$i]['users'][0]['_joinData']['id'])]) ?>
+                                            <?= $this->Form->postLink('Delete', ['action' => 'delete_test', $users['_joinData']['id']], ['block' => true,'confirm' => __('Are you sure you want to delete # {0}?', $users['_joinData']['id'])]) ?>
                                             </td>
                              <?php       }
                                     }
@@ -116,6 +117,7 @@
             <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
         </div>
         <?= $this->Form->end()?>
+        <?= $this->fetch('postLink')?>
     </div>
 </div>
 <script>
