@@ -93,7 +93,6 @@ class TestsTable extends Table
     {
         $rules->add($rules->existsIn(['subject_id'], 'Subjects'));
         $rules->add($rules->existsIn(['test_room_id'], 'TestRooms'));
-
         return $rules;
     }
 }

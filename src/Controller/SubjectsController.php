@@ -22,48 +22,67 @@ class SubjectsController extends AppController
      */
     public function index()
     {
-        $query = $this->Subjects->find()->contain(['TestRooms','Tests','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         });
         $subjects = $this->paginate($query);
+        // dd($query->toArray());
         $id = $this->Auth->user('id');
         // $query = TableRegistry::getTableLocator()->get('users_tests');
-        // dd($users_tests);
+        $check_name = '';
         foreach ( $subjects as $subject)
         {
-            $i = 0;
-            foreach ($subject->test_rooms as $tests)
-            {
-                foreach ($subject->tests[$i]['users'] as $test_rooms)
-                
-                 // dump($subject->tests[$i]['users']);
-                // dd($this->paginate($this->Subjects->find()->contain(['TestRooms','Tests'])->join([
-                //     'u' => [
-                //         'table' => 'users_tests',
-                //         'type' => 'LEFT',
-                //         'conditions' => 'u.test_id = Tests.id',
-                //     ]
-                // ])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);})->matching('Tests')
-                // ));
-                $i++;
-            }
+            
+                foreach ($subject->test_rooms as $test_rooms)
+                {
+                   // dd($test_rooms);
+                }
+               
         }
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
-        if ($this->request->is('post')) {
+            if ($this->request->is('post')) {
             $data = $this->request->getData();
+            $test_times = Array();
             foreach ($data['subject'] as $index => $value) {
-                $q = $users_tests->find()->where(['user_id'=> $this->Auth->user('id'),'test_id' => $index]);
-                if (empty($q->toArray())){
-                    $users_test = $users_tests->newEntity();
-                    $users_test->user_id = $this->Auth->user('id');
-                    $users_test->test_id = $index;
-                    if ($users_tests->save($users_test)) {
-                    $this->Flash->success(__('The subject has been saved.'));
+                $test_day = date('d:m:Y',strtotime($this->Subjects->get($index)->test_day));
+                $start_time = date('H:i',strtotime($tests->get($value)->start_time));
+                $last_time = date('H:i',strtotime($tests->get($value)->last_time));
+                // dump($test_day.' '.$start_time.' '.$last_time);
+                if (!empty($test_times))
+                {
+                    foreach($test_times as $test_time)
+                    {
+                        // dump($test_day.' '.$start_time.' '.$last_time);
+                        if ($test_day == $test_time[0])
+                        {
+                            if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
+                                {
+                                    $this->Flash->error("Thời gian đăng ký của bạn trùng nhau");
+                                    return $this->redirect(['action' => 'index']);
+                                }
+                        }
                     }
-                    else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
-                } 
+                }
+                array_push($test_times,[$test_day,$start_time,$last_time]); 
             }
-            return $this->redirect(['action' => 'index']);
+            // dd($test_times);
+            $check_error = false;
+            $q = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
+            $i =0;
+            foreach ($data['subject'] as $index => $value) {
+                    // dump($q[$i]['id']);
+                     if (!empty($q)) {
+                    $users_test = $users_tests->get($q[$i]['id']);
+                    }
+                    else $users_test = $users_tests->newEntity();
+                    $users_test->user_id = $this->Auth->user('id');
+                    $users_test->test_id = $value;
+                    if (!$users_tests->save($users_test)) { $check_error = true;}
+                    $i++;
+            }
+            if(!$check_error) $this->Flash->success(__('The subject has been saved.'));
+            else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
+            return $this->redirect(['action' => 'viewTest']);
         }
         $this->set(compact(['subjects','id']));
     }
@@ -90,7 +109,15 @@ class SubjectsController extends AppController
 
         $this->set('subject', $subject);
     }
+    public function viewTest()
+    {
+        $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        });
+        $subjects = $this->paginate($query);
+        $id = $this->Auth->user('id');
 
+        $this->set(compact(['subjects','id']));
+    }
     /**
      * Add method
      *
@@ -180,6 +207,25 @@ class SubjectsController extends AppController
             ->matching('Tests', function($q) use ($id) { return $q->where(['Tests.id' => $id]);}));
             
             $this->set(compact('subjects'));
+        }
+    }
+    public function checkTesttime()
+    {
+        $this->layout = false;
+        if ($this->request->is('ajax')) {
+            $data = $this->request->getData();
+            $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+            });
+            $subjects = $this->paginate($query);
+            foreach ( $subjects as $subject)
+            {
+                if($subject->id == $data['subject_id'])
+                {
+                    $check_subject = $subject;
+                }
+            }
+        $this->set('check_name', $data['check_name']);
+        $this->set('subject', $check_subject);
         }
     }
 }

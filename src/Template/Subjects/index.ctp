@@ -15,11 +15,11 @@
 <div class="subjects index large-9 medium-8 columns content">
     <div class="card">
         <div class="card-header"><h3><?= __('Subjects') ?></h3></div>
+        <?= $this->Form->create() ?>
         <div class="card-body table-responsive p-0" style="height:250px">
             <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" colspan=></th>
                     <th scope="col" colspan=><?= $this->Paginator->sort('code') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                     <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
@@ -29,86 +29,61 @@
                 </thead>
                 <tbody>
                 <?php foreach ($subjects as $subject): ?>
-                    <?php $i = 0; ?>
-                    <?php foreach ($subject->test_rooms as $test_rooms): ?>
-                        <tr>
-                            <?php 
-                            $disabled = ''; $checked = '';
-                            if (!empty($subject->tests[$i]['users']))
-                                {
-                                    foreach ($subject->tests[$i]['users'] as $users)
+                    <tr>
+                            <td class='subject_code'><?= $subject->code?></td>
+                            <td><?= $subject->name?></td>
+                            <td class='test_day'><?= $subject->test_day?></td>
+                            <td>
+                                <select class="form-control" id="test_room" onchange="selectTesttime(this,<?= $subject->id?>)" >
+                                <?php 
+                                    $i = 0;
+                                    $check_name = '';
+                                    $check_id = '';
+                                    foreach ($subject->tests as $tests)
                                     {
-                                        if($users['id'] == $id){
-                                            $disabled = 'disabled';
-                                            $checked = 'checked';
+                                        if(!empty($tests->users) && $tests->users[0]['id'] === $id)
+                                        {
+                                            $check_name = $tests->test_room->name;
+                                            $check_id = $tests->id;
                                         }
                                     }
-                                } 
-                            else{
-                                    $disabled = '';
-                                    $checked = '';
-                                } 
-                            ?>
-                                <td><input type="checkbox" class="checkBox" onclick="testCheckBox(this,<?=$subject->id?>,<?= $test_rooms->_joinData->test_room_id ?>,<?= $test_rooms->_joinData->id ?>) " <?= $disabled .' '. $checked?>></td>
-                                <td class='subject_code'><?= $subject->code?></td>
-                                <td><?= $subject->name?></td>
-                                <td class='test_day'><?= $subject->test_day?></td>
-                                <td><?= $test_rooms->name?></td>
-                                <td class="test_time"><?= date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time)) ?></td>
-                        </tr>
-                    <?php $i ++; ?>
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="subjects index large-9 medium-8 columns content">
-    <div class="card">
-        <?=$this->Form->create()?>
-        <div class="card-body table-responsive p-0" style="height:300px">
-            <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col" colspan=></th>
-                    <th scope="col" class="text-primary">Code</th>
-                    <th scope="col" class="text-primary">Name</th>
-                    <th scope="col" class="text-primary">Test day</th>
-                    <th scope="col" class="text-primary">Phòng thi</th>
-                    <th scope="col" class="text-primary">Thời gian thi</th>
-                    <th scope="col" class="actions text-primary"><?= __('Actions') ?></th>
-                </tr>
-                </thead>
-                <tbody class="check_content">
-                    <?php foreach ($subjects as $subject): ?>
-                    <?php $i = 0; ?>
-                    <?php foreach ($subject->test_rooms as $test_rooms): ?>
-                        <tr>
-                            <?php 
-                             if (!empty($subject->tests[$i]['users']))
-                                {
-                                    foreach ($subject->tests[$i]['users'] as $users)
+                                    $names = Array();
+                                    foreach ($subject->test_rooms as $test_rooms)
                                     {
-                                        if($users['id'] == $id){?>
-                                            <td style="width: 44px"></td>
-                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][code]" value="<?= $subject->code?>" style="width:50px" readonly></td>
-                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][name]" value="<?= $subject->name?>" style="width:50px"readonly></td>
-                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][test_day]" value="<?= $subject->test_day?>" style="width:80px"readonly></td>
-                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][room]" value="<?= $test_rooms->name?>" style="width:50px"readonly></td>
-                                            <td><input type="text" class="border-0" name="subject[<?= $subject['tests'][$i]['id']?>][time]" value="<?= date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time))?>" style="width:100px"readonly></td>
-                                            
-                                            <td class="actions">
-                                            <?= $this->Form->postLink('Delete', ['action' => 'delete_test', $users['_joinData']['id']], ['block' => true,'confirm' => __('Are you sure you want to delete # {0}?', $users['_joinData']['id'])]) ?>
-                                            </td>
-                             <?php       }
+                                        array_push($names,$test_rooms->name);
                                     }
-                                }
-                            ?>
-                               
-                        </tr>
-                    <?php $i ++; ?>
-                    <?php endforeach; ?>
+                                    $names = array_count_values($names);
+                                    foreach ($names as $index => $value)
+                                    {
+                                        if ($check_name == '') {$check_name = $index;}
+                                        if ($index == $check_name)
+                                            {echo '<option selected>'.$index.'</option>'; }
+                                        else echo '<option>'.$index.'</option>'; 
+                                    }
+                                ?>
+                                </select>
+                            </td>
+                            <td >
+                                <select class="form-control" id="test_time_<?= $subject->id?>" name = 'subject[<?= $subject->id?>]'>
+                                    <?php 
+                                        $data = Array();
+                                        foreach ($subject->test_rooms as $test_rooms)
+                                        {
+                                            if ($test_rooms->name == $check_name)
+                                            {
+                                                $test_time = date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time));
+                                                // $data = array_merge($data,[$test_time=>$test_rooms->_joinData->id]);
+                                                if ($check_id == $test_rooms->_joinData->id) {
+                                                    echo '<option value='.$test_rooms->_joinData->id.' selected>'.$test_time.'</option>';
+                                                }
+                                                else
+                                                echo '<option value='.$test_rooms->_joinData->id.'>'.$test_time.'</option>';
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </td>
+                    </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
@@ -116,45 +91,32 @@
         <div class="card-footer">
             <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
         </div>
-        <?= $this->Form->end()?>
-        <?= $this->fetch('postLink')?>
+        <?= $this->Form->end() ?>
     </div>
 </div>
+
 <script>
-    var arrCheck = new Array();
-    $( document ).ready(function() {
-        $( ".checkBox" ).each(function(index,check) {
-            if ($(check).is(':checked')){
-            var subject_code = $(check).parent().parent().find('.subject_code').text();
-            var test_day = $(check).parent().parent().find('.test_day').text();
-            var test_time = $(check).parent().parent().find('.test_time').text();
-            arrCheck.push([subject_code,test_day,test_time.slice(0,5),test_time.slice(-5)]);
-            console.log(arrCheck);
-                $( ".checkBox" ).each(function(index) {
-                    var check_code = $(this).parent().parent().find('.subject_code').text();
-                    var check_day = $(this).parent().parent().find('.test_day').text();
-                    var check_time = $(this).parent().parent().find('.test_time').text();
-                    var start_time = check_time.slice(0,5);
-                    var last_time = check_time.slice(-5);
-                    if ( subject_code == check_code)
-                    {
-                        $(this).prop('disabled',true);
-                    }
-                    else {
-                        for (var i =0 ; i < arrCheck.length;i++)
-                        {
-                            if (check_day == arrCheck[i][1])
-                            {
-                                if ((start_time >= arrCheck[i][2]&& start_time <= arrCheck[i][3])||(last_time >= arrCheck[i][2]&& last_time <= arrCheck[i][3]))
-                                    $(this).prop('disabled',true);
-                            }
-                        }
-                    }
-                    // $(check).prop('disabled',false);
-                });
-            }
-        })
-    });
+    function selectTesttime(check_name,subject_id){
+        console.log('#test_time_'+subject_id);
+    $.ajax({
+                url: baseUrl + '/subjects/checkTesttime',
+                type: 'post',
+                data: {
+                    check_name: check_name.value,
+                    subject_id: subject_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                dataType: 'html',
+                success: function (res) {
+                    $('#test_time_'+subject_id).html(res);
+                },
+                error: function () {
+
+                }
+            })    
+    }
     function testCheckBox(check,subject_id,test_room_id,id) {
         if ($(check).is(':checked'))
         {
