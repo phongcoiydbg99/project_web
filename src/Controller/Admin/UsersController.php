@@ -2,7 +2,10 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Cake\I18n;
@@ -24,7 +27,7 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $users = $this->paginate($this->Users);
+        $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user']));
         $import = $this->Users->newEntity();
         
         $this->set('import',$import);
@@ -57,6 +60,7 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            // dd($user);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -116,6 +120,8 @@ class UsersController extends AppController
     }
     public function import()
     {
+      $users_subjects = TableRegistry::getTableLocator()->get('users_subjects');
+      $subjects = TableRegistry::getTableLocator()->get('subjects');
         if (isset($_POST['submit'])) 
         {
             $check_import = $this->request->getData();
@@ -165,32 +171,58 @@ class UsersController extends AppController
             $worksheet = $spreadsheet->getActiveSheet();
             $i = 0;
             $dem = 0;
-            foreach ($worksheet->getRowIterator(2) as $row) {
+            $code = $worksheet->getCellByColumnAndRow(2, 6)->getValue();
+            $name = $worksheet->getCellByColumnAndRow(2, 7)->getValue();
+            $test_day = $worksheet->getCellByColumnAndRow(6, 7)->getFormattedValue();
+            $subject = $subjects->newEntity();
+            $subject->code = $code;
+            $subject->name = $name;
+            $subject->test_day = date("Y-m-d", strtotime($test_day));
+            if($subjects->save($subject))
+            {
+              foreach ($worksheet->getRowIterator(10) as $row) {
             // Fetch data
-              $i++;
-              $cellIterator = $row->getCellIterator();
-              $cellIterator->setIterateOnlyExistingCells(false);
-              $data = [];
-              foreach ($cellIterator as $cell) {
-                $data[] = $cell->getValue();
+                $i++;
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
+                $data = [];
+                foreach ($cellIterator as $cell) {
+                  $data[] = $cell->getValue();
+                }
+                // Insert database
+                $user = $this->Users->newEntity();
+                $user->username = $data[1];
+                $user->password = $data[1];
+                $user->role = 'user';
+                $vt = strrpos($data[2]," ");
+                $user->first_name = substr($data[2],0,$vt);
+                $user->last_name = substr($data[2],$vt+1,strlen($data[2]));
+                $user->date_birth = $data[3];
+                $user->class = $data[4];
+                if ($this->Users->save($user)) 
+                {
+                  $user_id = $user->id;
+                }
+                else 
+                {
+                  $check_user = $this->Users->find()->where(['Users.username' => $user->username])->toArray();
+                  $user_id = $check_user[0]['id'];
+                }
+                if (isset($user_id))
+                {
+                  $dem++;
+                  $users_subject = $users_subjects->newEntity();
+                  $users_subject->user_id = $user_id;
+                  $users_subject->subject_id = $subject->id;
+                  $users_subjects->save($users_subject);
+                }
               }
-
-              // Insert database
-              $user = $this->Users->newEntity();
-              $user->id = $data[0];
-              $user->username = $data[1];
-              $user->password = $data[2];
-              $user->role = $data[3];
-              $user->first_name = $data[4];
-              $user->last_name = $data[5];
-              $user->date_birth = $data[6];
-              $user->class = $data[7];
-              if ($this->Users->save($user)) $dem++;
+              if($i === $dem ){
+                $this->Flash->set('The user has been saved.',['element' =>'success',]);
+              } else  $this->Flash->set('The user could not be saved. Please, try again.',['element' =>'error',]);
             }
-            if($i === $dem ){
-              $this->Flash->set('The user has been saved.',['element' =>'success',]);
-            } else  $this->Flash->set('The user could not be saved. Please, try again.',['element' =>'error',]);
-
+            else $this->Flash->set('Môn của bạn bị trùng',['element' =>'error',]);
+            
         }
         return $this->redirect(['controller' => 'users', 'action' => 'index']);
     }
@@ -201,26 +233,95 @@ class UsersController extends AppController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'Id');
-        $sheet->setCellValue('B1', 'Username');
-        $sheet->setCellValue('C1', 'password');
-        $sheet->setCellValue('D1', 'Role');
-        $sheet->setCellValue('E1', 'FistName');
-        $sheet->setCellValue('F1', 'LastName');
-        $sheet->setCellValue('G1', 'Date birth');
-        $sheet->setCellValue('H1', 'Class');
-        $query = $this->Users->find();
-        $i =2;
+        $spreadsheet->getDefaultStyle()
+                    ->getFont()
+                    ->setName('Times New Roman')
+                    ->setSize(14);
+        $sheet->setCellValue('A1', 'ĐẠI HỌC QUỐC GIA HÀ NỘI');            
+        $sheet->setCellValue('A2', 'TRƯỜNG ĐẠI HỌC CÔNG NGHỆ');
+        $sheet->setCellValue('A4', 'DANH SÁCH TÀI KHOẢN CỦA SINH VIÊN');
+        $sheet->mergeCells("A4:G4");
+        $sheet->getStyle('A4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->applyFromArray(['font'=>['bold'=>true]]);
+        $sheet->getStyle('A2')->applyFromArray(['font'=>['bold'=>true]]);
+        $sheet->getStyle('A4')->applyFromArray(['font'=>['bold'=>true]]);
+
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(11);
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+
+        $sheet->setCellValue('A5', 'STT');
+        $sheet->setCellValue('B5', 'Mã SV');
+        $sheet->setCellValue('C5', 'Họ và tên');
+        $sheet->setCellValue('D5', 'Mật khẩu');
+        $sheet->setCellValue('E5', 'Ngày sinh');
+        $sheet->setCellValue('F5', 'Lớp');
+        $sheet->setCellValue('G5', 'Chú thích');
+
+        $styleArray = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'bottom' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ]
+        ];$styleArray1 = [
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'bottom' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ]
+        ];
+        $sheet->getStyle('A5')->applyFromArray($styleArray);
+        $sheet->getStyle('B5')->applyFromArray($styleArray);
+        $sheet->getStyle('C5')->applyFromArray($styleArray);
+        $sheet->getStyle('D5')->applyFromArray($styleArray);
+        $sheet->getStyle('E5')->applyFromArray($styleArray);
+        $sheet->getStyle('F5')->applyFromArray($styleArray);
+        $sheet->getStyle('G5')->applyFromArray($styleArray);
+        
+        $query = $this->Users->find()->where(['Users.role' => 'user']);
+        $i =6;
         foreach ($query as $user)
         {
-          $sheet->setCellValue('A'.$i, $user->id);
+          $sheet->setCellValue('A'.$i, $i-5);
           $sheet->setCellValue('B'.$i, $user->username);
-          $sheet->setCellValue('C'.$i, $user->password);
-          $sheet->setCellValue('D'.$i, $user->role);
-          $sheet->setCellValue('E'.$i, $user->first_name);
-          $sheet->setCellValue('F'.$i, $user->last_name);
-          $sheet->setCellValue('G'.$i, $user->date_birth);
-          $sheet->setCellValue('H'.$i, $user->class);
+          $sheet->setCellValue('C'.$i, $user->first_name.' '.$user->last_name);
+          $sheet->setCellValue('D'.$i, $user->username);
+          $sheet->setCellValue('E'.$i, date("Y-m-d", strtotime($user->date_birth)));
+          $sheet->setCellValue('F'.$i, $user->class);
+          $sheet->setCellValue('G'.$i, '');
+          $sheet->getStyle('A'.$i)->applyFromArray($styleArray);
+          $sheet->getStyle('B'.$i)->applyFromArray($styleArray);
+          $sheet->getStyle('C'.$i)->applyFromArray($styleArray1);
+          $sheet->getStyle('D'.$i)->applyFromArray($styleArray);
+          $sheet->getStyle('E'.$i)->applyFromArray($styleArray);
+          $sheet->getStyle('F'.$i)->applyFromArray($styleArray);
+          $sheet->getStyle('G'.$i)->applyFromArray($styleArray);
           $i++;
         }
         $filename = 'sample-'.time().'.xls';
@@ -241,5 +342,18 @@ class UsersController extends AppController
         // force_download($fileName, $filepath);
         exit;
         return $this->redirect(['controller' => 'users', 'action' => 'index']);
+    }
+
+    public function searchTable()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $query = $this->Users->find('all',[
+              'conditions' => ['or'=>['first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%']]
+          ])->where(['Users.role' => 'user']);
+          $users = $this->paginate($query);
+          $this->set(compact('users'));
+      }
     }
 }

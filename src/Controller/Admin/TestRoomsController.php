@@ -1,11 +1,12 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
 /**
  * TestRooms Controller
  *
+ * @property \App\Model\Table\TestRoomsTable $TestRooms
  *
  * @method \App\Model\Entity\TestRoom[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -33,7 +34,7 @@ class TestRoomsController extends AppController
     public function view($id = null)
     {
         $testRoom = $this->TestRooms->get($id, [
-            'contain' => []
+            'contain' => ['Tests']
         ]);
 
         $this->set('testRoom', $testRoom);
@@ -101,5 +102,17 @@ class TestRoomsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    public function searchTable()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $query = $this->TestRooms->find('all',[
+              'conditions' => ['name LIKE' => '%'.$data['name'].'%']
+          ]);
+          $testRooms = $this->paginate($query);
+          $this->set(compact('testRooms'));
+      }
     }
 }

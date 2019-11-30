@@ -20,6 +20,7 @@ class TestsFixture extends TestFixture
         'test_room_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'start_time' => ['type' => 'time', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'last_time' => ['type' => 'time', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'computer_registered' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'subject_id' => ['type' => 'index', 'columns' => ['subject_id'], 'length' => []],
             'test_room_id' => ['type' => 'index', 'columns' => ['test_room_id'], 'length' => []],
@@ -47,8 +48,9 @@ class TestsFixture extends TestFixture
                 'id' => 1,
                 'subject_id' => 1,
                 'test_room_id' => 1,
-                'start_time' => '03:52:13',
-                'last_time' => '03:52:13'
+                'start_time' => '08:45:54',
+                'last_time' => '08:45:54',
+                'computer_registered' => 1
             ],
         ];
         parent::init();

@@ -6,6 +6,7 @@ use App\Controller\AppController;
 /**
  * Tests Controller
  *
+ * @property \App\Model\Table\TestsTable $Tests
  *
  * @method \App\Model\Entity\Test[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -18,6 +19,9 @@ class TestsController extends AppController
      */
     public function index()
     {
+        $this->paginate = [
+            'contain' => ['Subjects', 'TestRooms']
+        ];
         $tests = $this->paginate($this->Tests);
 
         $this->set(compact('tests'));
@@ -33,7 +37,7 @@ class TestsController extends AppController
     public function view($id = null)
     {
         $test = $this->Tests->get($id, [
-            'contain' => []
+            'contain' => ['Subjects', 'TestRooms', 'Users']
         ]);
 
         $this->set('test', $test);
@@ -56,7 +60,10 @@ class TestsController extends AppController
             }
             $this->Flash->error(__('The test could not be saved. Please, try again.'));
         }
-        $this->set(compact('test'));
+        $subjects = $this->Tests->Subjects->find('list', ['limit' => 200]);
+        $testRooms = $this->Tests->TestRooms->find('list', ['limit' => 200]);
+        $users = $this->Tests->Users->find('list', ['limit' => 200]);
+        $this->set(compact('test', 'subjects', 'testRooms', 'users'));
     }
 
     /**
@@ -69,7 +76,7 @@ class TestsController extends AppController
     public function edit($id = null)
     {
         $test = $this->Tests->get($id, [
-            'contain' => []
+            'contain' => ['Users']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $test = $this->Tests->patchEntity($test, $this->request->getData());
@@ -80,7 +87,10 @@ class TestsController extends AppController
             }
             $this->Flash->error(__('The test could not be saved. Please, try again.'));
         }
-        $this->set(compact('test'));
+        $subjects = $this->Tests->Subjects->find('list', ['limit' => 200]);
+        $testRooms = $this->Tests->TestRooms->find('list', ['limit' => 200]);
+        $users = $this->Tests->Users->find('list', ['limit' => 200]);
+        $this->set(compact('test', 'subjects', 'testRooms', 'users'));
     }
 
     /**

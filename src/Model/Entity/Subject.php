@@ -25,9 +25,12 @@ class Subject extends Entity
      * @var array
      */
     protected $_accessible = [
+        'code' => true,
         'name' => true,
+        'test_day' => true,
+        'time' => true,
+        'tests' => true,
         'test_rooms' => true,
-        'test_times' => true,
         'users' => true
     ];
 }

@@ -11,7 +11,9 @@ use Cake\ORM\Entity;
  * @property int $test_room_id
  * @property \Cake\I18n\FrozenTime $start_time
  * @property \Cake\I18n\FrozenTime $last_time
+ * @property int $computer_registered
  *
+ * @property \App\Model\Entity\UsersTest[] $users_tests
  * @property \App\Model\Entity\Subject $subject
  * @property \App\Model\Entity\TestRoom $test_room
  * @property \App\Model\Entity\User[] $users
@@ -32,6 +34,8 @@ class Test extends Entity
         'test_room_id' => true,
         'start_time' => true,
         'last_time' => true,
+        'computer_registered' => true,
+        'users_tests' => true,
         'subject' => true,
         'test_room' => true,
         'users' => true

@@ -27,16 +27,21 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('bootstrap.min.css') ?>
+    <?= $this->Html->css('adminlte.css') ?>
+    <?= $this->Html->css('adminlte.min.css') ?>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
     <?= $this->Html->script('popper.min.js') ?>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+    <?= $this->Html->script('jquery.min.js') ?>
+    <?= $this->Html->script('myfile.js') ?>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"
+        var baseUrl = "<?= $this->Url->build('/', true) ?>";
+    </script>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -78,9 +83,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <div class="row">
         <div class="col-lg-2 mt-md-1 border border-top-0 border-bottom-0 border-left-0 ">
             <div class="list-group list-group-flush">
-              <a href="#" class="list-group-item list-group-item-action">First item</a>
-              <a href="#" class="list-group-item list-group-item-action">Second item</a>
-              <a href="#" class="list-group-item list-group-item-action">Third item</a>
+              <?= $this->Html->link('Sinh viên', ['controller'=>'users','action' => 'index'],['class' => 'list-group-item list-group-item-action', 'escape' => false]) ?>
+              <?= $this->Html->link('Phòng thi', ['controller'=>'test_rooms','action' => 'index'],['class' => 'list-group-item list-group-item-action', 'escape' => false]) ?>
+              <?= $this->Html->link('Môn thi', ['controller'=>'subjects','action' => 'index'],['class' => 'list-group-item list-group-item-action', 'escape' => false]) ?>
             </div>
         </div>
         <div class="col-lg-10">
@@ -93,5 +98,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     
     <footer>
     </footer>
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 2000);
+    </script>
 </body>
 </html>

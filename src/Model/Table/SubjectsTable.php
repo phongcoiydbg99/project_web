@@ -68,10 +68,21 @@ class SubjectsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
+            ->scalar('code')
+            ->maxLength('code', 15)
+            ->requirePresence('code', 'create')
+            ->notEmptyString('code');
+
+        $validator
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
             ->notEmptyString('name');
+
+        $validator
+            ->date('test_day')
+            ->requirePresence('test_day', 'create')
+            ->notEmptyDate('test_day');
 
         return $validator;
     }

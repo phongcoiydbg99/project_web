@@ -4,14 +4,8 @@
  * @var \App\Model\Entity\Subject[]|\Cake\Collection\CollectionInterface $subjects
  */
 ?>
-<nav class="large-3 medium-4 columns mt-5" id="actions-sidebar">
-    <ul class="side-nav h4">
-        <li class="heading"><?= $this->getRequest()->getSession()->read('Auth.User.first_name') . ' ' . $this->getRequest()->getSession()->read('Auth.User.last_name') ?></li>
-        <li><?= $this->Html->link(__('New Subject'), ['action' => 'add']) ?></li>
 
-    </ul>
-</nav>
-
+<h1 class="mt-2 mb-3"> <?= $this->getRequest()->getSession()->read('Auth.User.first_name') . ' ' . $this->getRequest()->getSession()->read('Auth.User.last_name') ?></h1>
 <div class="subjects index large-9 medium-8 columns content">
     <div class="card">
         <div class="card-header"><h3><?= __('Subjects') ?></h3></div>

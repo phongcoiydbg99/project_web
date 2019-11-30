@@ -27,17 +27,6 @@ class SubjectsController extends AppController
         $subjects = $this->paginate($query);
         // dd($query->toArray());
         $id = $this->Auth->user('id');
-        // $query = TableRegistry::getTableLocator()->get('users_tests');
-        $check_name = '';
-        foreach ( $subjects as $subject)
-        {
-            
-                foreach ($subject->test_rooms as $test_rooms)
-                {
-                   // dd($test_rooms);
-                }
-               
-        }
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
             if ($this->request->is('post')) {
@@ -115,7 +104,6 @@ class SubjectsController extends AppController
         });
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
-
         $this->set(compact(['subjects','id']));
     }
     /**

@@ -29,12 +29,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('adminlte.css') ?>
     <?= $this->Html->css('adminlte.min.css') ?>
+    <?= $this->Html->css('myfile.css') ?>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
     <?= $this->Html->script('popper.min.js') ?>
     <?= $this->Html->script('jquery.min.js') ?>
+    <?= $this->Html->script('printThis.js') ?>
     <?= $this->Html->script('jquery-3.4.1.js') ?>
     <script type="text/javascript">
         var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"

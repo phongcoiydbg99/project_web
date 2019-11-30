@@ -38,10 +38,6 @@ class TestsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('UsersTests', [
-            'foreignKey' => 'test_id'
-        ]);
-
         $this->belongsTo('Subjects', [
             'foreignKey' => 'subject_id',
             'joinType' => 'INNER'
@@ -79,6 +75,10 @@ class TestsTable extends Table
             ->requirePresence('last_time', 'create')
             ->notEmptyTime('last_time');
 
+        $validator
+            ->integer('computer_registered')
+            ->notEmptyString('computer_registered');
+
         return $validator;
     }
 
@@ -93,6 +93,7 @@ class TestsTable extends Table
     {
         $rules->add($rules->existsIn(['subject_id'], 'Subjects'));
         $rules->add($rules->existsIn(['test_room_id'], 'TestRooms'));
+        // $rules->add($rules->isUnique(['subject_id','test_room_id','start_time','last_time']));
         return $rules;
     }
 }

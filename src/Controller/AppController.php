@@ -56,7 +56,7 @@ class AppController extends Controller
                 ]
             ],
             'loginAction' => ['/login'],
-            'loginRedirect' => ['controller' => 'subjects', 'action' => 'index'],
+            'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
             'authorize' => 'Controller', // Added this line
         ]);
