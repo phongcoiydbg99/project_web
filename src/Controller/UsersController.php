@@ -3,6 +3,13 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Utility\Security;
+use Cake\Mailer\TransportFactory;
+use Cake\Datasource\EntityInterface;
 /**
  * Users Controller
  *
@@ -20,7 +27,7 @@ class UsersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['login']);
+        $this->Auth->allow(['login','logout','forgotpassword','resetpassword']);
     }
     // public function isAuthorized($user = null)
     // {
@@ -121,6 +128,7 @@ class UsersController extends AppController
     }
     public function login()
     {
+        $this->viewBuilder()->setLayout('login');
         if($this->Auth->user('id'))
         {
             // user already login
@@ -158,5 +166,60 @@ class UsersController extends AppController
     public function logout()
     {
         return $this->redirect($this->Auth->logout());
+    }
+    public function forgotpassword(){
+        if ($this->request->is('post')){
+            $myemail = $this->request->getData('email');
+            $mytoken = Security::hash(Security::randomBytes(25));
+            $userTable = TableRegistry::get('Users');
+            $user = $userTable->find('all')->where(['email'=>$myemail])->first();
+            $user->password = '';
+            $user->token = $mytoken;
+            if($userTable->save($user)){
+                $this->Flash->success('reset password link have been sent');
+                // TransportFactory::setConfig('mailtrap', [
+                //   'host' => 'smtp.mailtrap.io',
+                //   'port' => 2525,
+                //   'username' => '0e66c8eab31041',
+                //   'password' => 'e9ad77e30224e4',
+                //   'className' => 'Smtp'
+                // ]);
+                TransportFactory::setConfig('gmail', [
+                    'host' => 'ssl://smtp.gmail.com',
+                    'port' => 465,
+                    'username' => 'nhido9993@gmail.com',
+                    'password' => '01668291228',
+                    'className' => 'Smtp'
+                ]);
+            }
+            $email = new Email('default');
+            $email->Transport('gmail');
+            $email->emailFormat('html');
+            $email->from('nhido9993@gmail.com', 'nhị đỗ');
+            $email->subject('please confirm your reset password');
+            $email->to($myemail);
+            $email->send('hello ' . $myemail . '<br/>Plese click link below to reset your password<br/><br?> <a href="http://localhost/project_web/users/resetpassword/'. $mytoken.'" >Click</a>');
+
+
+        }
+
+
+    }
+
+    
+    public function resetpassword($token){
+        if($this->request->is('post')){
+            // $hasher = new DefaultPasswordHasher();
+            $mypass = $this->request->getData('password');
+            // dd($mypass);
+            $userTable = TableRegistry::get('users');
+            $user = $userTable->find('all')->where(['token'=>$token])->first();
+            // dd($userTable->find('all')->where(['token'=>$token])->first());
+            $user->password = $mypass;
+            if($userTable->save($user)){
+                // dd($user->password);
+                return $this->redirect(['action'=>'login']);
+            }
+        }
     }
 }

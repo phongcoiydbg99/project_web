@@ -25,6 +25,7 @@
 				);
 
 				echo $this->Form->button('Login',['class' =>'btn btn-primary']);
+				echo $this->Html->link('Quên mật khẩu',array('controller'=>'Users','action'=>'forgotpassword'),array('style'=>'float: right; margin-top:10px;'));
 				echo $this->Form->end();
 			?>
 	</div>
