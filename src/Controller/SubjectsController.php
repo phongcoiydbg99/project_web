@@ -59,13 +59,12 @@ class SubjectsController extends AppController
             $q = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
             $i =0;
             foreach ($data['subject'] as $index => $value) {
-                    // dump($q[$i]['id']);
-                     if (!empty($q)) {
-                    $users_test = $users_tests->get($q[$i]['id']);
+                    if (!empty($q[$i])) {
+                        $users_test = $users_tests->get($q[$i]['id']);
                     }
                     else $users_test = $users_tests->newEntity();
                     $users_test->user_id = $this->Auth->user('id');
-                    $users_test->test_id = $value;
+                    $users_test->test_id = (int)$value;
                     if (!$users_tests->save($users_test)) { $check_error = true;}
                     $i++;
             }
