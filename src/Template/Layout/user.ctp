@@ -29,8 +29,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('adminlte.css') ?>
     <?= $this->Html->css('adminlte.min.css') ?>
-    <?= $this->Html->css('alertify.min.css') ?>
-    <?= $this->Html->css('default.min.css') ?>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
@@ -38,7 +36,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->script('popper.min.js') ?>
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('jquery-3.4.1.js') ?>
-    <?= $this->Html->script('alertify.min.js') ?>
     <script type="text/javascript">
         var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"
         var baseUrl = "<?= $this->Url->build('/', true) ?>";
@@ -67,35 +64,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             ) ?>
             </li> --> 
         </ul>
-        <!-- <ul class="navbar-nav">
+        <ul class="navbar-nav">
             <li class="nav-item ">
                 <?= $this->Html->link(
                     '<i class="fas fa-power-off"></i> Logout ',
                     '/logout',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
-             
+              <!--<a class="nav-link" href="#"><i class="fa fa-home"></i><?= $this->fetch('title')?></a> -->
             </li>
-        </ul> -->
-        <ul class="navbar-nav ml-auto" >
-                <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="mr-2 d-none d-lg-inline text-gray-600 small"> <?= $current['first_name'].' '. $current['last_name']?> </span> 
-                      <img class="img-profile rounded-circle" style="width: 35px; height: 35px"  src="http://www.clker.com/cliparts/n/l/p/q/K/L/blue-user-icon.svg">
-                    </a>
-                    <!-- Dropdown - User Information -->
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                      
-                      <div class="dropdown-item" onclick="alertify.alert('Username: <?= $current['username'].'<br/>' ?>Họ và tên: <?=  $current['first_name'].' '. $current['last_name'].'<br/>' ?> Email: <?= $current['Email'].'<br/>'?> Ngày sinh: <?= $current['date_birth'].'<br/>' ?> Lớp: <?= $current['class'].'<br/>' ?>')">
-
-                        <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
-                        Profile
-                      </div>
-                      <div class="dropdown-divider"></div>
-                      <?php echo $this->Html->link('<img src="https://cdn1.iconfinder.com/data/icons/materia-arrows-symbols-vol-3/24/018_128_arrow_exit_logout-512.png" style="height="20" width="20""/> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
-                    </div>
-                  </li>
-                </ul>
+        </ul>
       </div>  
     </nav>
     <?= $this->Flash->render() ?>
