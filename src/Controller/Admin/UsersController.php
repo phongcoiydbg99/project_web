@@ -25,6 +25,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    
     public function index()
     {
         $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user']));

@@ -65,6 +65,7 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+        $this->set('current',$this->Auth->user());
     }
     public function isAuthorized($user = null)
     {
