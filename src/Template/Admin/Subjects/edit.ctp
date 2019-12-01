@@ -49,7 +49,7 @@
                                 <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.start_time',['type'=> 'text','id'=>'start_time'.$i,'label'=>false]) ?></div>
                                 <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.last_time',['type'=> 'text','id'=>'last_time'.$i,'label'=>false]) ?></div>
                                 <div class="col-lg-1">
-                                    <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-light float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
+                                    <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-light float-right",'type'=>'button','onclick'=>'deleteTests('.$i.','.$test->id.')','escape' => false]) ?>
                                 </div>
                             </div>
                             <?php
@@ -109,8 +109,29 @@
             }
         })    
     }
-    function deleteTests(id)
+    function deleteTests(id,test_id)
     {
         $(".subject_content"+id).remove();
+        if(typeof test_id !== 'undefined')
+        {
+            $.ajax({
+            url: baseUrl + 'admin/subjects/deleteTests',
+            type: 'post',
+            data: {
+                id : test_id
+            },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            dataType: 'html',
+            success: function (res) {
+                $('.add_content').append(res);
+            },
+            error: function () {
+
+            }
+        })       
+        }
+        
     }
 </script>

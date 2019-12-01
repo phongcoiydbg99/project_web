@@ -113,15 +113,29 @@ class SubjectsController extends AppController
             $data = $this->request->getData();
             $tests = $subject->tests;
 
-            $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
             $check_tests = $this->Subjects->find()->contain(['Tests'])
             ->where(['Subjects.test_day' => $data['test_day'],'Subjects.id !='=> $id]);
+
             $check_time = false;
+
+
             if(!empty($data['tests']))
             {
+              $i = 0;
               foreach ($data['tests'] as $key) {
+                
                 if ($key['start_time'] < $key['last_time'])
                 {
+                  $st = date('H:i:s',strtotime($key['start_time']));
+                  $lt = date('H:i:s',strtotime($key['last_time']));
+                  $temp = $this->Subjects->find()
+                              ->matching('Tests', function($q) use ($st,$lt){ 
+                                    return $q->where(['Tests.start_time' => $st,'Tests.last_time'=> $lt]);})->first();
+                  if (!empty($temp)) 
+                  {
+                    $data['tests'][$i] = array_merge($key,['id'=> $temp->_matchingData['Tests']['id']]);
+                  }            
+                  
                     foreach ($check_tests as $check_test) {
                         foreach ($check_test->tests as $test) {
                             $start_time = date('H:i',strtotime($test->start_time));
@@ -134,16 +148,22 @@ class SubjectsController extends AppController
                                     $this->Flash->error("Thời gian đăng ký của bạn trùng với môn: ".$check_test->code);
                                 }  
                             }
+                            if (!$check_time)
+                            {
+                              
+                            }
                         }                
                     }
-                }
-                else 
-                {
-                    $check_time = true;
-                    $this->Flash->error("Thời gian bắt đầu lớn hơn thời gian kết thúc.");
-                }
+                  }
+                  else 
+                  {
+                      $check_time = true;
+                      $this->Flash->error("Thời gian bắt đầu lớn hơn thời gian kết thúc.");
+                  }
+                $i++;
               }  
             }
+                  // dd($data); 
             
             if ($check_time)
             {
@@ -151,11 +171,13 @@ class SubjectsController extends AppController
             }
             else
             {
+                $subject = $this->Subjects->patchEntity($subject, $data);
+                // dd($subject->toArray());
                 if ($this->Subjects->save($subject)) {
                     $this->Flash->success(__('The subject has been saved.'));
-                    foreach ($tests as $test) {
-                        $this->Subjects->Tests->delete($test);
-                    }
+                    // foreach ($tests as $test) {
+                    //     $this->Subjects->Tests->delete($test);
+                    // }
                     return $this->redirect(['action' => 'index']);
                 }
                 $this->Flash->error(__('The subject could not be saved. Please, try again.'));
@@ -205,6 +227,15 @@ class SubjectsController extends AppController
           ]);
           $subjects = $this->paginate($query);
           $this->set(compact('subjects'));
+      }
+    }
+    public function deleteTests()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $test = $this->Subjects->Tests->get($data['id']);
+          $this->Subjects->Tests->delete($test);
       }
     }
 }
