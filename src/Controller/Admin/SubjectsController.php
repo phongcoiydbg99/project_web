@@ -111,11 +111,11 @@ class SubjectsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $check_tests = $subject->tests;
+            $tests = $subject->tests;
+
             $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
             $check_tests = $this->Subjects->find()->contain(['Tests'])
             ->where(['Subjects.test_day' => $data['test_day'],'Subjects.id !='=> $id]);
-            // dd($check_tests->toArray());
             $check_time = false;
             if(!empty($data['tests']))
             {
@@ -153,7 +153,7 @@ class SubjectsController extends AppController
             {
                 if ($this->Subjects->save($subject)) {
                     $this->Flash->success(__('The subject has been saved.'));
-                    foreach ($check_tests as $test) {
+                    foreach ($tests as $test) {
                         $this->Subjects->Tests->delete($test);
                     }
                     return $this->redirect(['action' => 'index']);
