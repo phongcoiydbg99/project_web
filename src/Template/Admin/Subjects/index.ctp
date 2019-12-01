@@ -26,7 +26,7 @@
                 <tr>
                     <td><?= h($subject->code) ?></td>
                     <td><?= h($subject->name) ?></td>
-                    <td><?= h($subject->test_day) ?></td>
+                    <td><?= h($subject->test_day->i18nFormat('dd/MM/yyyy')) ?></td>
                     <td class="actions">
                         <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $subject->id],['class' => 'btn btn-warning', 'escape' => false])?>
                         <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $subject->id], ['confirm' => __('Are you sure you want to delete # {0}?', $subject->id),'class' => 'btn btn-danger', 'escape' => false]) ?>

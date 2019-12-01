@@ -67,7 +67,7 @@
                                     {?>
                                         <td><?= $subject->code?></td>
                                         <td><?= $subject->name?></td>
-                                        <td><?= $subject->test_day?></td>
+                                        <td><?= $subject->test_day->i18nFormat('dd/MM/yyyy')?></td>
                                         <td><?= $tests->test_room->name?></td>
                                         <td><?= date('H:i',strtotime($tests->start_time)).' - '.date('H:i',strtotime($tests->last_time))?></td>
                         <?php       }

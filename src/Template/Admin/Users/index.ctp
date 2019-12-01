@@ -64,7 +64,7 @@
                     <td><?= h($user->username) ?></td>
                     <td><?= h($user->role) ?></td>
                     <td><?= h($user->first_name.' '.$user->last_name) ?></td>
-                    <td><?= h($user->date_birth) ?></td>
+                    <td><?= h($user->date_birth->i18nFormat('dd/MM/yyyy')) ?></td>
                     <td><?= h($user->class) ?></td>
                     <td class="actions">
                         <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $user->id],['class' => 'btn btn-warning', 'escape' => false]) ?>

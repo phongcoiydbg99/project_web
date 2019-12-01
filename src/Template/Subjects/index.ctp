@@ -26,7 +26,7 @@
                     <tr>
                             <td class='subject_code'><?= $subject->code?></td>
                             <td><?= $subject->name?></td>
-                            <td class='test_day'><?= $subject->test_day?></td>
+                            <td class='test_day'><?= $subject->test_day->i18nFormat('dd/MM/yyyy')?></td>
                             <td>
                                 <select class="form-control" id="test_room" onchange="selectTesttime(this,<?= $subject->id?>)" >
                                 <?php 

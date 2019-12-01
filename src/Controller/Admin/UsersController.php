@@ -126,25 +126,7 @@ class UsersController extends AppController
         {
             $check_import = $this->request->getData();
             $filename = $check_import['csv']['tmp_name'];
-            // // Import uploaded file to Database
-            // $handle = fopen($filename, "r");
-            // while(($data = fgetcsv($handle)) !== FALSE)
-            // {
-            //     $user = $this->Users->newEntity();
-            //     $user->id = $data[0];
-            //     $user->username = $data[1];
-            //     $user->password = $data[2];
-            //     $user->role = $data[3];
-            //     $user->first_name = $data[4];
-            //     $user->last_name = $data[5];
-            //     $user->date_birth = $data[6];
-            //     $user->class = $data[7];
-            // if ($this->Users->save($user)) {
-            //     $this->Flash->success(__('The user has been saved.'));}
-            // else  $this->Flash->error(__('The user could not be saved. Please, try again.'));
-
-            // }
-            // 
+            
             if (!isset($filename) || !in_array($check_import['csv']['type'], [
               'text/x-comma-separated-values', 
               'text/comma-separated-values', 
@@ -187,7 +169,7 @@ class UsersController extends AppController
                 $cellIterator->setIterateOnlyExistingCells(false);
                 $data = [];
                 foreach ($cellIterator as $cell) {
-                  $data[] = $cell->getValue();
+                  $data[] = $cell->getFormattedValue();
                 }
                 // Insert database
                 $user = $this->Users->newEntity();
@@ -197,7 +179,8 @@ class UsersController extends AppController
                 $vt = strrpos($data[2]," ");
                 $user->first_name = substr($data[2],0,$vt);
                 $user->last_name = substr($data[2],$vt+1,strlen($data[2]));
-                $user->date_birth = $data[3];
+                $date = str_replace('/','-',$data[3]);
+                $user->date_birth = date("Y-m-d", strtotime($date));
                 $user->class = $data[4];
                 if ($this->Users->save($user)) 
                 {
