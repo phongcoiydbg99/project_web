@@ -8,7 +8,8 @@
     <?= $this->Flash->render()?>
     <div>
         <h3 class="float-left"><?= __('Users') ?></h3>
-        <a href="#" class="btn btn-primary float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-square"></i></a> 
+        <?= $this->Html->Link('<i class="fas fa-plus-circle"></i>', ['action' => 'add'], ['class' => 'btn btn-primary float-right ml-1', 'escape' => false]) ?>
+        <a href="#" class="btn btn-primary float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a> 
         <?= $this->Form->postLink('<i class="fas fa-download"></i>', ['action' => 'export'], ['class' => 'btn btn-primary float-right ml-1', 'escape' => false]) ?>
         <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Search name..','onkeyup'=>'searchTable(this.value,"admin/users/searchTable")']) ?>
         <!-- The Modal -->

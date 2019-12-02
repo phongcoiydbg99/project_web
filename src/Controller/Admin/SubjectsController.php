@@ -175,9 +175,6 @@ class SubjectsController extends AppController
                 // dd($subject->toArray());
                 if ($this->Subjects->save($subject)) {
                     $this->Flash->success(__('The subject has been saved.'));
-                    // foreach ($tests as $test) {
-                    //     $this->Subjects->Tests->delete($test);
-                    // }
                     return $this->redirect(['action' => 'index']);
                 }
                 $this->Flash->error(__('The subject could not be saved. Please, try again.'));

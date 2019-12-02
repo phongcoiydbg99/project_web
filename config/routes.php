@@ -102,7 +102,7 @@ Router::prefix('admin', function (RouteBuilder $routes) {
     // you do not need to include the /admin prefix
     // or the admin route element.
     $routes->connect('/', ['controller' => 'users', 'action' => 'index']);
-    // $routes->connect('/users/import', ['controller' => 'users', 'action' => 'import']);
+    $routes->connect('/users/index', ['controller' => 'users', 'action' => 'index']);
     
     $routes->fallbacks(DashedRoute::class);
 });

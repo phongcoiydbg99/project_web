@@ -103,6 +103,16 @@ class UsersTable extends Table
             ->requirePresence('class', 'create')
             ->notEmptyString('class');
 
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email');
+
+        $validator
+            ->scalar('token')
+            ->maxLength('token', 100)
+            ->allowEmptyString('token');
+
         return $validator;
     }
 
@@ -112,10 +122,10 @@ class UsersTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->notEmptyString('username');
+            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin');
 
         $validator
-            ->notEmptyString('password');
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');
 
         return $validator;
     }

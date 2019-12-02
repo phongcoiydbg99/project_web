@@ -29,18 +29,19 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['login','logout','forgotpassword','resetpassword']);
     }
-    // public function isAuthorized($user = null)
-    // {
-    //     // All registered users can add articles
-    //     // Admin can access every action
-    //     // 
-    //     if (isset($user['role']) && $user['role'] === 'user') {
-    //         return true;
-    //     }
+    public function isAuthorized($user = null)
+    {
+        // All registered users can add articles
+        // Admin can access every action
+        // 
+        if (isset($user['role']) && $user['role'] === 'user') {
+            $this->redirect(array('controller' => 'users', 'action' => 'index','scope' => '/'));
+            return true;
+        }
 
-    //     $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
-    //     return parent::isAuthorized($user);
-    // }
+        $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
+        return parent::isAuthorized($user);
+    }
     public function index()
     {
         $users = $this->paginate($this->Users);
@@ -132,7 +133,8 @@ class UsersController extends AppController
         if($this->Auth->user('id'))
         {
             // user already login
-            return $this->redirect($this->Auth->redirectUrl());
+            // return $this->redirect($this->Auth->redirectUrl());
+            return $this->redirect(['controller' => 'subjects', 'action' => 'view_test']);
         }
         else{
             $login = $this->Users->newEntity();
@@ -154,9 +156,9 @@ class UsersController extends AppController
                         {
                            return $this->redirect(['controller' => 'users', 'action' => 'index','prefix'=>'admin']);
                         }
-                        else return $this->redirect($this->Auth->redirectUrl());
+                        else return $this->redirect(['controller' => 'subjects', 'action' => 'view_test']);
                     }
-                    $this->Flash->error("Mật khẩu của bạn chưa đúng!");
+                    $this->Flash->error("Tài khoản hoặc mật khẩu của bạn chưa đúng!");
                 }
             }
             // $this->set('validator',$validator);
@@ -168,34 +170,30 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
     public function forgotpassword(){
+        $this->viewBuilder()->setLayout('login');
         if ($this->request->is('post')){
             $myemail = $this->request->getData('email');
             $mytoken = Security::hash(Security::randomBytes(25));
             $userTable = TableRegistry::get('Users');
             $user = $userTable->find('all')->where(['email'=>$myemail])->first();
+            // dd($user);
             $user->password = '';
             $user->token = $mytoken;
             if($userTable->save($user)){
                 $this->Flash->success('reset password link have been sent');
-                // TransportFactory::setConfig('mailtrap', [
-                //   'host' => 'smtp.mailtrap.io',
-                //   'port' => 2525,
-                //   'username' => '0e66c8eab31041',
-                //   'password' => 'e9ad77e30224e4',
-                //   'className' => 'Smtp'
-                // ]);
+                
                 TransportFactory::setConfig('gmail', [
                     'host' => 'ssl://smtp.gmail.com',
                     'port' => 465,
-                    'username' => 'nhido9993@gmail.com',
-                    'password' => '01668291228',
+                    'username' => 'projectweb.993@gmail.com',
+                    'password' => 'phongcoibg99',
                     'className' => 'Smtp'
                 ]);
             }
             $email = new Email('default');
             $email->Transport('gmail');
             $email->emailFormat('html');
-            $email->from('nhido9993@gmail.com', 'nhị đỗ');
+            $email->from('projectweb.993@gmail.com', 'Admin');
             $email->subject('please confirm your reset password');
             $email->to($myemail);
             $email->send('hello ' . $myemail . '<br/>Plese click link below to reset your password<br/><br?> <a href="http://localhost/project_web/users/resetpassword/'. $mytoken.'" >Click</a>');
@@ -208,6 +206,7 @@ class UsersController extends AppController
 
     
     public function resetpassword($token){
+        $this->viewBuilder()->setLayout('login');
         if($this->request->is('post')){
             // $hasher = new DefaultPasswordHasher();
             $mypass = $this->request->getData('password');

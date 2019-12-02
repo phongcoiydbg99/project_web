@@ -37,8 +37,10 @@ class User extends Entity
         'last_name' => true,
         'date_birth' => true,
         'class' => true,
+        'email' => true,
+        'token' => true,
         'subjects' => true,
-        'test_times' => true
+        'tests' => true
     ];
 
     /**

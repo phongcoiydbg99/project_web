@@ -56,7 +56,7 @@ class AppController extends Controller
                 ]
             ],
             'loginAction' => ['/login'],
-            'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
+            // 'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
             'authorize' => 'Controller', // Added this line
         ]);
@@ -65,6 +65,7 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+        // dd($this->Auth->user());
         $this->set('current',$this->Auth->user());
     }
     public function isAuthorized($user = null)
