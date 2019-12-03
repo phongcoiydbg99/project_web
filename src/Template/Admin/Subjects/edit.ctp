@@ -4,7 +4,21 @@
  * @var \App\Model\Entity\Subject $subject
  */
 ?>
-</br>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Môn thi</a></li>
+          <li class="breadcrumb-item active">Sửa môn thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <?php 
     $myTemplates = [
             // 'formStart' => '<form{{attrs}}>',
@@ -15,13 +29,13 @@
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
+<div class="content">
 <?= $this->Form->create($subject) ?>
 <fieldset>
-    <legend><h2><?= __('Add Subject') ?></h2></legend>
     <div class="row">
         <div class="col-md-6 col-lg-6">
             <div class="subjects form large-9 medium-8 columns content card">
-                <div class="card-header bg-danger"><h3>Thêm môn thi</h3></div>
+                <div class="card-header "><h3>Thêm môn thi</h3></div>
                 <div class="card-body">
                     <?php
 
@@ -35,7 +49,7 @@
         </div>
         <div class="col-md-6 col-lg-6">
             <div class="card">
-                <div class="card-header bg-success">
+                <div class="card-header ">
                     <h3 class="float-left">Thêm phòng thi và lịch thi</h3>
                     <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'addTests()','escape' => false]) ?>
                 </div>
@@ -81,6 +95,7 @@
 </fieldset>
 <?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
 <?= $this->Form->end() ?>
+</div>
 <script type="text/javascript">
     var id = <?php echo json_encode($i) ?>;
     $('#datepicker').datepicker({

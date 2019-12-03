@@ -1,4 +1,4 @@
-<table class="table table-hover mt-5" cellpadding="0" cellspacing="0">
+<table class="table table-hover border" cellpadding="0" cellspacing="0">
     <thead class="thead-light"> 
         <tr>
             <th scope="col"><?= $this->Paginator->sort('id') ?></th>

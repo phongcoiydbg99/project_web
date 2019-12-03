@@ -88,7 +88,7 @@ class AppController extends Controller
         
         if($this->Auth->user('role') === 'admin')
         {
-            $this->viewBuilder()->setLayout('admin');
+            $this->viewBuilder()->setLayout('newuser');
         }
     }
 }

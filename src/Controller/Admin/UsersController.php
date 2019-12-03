@@ -28,7 +28,7 @@ class UsersController extends AppController
     
     public function index()
     {
-        $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user']));
+        $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user']),['limit'=>15]);
         $import = $this->Users->newEntity();
         
         $this->set('import',$import);
@@ -75,7 +75,7 @@ class UsersController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            else {debug($user->errors()); die;}
+            // else {debug($user->errors()); die;}
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
@@ -359,7 +359,7 @@ class UsersController extends AppController
           $query = $this->Users->find('all',[
               'conditions' => ['or'=>['first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%']]
           ])->where(['Users.role' => 'user']);
-          $users = $this->paginate($query);
+          $users = $this->paginate($query,['limit'=>15]);
           $this->set(compact('users'));
       }
     }

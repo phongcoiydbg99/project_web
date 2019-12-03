@@ -4,7 +4,21 @@
  * @var \App\Model\Entity\Subject $subject
  */
 ?>
-</br>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Môn thi</a></li>
+          <li class="breadcrumb-item active">Thêm môn thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <?php 
     $myTemplates = [
             // 'formStart' => '<form{{attrs}}>',
@@ -15,55 +29,56 @@
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
-<?= $this->Form->create($subject) ?>
-<fieldset>
-    <legend><h2><?= __('Add Subject') ?></h2></legend>
-    <div class="row">
-        <div class="col-md-6 col-lg-6">
-            <div class="subjects form large-9 medium-8 columns content card">
-                <div class="card-header bg-danger"><h3>Thêm môn thi</h3></div>
-                <div class="card-body">
-                    <?php
-                        // echo $this->Form->control('code');
-                        // echo $this->Form->control('name');
-                        // echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker']);
-                        // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);
-                        echo $this->Form->controls(
-                            ['code' => ['class' => 'form-control is-invalid','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học']],
-                                                
-                             'name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
-                             'test_day' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'Ngày thi']],
-                            ],['legend' => '']
-                        );
-                        $i = 0;
-                    ?>
-                </div>
-            </div> 
-        </div>
-        <div class="col-md-6 col-lg-6">
-            <div class="card">
-                <div class="card-header bg-success">
-                    <h3 class="float-left">Thêm phòng thi và lịch thi</h3>
-                    <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'addTests()','escape' => false]) ?>
-                </div>
-                <div class="card-body">
-                    <div class="row add_content">
-                        <div class=" row subject_content<?=$i?>">
-                            <div class="col-lg-3"><?= $this->Form->control('tests.'.$i.'.test_room_id', ['options' => $testRooms,'class'=>"form-control",'label'=>false]) ?></div>
-                            <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.start_time',['type'=> 'text','id'=>'start_time'.$i,'label'=>false]) ?></div>
-                            <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.last_time',['type'=> 'text','id'=>'last_time'.$i,'label'=>false]) ?></div>
-                            <div class="col-lg-1">
-                                <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-light float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
-                            </div>
-                        </div>                        
+<div class="content">
+    <?= $this->Form->create($subject) ?>
+    <fieldset>
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <div class="subjects form large-9 medium-8 columns content card">
+                    <div class="card-header "><h3>Thêm môn thi</h3></div>
+                    <div class="card-body">
+                        <?php
+                            // echo $this->Form->control('code');
+                            // echo $this->Form->control('name');
+                            // echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker']);
+                            // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);
+                            echo $this->Form->controls(
+                                ['code' => ['class' => 'form-control is-invalid','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học']],
+                                                    
+                                 'name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
+                                 'test_day' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'Ngày thi']],
+                                ],['legend' => '']
+                            );
+                            $i = 0;
+                        ?>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header ">
+                        <h3 class="float-left">Thêm phòng thi và lịch thi</h3>
+                        <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'addTests()','escape' => false]) ?>
+                    </div>
+                    <div class="card-body">
+                        <div class="row add_content">
+                            <div class=" row subject_content<?=$i?>">
+                                <div class="col-lg-3"><?= $this->Form->control('tests.'.$i.'.test_room_id', ['options' => $testRooms,'class'=>"form-control",'label'=>false]) ?></div>
+                                <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.start_time',['type'=> 'text','id'=>'start_time'.$i,'label'=>false]) ?></div>
+                                <div class="col-lg-4"><?= $this->Form->control('tests.'.$i.'.last_time',['type'=> 'text','id'=>'last_time'.$i,'label'=>false]) ?></div>
+                                <div class="col-lg-1">
+                                    <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-light float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
+                                </div>
+                            </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</fieldset>
-<?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
-<?= $this->Form->end() ?>
+    </fieldset>
+    <?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
+    <?= $this->Form->end() ?>   
+</div>
 <script type="text/javascript">
     var id = <?php echo json_encode($i) ?>;
     $('#datepicker').datepicker({

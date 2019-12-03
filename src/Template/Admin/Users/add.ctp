@@ -4,6 +4,21 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Sinh viên</a></li>
+          <li class="breadcrumb-item active">Thêm sinh viên</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <?php 
     $myTemplates = [
             // 'formStart' => '<form{{attrs}}>',
@@ -14,76 +29,76 @@
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
-<?= $this->Form->create($user) ?>
-    <fieldset>
-    <legend><?= __('Add User') ?></legend>
-    <div class="row">
-        <div class="col-md-6 col-lg-6">
-            <div class="users form large-9 medium-8 columns content card container">
-                <div class="card-header"><h3>Thêm sinh viên</h3></div>
-                <div class="card-body">
-                    <?php
-                        // echo $this->Form->control('role');
-                        // echo $this->Form->control('first_name');
-                        // echo $this->Form->control('last_name');
-                        // echo $this->Form->control('date_birth',['type'=> 'text','id'=>'datepicker']);
-                        // echo $this->Form->control('class');
-                        // echo $this->Form->control('subjects._ids', ['options' => $subjects]);
-                        echo $this->Form->controls(
-                            ['username' => ['class' => 'form-control is-invalid','required' => false,'id' => 'username','label' => ['text'=>'Username']],
-                                                
-                             'password' => ['class' => 'form-control is-invalid','required' => false,'id' => 'password','label' => ['text'=>'Password']],
-                             'first_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'first_name','label' => ['text'=>'First name']],
-                             'last_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'last_name','label' => ['text'=>'Last name']],
-                             'date_birth' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'date_birth']],
-                             'class' => ['class' => 'form-control is-invalid','required' => false,'id' => 'class','label' => ['text'=>'Class']],
-                            ],['legend' => '']
-                        );
-                        $i = 0;
-                    ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="float-left">Thêm môn thi</h3>
-                    <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-primary float-right",'type'=>'button','onclick'=>'addSubjects()','escape' => false]) ?>
-                </div>
-                <div class="card-body">
-                    <div class="add_content">
-                        <div class="row subject_content<?=$i?> mb-3">
-                            <div class="col-lg-6">
-                                <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
-                                <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="" name='subjects[0]' id='subjects<?=$i?>'>
-                                <div class="autocomplete autocomplete<?=$i?>" >
-                                    <ul name='ul' class="autocomplete-list" style="" >
-                                      <?php 
-
-                                        foreach ($subjects as $index => $value) 
-                                        {
-                                            echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
-
-                                        }
-                                      ?>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-1">
-                                 <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
-                            </div>
-                        </div>                        
+<div class="content">
+    <?= $this->Form->create($user) ?>
+        <fieldset>
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <div class="users form large-9 medium-8 columns content card container">
+                    <div class="card-header"><h3>Thêm sinh viên</h3></div>
+                    <div class="card-body">
+                        <?php
+                            // echo $this->Form->control('role');
+                            // echo $this->Form->control('first_name');
+                            // echo $this->Form->control('last_name');
+                            // echo $this->Form->control('date_birth',['type'=> 'text','id'=>'datepicker']);
+                            // echo $this->Form->control('class');
+                            // echo $this->Form->control('subjects._ids', ['options' => $subjects]);
+                            echo $this->Form->controls(
+                                ['username' => ['class' => 'form-control is-invalid','required' => false,'id' => 'username','label' => ['text'=>'Username']],
+                                                    
+                                 'password' => ['class' => 'form-control is-invalid','required' => false,'id' => 'password','label' => ['text'=>'Password']],
+                                 'first_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'first_name','label' => ['text'=>'First name']],
+                                 'last_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'last_name','label' => ['text'=>'Last name']],
+                                 'date_birth' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'date_birth']],
+                                 'class' => ['class' => 'form-control is-invalid','required' => false,'id' => 'class','label' => ['text'=>'Class']],
+                                ],['legend' => '']
+                            );
+                            $i = 0;
+                        ?>
                     </div>
                 </div>
-                <div class="card-footer">
-                <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="float-left">Thêm môn thi</h3>
+                        <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-primary float-right",'type'=>'button','onclick'=>'addSubjects()','escape' => false]) ?>
+                    </div>
+                    <div class="card-body">
+                        <div class="add_content mt-3">
+                            <div class="row subject_content<?=$i?> mb-3">
+                                <div class="col-lg-10">
+                                    <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
+                                    <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="" name='subjects[0]' id='subjects<?=$i?>'>
+                                    <div class="autocomplete autocomplete<?=$i?>" >
+                                        <ul name='ul' class="autocomplete-list" style="" >
+                                          <?php 
+
+                                            foreach ($subjects as $index => $value) 
+                                            {
+                                                echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
+
+                                            }
+                                          ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    </fieldset>
-<?= $this->Form->end() ?>  
-
+        </fieldset>
+    <?= $this->Form->end() ?>  
+</div>
 <script type="text/javascript">
     var mouse_is_inside=''; 
     var id = <?php echo json_encode($i)?>;

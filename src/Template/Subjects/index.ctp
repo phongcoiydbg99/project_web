@@ -4,11 +4,23 @@
  * @var \App\Model\Entity\Subject[]|\Cake\Collection\CollectionInterface $subjects
  */
 ?>
-
-<h1 class="mt-2 mb-3"> <?= $this->getRequest()->getSession()->read('Auth.User.first_name') . ' ' . $this->getRequest()->getSession()->read('Auth.User.last_name') ?></h1>
-<div class="subjects index large-9 medium-8 columns content">
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Đăng kí thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<div class="content">
     <div class="card">
-        <div class="card-header"><h3><?= __('Subjects') ?></h3></div>
+        <div class="card-header"><h3>Đăng kí thi</h3></div>
         <?= $this->Form->create() ?>
         <div class="card-body table-responsive p-0" style="height:250px">
             <table class="table table-head-fixed" cellpadding="0" cellspacing="0">

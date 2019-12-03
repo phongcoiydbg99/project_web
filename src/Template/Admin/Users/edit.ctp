@@ -4,6 +4,21 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Sinh viên</a></li>
+          <li class="breadcrumb-item active">Sửa sinh viên</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <?php 
     $myTemplates = [
             // 'formStart' => '<form{{attrs}}>',
@@ -14,11 +29,11 @@
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
+<div class="content">
 <?= $this->Form->create($user) ?>
 <fieldset>
-   <legend><?= __('Add User') ?></legend>
     <div class="row">
-        <div class="col-md-6 col-lg-6">
+        <div class="col-md-8 col-lg-8">
             <div class="users form large-9 medium-8 columns content card container">
                 <div class="card-header"><h3>Thêm sinh viên</h3></div>
                 <div class="card-body">
@@ -44,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-lg-6">
+        <div class="col-md-4 col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <h3 class="float-left">Thêm môn thi</h3>
@@ -54,7 +69,7 @@
                     <div class="add_content">
                         <?php foreach ($user->subjects as $subject): ?>
                         <div class="row subject_content<?=$i?> mb-3">
-                            <div class="col-lg-6">
+                            <div class="col-lg-10">
                                 <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
                                     <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="<?=$subject->code.'-'.$subject->name?>" name='subjects[<?=$subject->id?>]' id='subjects<?=$i?>'>
                                 
@@ -71,7 +86,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-1">
+                            <div class="col-lg-2">
                                  <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?>
                             </div>
                         </div>    
@@ -88,6 +103,7 @@
 </fieldset>
 <?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
 <?= $this->Form->end() ?>
+</div>
 <script type="text/javascript">
     var mouse_is_inside=''; 
     var id = <?php echo json_encode($i)?>;
