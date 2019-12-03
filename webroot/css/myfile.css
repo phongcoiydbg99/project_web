@@ -2,3 +2,31 @@
         font-family: 'Roboto Slab', serif;
         font-size: 16px;
       }
+.autocomplete{
+  position: relative;
+	width: 100%;
+	display: none;
+}
+.autocomplete-list {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  border: 1px solid var(--popupBorderColor);
+  -webkit-box-shadow: 0 1px 3px rgba(2, 8, 20, 0.06), 0 1px 2px rgba(2, 8, 20, 0.04);
+  box-shadow: 0 1px 3px rgba(2, 8, 20, 0.06), 0 1px 2px rgba(2, 8, 20, 0.04);
+  padding: 0;
+  max-height: 8rem;
+  overflow: auto;
+}
+.autocomplete-list.show{
+	display:  block;
+}
+ul.autocomplete-list li {
+  cursor: pointer;
+  padding: 0.2rem 1rem;
+}
+ul.autocomplete-list li:hover{
+	/* font-weight: bold; */
+	background-color: #0C76FA;
+	cursor:pointer;
+}

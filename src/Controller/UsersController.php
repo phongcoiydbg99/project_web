@@ -221,4 +221,9 @@ class UsersController extends AppController
             }
         }
     }
+    public function profile()
+    {
+        $users = $this->paginate($this->Users);
+        $this->set(compact('users'));
+    }
 }

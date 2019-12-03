@@ -31,6 +31,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('adminlte.min.css') ?>
     <?= $this->Html->css('alertify.min.css') ?>
     <?= $this->Html->css('default.min.css') ?>
+    <?= $this->Html->css('myfile.css') ?>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
@@ -38,6 +40,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->script('popper.min.js') ?>
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('myfile.js') ?>
+
     <?= $this->Html->script('alertify.min.js') ?>
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
@@ -89,12 +92,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                       
-                      <div class="dropdown-item" onclick="alertify.alert('Username: <?= $current['username'].'<br/>' ?>Họ và tên: <?=  $current['first_name'].' '. $current['last_name'].'<br/>' ?> Email: <?= $current['email'].'<br/>'?> Ngày sinh: <?= $current['date_birth'].'<br/>' ?> Lớp: <?= $current['class'].'<br/>' ?>')">
-
+                      <!-- <div class="dropdown-item" onclick="alertify.alert('Username: <?= $current['username'].'<br/>' ?>Họ và tên: <?=  $current['first_name'].' '. $current['last_name'].'<br/>' ?> Email: <?= $current['email'].'<br/>'?> Ngày sinh: <?= $current['date_birth'].'<br/>' ?> Lớp: <?= $current['class'].'<br/>' ?>')">
                         <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
                         Profile
-                      </div>
+                      </div> -->
+                      <?php echo $this->Html->link('<img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20""/> Profile', ['action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+
                       <div class="dropdown-divider"></div>
+
                       <?php echo $this->Html->link('<img src="https://cdn1.iconfinder.com/data/icons/materia-arrows-symbols-vol-3/24/018_128_arrow_exit_logout-512.png" style="height="20" width="20""/> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
                     </div>
                   </li>

@@ -60,12 +60,22 @@ class UsersController extends AppController
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+            $key = $data['subjects'];
+            unset($data['subjects']);
+            $data['subjects']['_ids'] = array();
+            foreach ($key as $index => $value) {
+                    array_push($data['subjects']['_ids'],(string)$index);
+                }
+            $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+            $user->role = 'user';
             if ($this->Users->save($user)) {
+
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+            else {debug($user->errors()); die;}
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
@@ -87,18 +97,28 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Subjects', 'Tests']
+            'contain' => ['Subjects']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+            $key = $data['subjects'];
+            unset($data['subjects']);
+            $data['subjects']['_ids'] = array();
+            foreach ($key as $index => $value) {
+                    array_push($data['subjects']['_ids'],(string)$index);
+                }
+            $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
-            }
+            }else{debug($user->errors()); die;}
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
+        $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->code . '- ' . $e->name ;
+          },'limit' => 200]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);
         $this->set(compact('user', 'subjects', 'tests'));
     }
@@ -341,6 +361,47 @@ class UsersController extends AppController
           ])->where(['Users.role' => 'user']);
           $users = $this->paginate($query);
           $this->set(compact('users'));
+      }
+    }
+    public function profile()
+    {
+        $users = $this->paginate($this->Users);
+        $this->set(compact('users'));
+    }
+    public function autoComplete()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $i = $data['id'];
+          $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
+          'valueField' => function ($e) {
+                return $e->code . '- ' . $e->name ;
+            },'limit' => 200,'conditions' => ['or'=>['code LIKE' => '%'.$data['name'].'%','name LIKE' => '%'.$data['name'].'%']]]);
+          $this->set(compact('subjects','i'));
+      }
+    }
+    public function addSubjects()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+        $data = $this->request->getData();
+        $i = $data['id'];
+        $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
+          'valueField' => function ($e) {
+                return $e->code . '- ' . $e->name ;
+            },'limit' => 200]);
+        $this->set(compact('subjects','i'));
+      }
+    }
+    public function deleteTests()
+    {
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $users_subjects = TableRegistry::getTableLocator()->get('users_subjects');
+          $test = $users_subjects->get($data['id']);
+          $users_subjects->delete($test);
       }
     }
 }

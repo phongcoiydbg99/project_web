@@ -56,66 +56,6 @@ class UsersTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
-            ->scalar('username')
-            ->maxLength('username', 60)
-            ->requirePresence('username', 'create')
-            ->notEmptyString('username');
-
-        $validator
-            ->scalar('password')
-            ->maxLength('password', 60)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
-
-        $validator
-            ->scalar('role')
-            ->maxLength('role', 10)
-            ->requirePresence('role', 'create')
-            ->notEmptyString('role');
-
-        $validator
-            ->scalar('first_name')
-            ->maxLength('first_name', 100)
-            ->requirePresence('first_name', 'create')
-            ->notEmptyString('first_name');
-
-        $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 100)
-            ->requirePresence('last_name', 'create')
-            ->notEmptyString('last_name');
-
-        $validator
-            ->date('date_birth')
-            ->requirePresence('date_birth', 'create')
-            ->notEmptyDate('date_birth');
-
-        $validator
-            ->scalar('class')
-            ->maxLength('class', 60)
-            ->requirePresence('class', 'create')
-            ->notEmptyString('class');
-
-        $validator
-            ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email');
-
-        $validator
-            ->scalar('token')
-            ->maxLength('token', 100)
-            ->allowEmptyString('token');
-
-        return $validator;
-    }
-
     public function validationLogin(Validator $validator)
     {
         $validator
@@ -129,6 +69,110 @@ class UsersTable extends Table
 
         return $validator;
     }
+    public function validationAdd(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('username')
+            ->maxLength('username', 60)
+            ->requirePresence('username', 'create')
+            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 60)
+            ->requirePresence('password', 'create')
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 100)
+            ->requirePresence('first_name', 'create')
+            ->notEmptyString('first_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 100)
+            ->requirePresence('last_name', 'create')
+            ->notEmptyString('last_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->date('date_birth')
+            ->requirePresence('date_birth', 'create')
+            ->notEmptyDate('date_birth','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('class')
+            ->maxLength('class', 60)
+            ->requirePresence('class', 'create')
+            ->notEmptyString('class','Bạn chưa điền đầy đủ thông tin');
+
+        return $validator;
+    }
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('username')
+            ->maxLength('username', 60)
+            ->requirePresence('username', 'create')
+            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 60)
+            ->requirePresence('password', 'create')
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('role')
+            ->maxLength('role', 10)
+            ->requirePresence('role', 'create')
+            ->notEmptyString('role','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 100)
+            ->requirePresence('first_name', 'create')
+            ->notEmptyString('first_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 100)
+            ->requirePresence('last_name', 'create')
+            ->notEmptyString('last_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->date('date_birth')
+            ->requirePresence('date_birth', 'create')
+            ->notEmptyDate('date_birth','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('class')
+            ->maxLength('class', 60)
+            ->requirePresence('class', 'create')
+            ->notEmptyString('class','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('token')
+            ->maxLength('token', 100)
+            ->allowEmptyString('token','Bạn chưa điền đầy đủ thông tin');
+
+        return $validator;
+    }
+
+    
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

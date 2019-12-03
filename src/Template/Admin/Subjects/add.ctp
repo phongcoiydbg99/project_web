@@ -24,10 +24,17 @@
                 <div class="card-header bg-danger"><h3>Thêm môn thi</h3></div>
                 <div class="card-body">
                     <?php
-                        echo $this->Form->control('code');
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker']);
+                        // echo $this->Form->control('code');
+                        // echo $this->Form->control('name');
+                        // echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker']);
                         // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);
+                        echo $this->Form->controls(
+                            ['code' => ['class' => 'form-control is-invalid','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học']],
+                                                
+                             'name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
+                             'test_day' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'Ngày thi']],
+                            ],['legend' => '']
+                        );
                         $i = 0;
                     ?>
                 </div>
