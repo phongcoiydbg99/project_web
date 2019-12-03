@@ -93,6 +93,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                       
                       <!-- <div class="dropdown-item" onclick="alertify.alert('Username: <?= $current['username'].'<br/>' ?>Họ và tên: <?=  $current['first_name'].' '. $current['last_name'].'<br/>' ?> Email: <?= $current['email'].'<br/>'?> Ngày sinh: <?= $current['date_birth'].'<br/>' ?> Lớp: <?= $current['class'].'<br/>' ?>')">
+
                         <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
                         Profile
                       </div> -->
