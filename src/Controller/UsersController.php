@@ -60,7 +60,6 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
-
         $this->set('user', $user);
     }
 
@@ -220,5 +219,11 @@ class UsersController extends AppController
                 return $this->redirect(['action'=>'login']);
             }
         }
+    }
+    
+    public function profile()
+    {
+        $users = $this->paginate($this->Users);
+        $this->set(compact('users'));
     }
 }

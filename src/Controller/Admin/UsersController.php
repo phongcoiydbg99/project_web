@@ -343,4 +343,10 @@ class UsersController extends AppController
           $this->set(compact('users'));
       }
     }
+    
+    public function profile()
+    {
+        $users = $this->paginate($this->Users);
+        $this->set(compact('users'));
+    }
 }
