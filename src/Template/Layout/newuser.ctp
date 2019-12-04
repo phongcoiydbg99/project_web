@@ -100,9 +100,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <span class="brand-text font-weight-light"><?= $current['first_name'].' '. $current['last_name']?></span>
-    </a>
+    <?php echo $this->Html->link('<span class="brand-text font-weight-light">'.$current['first_name'].' '. $current['last_name'].'</span>', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'brand-link'))?>
 
     <!-- Sidebar -->
     <div class="sidebar">

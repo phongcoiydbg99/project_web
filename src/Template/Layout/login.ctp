@@ -45,29 +45,19 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-light navbar-light">
-      <?= $this->Html->link(
-                '<i class="fa fa-home"></i> Home ',
-                '/',
-                ['class' => 'navbar-brand', 'escape' => false]
-            ) ?>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item active">
-            <?= $this->Html->link(
-                'About',
-                '/Users/Home',
-                ['class' => 'nav-link', 'escape' => false]
-            ) ?>
-            </li> --> 
+    <nav class="navbar navbar-expand navbar-white navbar-light shadow-sm">
+    <!-- Left navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item d-none d-sm-inline-block">
+             <?= $this->Html->link(
+                        '<i class="fa fa-home"></i> Home ',
+                        '/',
+                        ['class' => 'nav-link', 'escape' => false]
+                    ) ?>
+          </li>
         </ul>
-        
-      </div>  
     </nav>
-    <!-- <?= $this->Flash->render() ?> -->
+    <?= $this->Flash->render() ?>
     <div class="container clearfix">
         <?= $this->fetch('content') ?>
     </div>

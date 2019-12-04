@@ -14,14 +14,11 @@
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
-<?= $this->Form->create($user) ?>
+<?= $this->Form->create($user,['action' => 'profile']) ?>
 <fieldset>
-    <legend><?= __('Edit User') ?></legend>
         <div class="users form large-9 medium-8 columns content">
                 <?php
                     echo $this->Form->control('username');
-                    echo $this->Form->control('password');
-                    echo $this->Form->control('role');
                     echo $this->Form->control('first_name');
                     echo $this->Form->control('last_name');
                     echo $this->Form->control('date_birth',['type'=> 'text','id'=>'datepicker','value'=>date("Y-m-d", strtotime($user->date_birth))]);

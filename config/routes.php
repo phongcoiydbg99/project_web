@@ -69,6 +69,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/users/subjects/delete_test', ['controller' => 'subjects', 'action' => 'delete_test']);
     $routes->connect('/users/forgotpassword', ['controller' => 'users', 'action' => 'forgotpassword']);
     $routes->connect('/users/resetpassword', ['controller' => 'users', 'action' => 'resetpassword']);
+    $routes->connect('/users/profile', ['controller' => 'users', 'action' => 'profile']);
     
 
     /**

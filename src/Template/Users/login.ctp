@@ -1,8 +1,9 @@
 <div class="row">
 	<div class="col-lg-4"></div>
-	<div class="col-lg-4 mt-sm-5 mt-md-5 border border-light rounded p-3 mb-5">
+	<div class="col-lg-4 mt-sm-5 mt-md-5 rounded p-3 mb-5 card container">
+		<div class="card-header"><h2>Login</h2></div>
+		<div class="card-body">
 			<?php 
-				echo $this->Flash->render();
 
 				$myTemplates = [
 					// 'formStart' => '<form{{attrs}}>',
@@ -21,13 +22,14 @@
 					['username' => ['class' => 'form-control is-invalid','required' => false,'placeholder' => 'Enter username', 'id' => 'username','label' => ['text'=>'Username']],
 										
 					 'password' => ['class' => 'form-control is-invalid','required' => false,'placeholder' => 'Enter password', 'id' => 'password','label' => ['text'=>'Password']]
-					],['legend' => 'Login']
+					],['legend' => '']
 				);
 
 				echo $this->Form->button('Login',['class' =>'btn btn-primary']);
 				echo $this->Html->link('Forgot password',array('controller'=>'Users','action'=>'forgotpassword'),array('style'=>'float: right; margin-top:10px;'));
 				echo $this->Form->end();
 			?>
+		</div>
 	</div>
 	<div class="col-lg-4"></div>
 </div>
