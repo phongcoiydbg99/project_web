@@ -89,7 +89,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
                     Profile
                   </div> -->
-                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
                 <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
             </div>

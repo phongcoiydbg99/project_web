@@ -405,4 +405,22 @@ class UsersController extends AppController
           $users_subjects->delete($test);
       }
     }
+    public function editProfile($id = null)
+    {
+        $user = $this->Users->get($this->Auth->user('id'), [
+            'contain' => ['Subjects', 'Tests']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['controller'=>'users','action' => 'index']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
+        $tests = $this->Users->Tests->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'subjects', 'tests'));
+    }
 }

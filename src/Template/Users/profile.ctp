@@ -17,7 +17,7 @@
 					</dl>
 					<dl>
 						<dt>Ngày sinh</dt>
-						<dd style="margin-left: 25px"> <?=$time = date('d/m/Y',strtotime($current['date_birth']))  ?> </dd>
+						<dd style="margin-left: 25px"> <?= $time = date('d/m/Y',strtotime($current['date_birth']))  ?> </dd>
 					</dl>
 					<dl>
 						<dt>Lớp</dt>
@@ -30,7 +30,7 @@
 			<h4>Action</h4>
 			<ul class="list-group list-group-flush">
 				<li class="list-group-item">
-					<?php echo $this->Html->link('<img src="https://small.pngfans.com/20190523/s/edit-profile-icon-png-computer-icons-user-profile-034e263697f438c7.jpg" style="height="20" width="20""/> Edit profile', ['controller'=>'users','action'=>'editProfile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+					<?php echo $this->Html->link('<img src="https://small.pngfans.com/20190523/s/edit-profile-icon-png-computer-icons-user-profile-034e263697f438c7.jpg" style="height="20" width="20""/> Edit profile', ['action'=>'editProfile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
 
 				</li>
 			</ul>
