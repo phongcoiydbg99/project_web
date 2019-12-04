@@ -56,9 +56,8 @@
                 <table class="table table-hover border" cellpadding="0" cellspacing="0">
                     <thead class="thead-light"> 
                         <tr>
-                            <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('username') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('role') ?></th>
+                            <!-- <th scope="col"><?= $this->Paginator->sort('id') ?></th> -->
+                            <th scope="col" class="pl-4"><?= $this->Paginator->sort('username') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('last_name','Họ và tên') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('date_birth') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('class') ?></th>
@@ -66,12 +65,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $id = 0;
-                        foreach ($users as $user): ?>
+                        <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><?= $id++ ?></td>
-                            <td><?= h($user->username) ?></td>
-                            <td><?= h($user->role) ?></td>
+                            <!-- <td><?= $this->Number->format($user->id) ?></td> -->
+                            <td class="pl-4"><?= h($user->username) ?></td>
                             <td><?= h($user->first_name.' '.$user->last_name) ?></td>
                             <td><?= h($user->date_birth->i18nFormat('dd/MM/yyyy')) ?></td>
                             <td><?= h($user->class) ?></td>

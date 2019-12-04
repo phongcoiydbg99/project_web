@@ -28,7 +28,7 @@ class UsersController extends AppController
     
     public function index()
     {
-        $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user']),['limit'=>15]);
+        $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user'])->order(['Users.username' => 'ASC']),['limit'=>15]);
         $import = $this->Users->newEntity();
         
         $this->set('import',$import);
@@ -59,24 +59,31 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEntity();
+        $check_edit = false; 
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $key = $data['subjects'];
             unset($data['subjects']);
             $data['subjects']['_ids'] = array();
             foreach ($key as $index => $value) {
+                    if($index == 0) $check_edit = true;
                     array_push($data['subjects']['_ids'],(string)$index);
                 }
             $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
             $user->role = 'user';
-            if ($this->Users->save($user)) {
+            if (!$check_edit)
+            {
+              $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+              if ($this->Users->save($user)) {
+                  $this->Flash->success(__('The user has been saved.'));
 
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                  return $this->redirect(['action' => 'index']);
+              }else{
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                // debug($user->errors()); die;
+              }
             }
-            // else {debug($user->errors()); die;}
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            else $this->Flash->error(__('Môn thi của bạn bị trống'));
         }
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
@@ -99,21 +106,30 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['Subjects']
         ]);
+        $check_edit = false; 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $key = $data['subjects'];
             unset($data['subjects']);
             $data['subjects']['_ids'] = array();
             foreach ($key as $index => $value) {
+                  if($index == 0) $check_edit = true;
                     array_push($data['subjects']['_ids'],(string)$index);
                 }
-            $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+            if (!$check_edit)
+            {
+              $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+              if ($this->Users->save($user)) {
+                  $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            }else{debug($user->errors()); die;}
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                  return $this->redirect(['action' => 'index']);
+              }else{
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                // debug($user->errors()); die;
+              }
+            }
+            else $this->Flash->error(__('Môn thi của bạn bị trống'));
+            
         }
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {

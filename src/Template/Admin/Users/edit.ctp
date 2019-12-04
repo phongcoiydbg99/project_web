@@ -71,7 +71,7 @@
                         <div class="row subject_content<?=$i?> mb-3">
                             <div class="col-lg-10">
                                 <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
-                                    <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="<?=$subject->code.'-'.$subject->name?>" name='subjects[<?=$subject->id?>]' id='subjects<?=$i?>'>
+                                    <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="<?=$subject->code.'- '.$subject->name?>" name='subjects[<?=$subject->id?>]' id='subjects<?=$i?>'>
                                 
                                 <div class="autocomplete autocomplete<?=$i?>" >
                                     <ul name='ul' class="autocomplete-list" style="" >
@@ -127,10 +127,21 @@
     {
       $('.autocomplete'+i).slideDown(0); 
     }
-    function list(e,index,id)
+    function list(event,index,id)
     {
+        check = false;
+        $('#subjects'+id).val('');
+        $( ".auto" ).each(function(index,e) {
+            if ($(event).text() == $(e).val())
+            {
+                alert('Môn đăng ký của bạn bị trùng');
+                check = true;
+            }
+        });
+        if (!check){
         $('#subjects'+id).attr('name','subjects['+index+']');
-        $('#subjects'+id).val($(e).text());
+        $('#subjects'+id).val($(event).text());
+        }
         $('.autocomplete'+id).hide(0);
 
     }

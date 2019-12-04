@@ -3,12 +3,12 @@
         font-size: 16px;
       }
 .autocomplete{
-  position: relative;
+  /* position: relative; */
 	width: 100%;
 	display: none;
 }
 .autocomplete-list {
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
   background-color: white;
   border: 1px solid var(--popupBorderColor);

@@ -37,11 +37,22 @@
     {
       $('.autocomplete'+i).slideDown(0); 
     }
-    function list(e,index,id)
+    function list(event,index,id)
     {
+        check = false;
+        $('#subjects'+id).val('');
+        $( ".auto" ).each(function(index,e) {
+            if ($(event).text() == $(e).val())
+            {
+                alert('Môn đăng ký của bạn bị trùng');
+                check = true;
+            }
+        });
+        if (!check){
         $('#subjects'+id).attr('name','subjects['+index+']');
-        $('#subjects'+id).val($(e).text());
-        $('.autocomplete').hide(0);
+        $('#subjects'+id).val($(event).text());
+        }
+        $('.autocomplete'+id).hide(0);
 
     }
 </script>
