@@ -33,8 +33,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('alertify.min.css') ?>
     <?= $this->Html->css('default.min.css') ?>
     <?= $this->Html->css('summernote-bs4.css') ?>
-    <link rel="stylesheet" href="../webroot/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <link rel="stylesheet" href="../webroot/plugins/summernote/summernote-bs4.css">
+    <?= $this->Html->css('icheck-bootstrap.min.css') ?>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">

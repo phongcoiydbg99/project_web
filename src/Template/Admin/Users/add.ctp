@@ -124,6 +124,9 @@
     }
     function list(e,index,id)
     {
+        $( ".auto" ).each(function(index,e) {
+            console.log($(e).attr('name'));
+        });
         $('#subjects'+id).attr('name','subjects['+index+']');
         $('#subjects'+id).val($(e).text());
         $('.autocomplete'+id).hide(0);
@@ -153,17 +156,11 @@
     function addSubjects()
     {
         id++;
-        var i = id-1;
-        var cars = ["Saab", "Volvo", "BMW"];
-        $( ".auto" ).each(function(index,e) {
-            console.log($(e).attr('name'));
-        });
         $.ajax({
                 url: baseUrl + 'admin/users/addSubjects',
                 type: 'post',
                 data: {
                     id :id,
-                    car: cars
                 },
                 headers: {
                     'X-CSRF-TOKEN': csrfToken

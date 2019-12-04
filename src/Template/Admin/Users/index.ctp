@@ -44,8 +44,7 @@
                             </div>
                             <hr >
                             <button type="submit" name="submit" class="btn btn-default float-right"> Upload </button>
-                            <!-- <?= $this->Form->postLink('<button type="submit" name="submit" class="btn btn-default"> Upload </button>',                      ['action' => 'import',$eid],
-                                                      ['escape' => false]) ?> -->
+                            
                             <?= $this->Form->end() ?>
                         </div>
                     </div>
@@ -67,9 +66,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($users as $user): ?>
+                        <?php $id = 0;
+                        foreach ($users as $user): ?>
                         <tr>
-                            <td><?= $this->Number->format($user->id) ?></td>
+                            <td><?= $id++ ?></td>
                             <td><?= h($user->username) ?></td>
                             <td><?= h($user->role) ?></td>
                             <td><?= h($user->first_name.' '.$user->last_name) ?></td>
