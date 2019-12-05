@@ -77,15 +77,16 @@ class UsersTable extends Table
 
         $validator
             ->scalar('username')
-            ->maxLength('username', 60)
             ->requirePresence('username', 'create')
-            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin');
+            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin')
+            ->add('username','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{3,16}$/'),
+                'message' => 'Tên đăng nhập có chứa ký tự đặc biệt']);
 
         $validator
             ->scalar('password')
             ->maxLength('password', 60)
             ->requirePresence('password', 'create')
-            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');  
 
         $validator
             ->scalar('first_name')
@@ -112,6 +113,23 @@ class UsersTable extends Table
 
         return $validator;
     }
+
+    public function validationFirstLogin(Validator $validator){
+        $validator
+            ->scalar('password')
+            ->requirePresence('password', 'create')
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin')
+            ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu có chứa ký tự đặc biệt']);
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin')
+            ->add('email','vaildFormat',['rule' => array('custom', '/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/'),
+                'message' => 'Định dạng email chưa đúng']);
+        return $validator;
+    }
+
     public function validationDefault(Validator $validator)
     {
         $validator
@@ -123,12 +141,13 @@ class UsersTable extends Table
             ->maxLength('username', 60)
             ->requirePresence('username', 'create')
             ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin');
-
+            
         $validator
             ->scalar('password')
             ->maxLength('password', 60)
             ->requirePresence('password', 'create')
             ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');
+            
 
         $validator
             ->scalar('role')
@@ -161,6 +180,7 @@ class UsersTable extends Table
 
         $validator
             ->email('email')
+            ->maxLength('email', 60)
             ->requirePresence('email', 'create')
             ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin');
 
@@ -182,7 +202,8 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->isUnique(['username'],'Tên đăng nhập đã có người sử dụng'));
+        $rules->add($rules->isUnique(['email'],'email đã có người sử dụng'));
 
         return $rules;
     }
