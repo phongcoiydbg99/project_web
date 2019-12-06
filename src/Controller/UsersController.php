@@ -231,13 +231,12 @@ class UsersController extends AppController
 
     public function firstlogin()
     {
-        $this->viewBuilder()->setLayout('login');
-        $users = $this->paginate($this->Users);
         $user = $this->Users->get($this->Auth->user('id'), [
-            'contain' => ['Subjects', 'Tests']
+            'contain' => ['Subjects']
         ]);
+        $check = false;
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData(),['validate'=>'Firstlogin']);
+            $user = $this->Users->patchEntity($user, $this->request->getData(),['validate'=>'firstLogin']);
              // dd($user->errors());
             if ($this->Users->save($user)) {
 
@@ -246,12 +245,17 @@ class UsersController extends AppController
 
                 return $this->redirect(['controller'=>'users','action' => 'profile']);
             }
+            else {
+                $check =true;
+                $this->Flash->error($user->errors()['email']['vaildFormat']);
+                //debug($user->errors()['email']['vaildFormat']); die;
+
+            }
+            if(!$check)
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
-        $tests = $this->Users->Tests->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'subjects', 'tests'));
-        $this->set(compact('users'));
+        $this->set(compact('user', 'subjects'));
     }
     public function profile()
     {

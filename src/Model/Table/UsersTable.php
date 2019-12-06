@@ -117,13 +117,11 @@ class UsersTable extends Table
     public function validationFirstLogin(Validator $validator){
         $validator
             ->scalar('password')
-            ->requirePresence('password', 'create')
             ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin')
             ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
                 'message' => 'Mật khẩu có chứa ký tự đặc biệt']);
         $validator
             ->email('email')
-            ->requirePresence('email', 'create')
             ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin')
             ->add('email','vaildFormat',['rule' => array('custom', '/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/'),
                 'message' => 'Định dạng email chưa đúng']);
