@@ -16,43 +16,6 @@
         </div>
     </div>
     <div class="col-lg-2">
-         <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
+         <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTest('.$i.')','escape' => false]) ?>
     </div>
 </div>          
-<script type="text/javascript">
-    var mouse_is_inside=''; 
-    $(document).ready(function()
-    {
-        $('.autocomplete').hover(function(){ 
-            mouse_is_inside=true; 
-        }, function(){ 
-            mouse_is_inside=false; 
-        });
-
-        $("body").mouseup(function(){ 
-            if(! mouse_is_inside) $('.autocomplete').hide(0);
-        });
-    });
-    function autoclick(i)
-    {
-      $('.autocomplete'+i).slideDown(0); 
-    }
-    function list(event,index,id)
-    {
-        check = false;
-        $('#subjects'+id).val('');
-        $( ".auto" ).each(function(index,e) {
-            if ($(event).text() == $(e).val())
-            {
-                alert('Môn đăng ký của bạn bị trùng');
-                check = true;
-            }
-        });
-        if (!check){
-        $('#subjects'+id).attr('name','subjects['+index+']');
-        $('#subjects'+id).val($(event).text());
-        }
-        $('.autocomplete'+id).hide(0);
-
-    }
-</script>

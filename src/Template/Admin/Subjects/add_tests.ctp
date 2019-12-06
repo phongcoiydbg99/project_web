@@ -7,11 +7,17 @@
         <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-light float-right",'type'=>'button','onclick'=>'deleteTests('.$id.')','escape' => false]) ?>
     </div>
 </div>
-<script type="text/javascript">
+<script>
 	 $('#start_time'+id).timepicker({
                 uiLibrary: 'bootstrap4',
+                icons: {
+                     rightIcon: '<i class="fas fa-clock"></i>'
+                 }
             }); 
      $('#last_time'+id).timepicker({
                 uiLibrary: 'bootstrap4',
+                icons: {
+                     rightIcon: '<i class="fas fa-clock"></i>'
+                 }
             });
 </script>

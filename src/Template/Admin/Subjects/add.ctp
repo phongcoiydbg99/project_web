@@ -24,7 +24,6 @@
             // 'formStart' => '<form{{attrs}}>',
             'error' => '<div class="text-danger mt-2">{{content}}</div>',
             'inputContainer' => '<div class="form-group{{required}}">{{content}}<span class="help">{{help}}</span></div>',
-            'input' => '<input type="{{type}}" name="{{name}}" class="form-control " {{attrs}}/>',
             'inputContainerError' => '<div class="form-group {{type}}{{required}}">{{content}}{{error}}</div>',
         ];
     $this->Form->setTemplates($myTemplates);
@@ -43,10 +42,10 @@
                             // echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker']);
                             // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);
                             echo $this->Form->controls(
-                                ['code' => ['class' => 'form-control is-invalid','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học']],
+                                ['code' => ['class' => 'form-control','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học']],
                                                     
-                                 'name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
-                                 'test_day' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'Ngày thi']],
+                                 'name' => ['class' => 'form-control','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
+                                 'test_day' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','label' => ['text'=>'Ngày thi']],
                                 ],['legend' => '']
                             );
                             $i = 0;
@@ -79,17 +78,23 @@
     <?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
     <?= $this->Form->end() ?>   
 </div>
-<script type="text/javascript">
+<script>
     var id = <?php echo json_encode($i) ?>;
-    $('#datepicker').datepicker({
-                uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd'
-            });
+    // $('#datepicker').datepicker({
+    //             uiLibrary: 'bootstrap4',
+    //             format: 'yyyy-mm-dd'
+    //         });
      $('#start_time'+id).timepicker({
                 uiLibrary: 'bootstrap4',
+                icons: {
+                     rightIcon: '<i class="fas fa-clock"></i>'
+                 }
             }); 
      $('#last_time'+id).timepicker({
                 uiLibrary: 'bootstrap4',
+                icons: {
+                     rightIcon: '<i class="fas fa-clock"></i>'
+                 }
             });
     function addTests()
     {

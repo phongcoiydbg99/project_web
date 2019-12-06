@@ -24,8 +24,7 @@
             // 'formStart' => '<form{{attrs}}>',
             'error' => '<div class="text-danger mt-2">{{content}}</div>',
             'inputContainer' => '<div class="form-group{{required}}">{{content}}<span class="help">{{help}}</span></div>',
-            'input' => '<input type="{{type}}" name="{{name}}" class="form-control " {{attrs}}/>',
-            'inputContainerError' => '<div class="form-group {{type}}{{required}}">{{content}}{{error}}</div>',
+            'inputContainerError' => '<div class="form-group is-invalid {{type}}{{required}}">{{content}}{{error}}</div>',
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
@@ -38,23 +37,26 @@
                     <div class="card-header"><h3>Thêm sinh viên</h3></div>
                     <div class="card-body">
                         <?php
-                            // echo $this->Form->control('role');
-                            // echo $this->Form->control('first_name');
-                            // echo $this->Form->control('last_name');
-                            // echo $this->Form->control('date_birth',['type'=> 'text','id'=>'datepicker']);
-                            // echo $this->Form->control('class');
+                            // echo $this->Form->control('username', ['class' => 'form-control']);
+                            // echo $this->Form->control('password', ['class' => 'form-control']);
+                            // echo $this->Form->control('first_name', ['class' => 'form-control']);
+                            // echo $this->Form->control('last_name', ['class' => 'form-control']);
+                            // echo $this->Form->control('date_birth',['type'=> 'text','class'=> ['datepicker', 'form-control']]);
+                            // echo $this->Form->control('class' , ['class' => 'form-control']);
                             // echo $this->Form->control('subjects._ids', ['options' => $subjects]);
                             echo $this->Form->controls(
-                                ['username' => ['class' => 'form-control is-invalid','required' => false,'id' => 'username','label' => ['text'=>'Username']],
+                                ['username' => ['class' => 'form-control ','required' => false,'id' => 'username','label' => ['text'=>'Username']],
                                                     
-                                 'password' => ['class' => 'form-control is-invalid','required' => false,'id' => 'password','label' => ['text'=>'Password']],
-                                 'first_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'first_name','label' => ['text'=>'First name']],
-                                 'last_name' => ['class' => 'form-control is-invalid','required' => false,'id' => 'last_name','label' => ['text'=>'Last name']],
-                                 'date_birth' => ['class' => 'form-control is-invalid','required' => false,'type'=> 'text','id'=>'datepicker','label' => ['text'=>'date_birth']],
-                                 'class' => ['class' => 'form-control is-invalid','required' => false,'id' => 'class','label' => ['text'=>'Class']],
+                                 'password' => ['class' => 'form-control ','required' => false,'id' => 'password','label' => ['text'=>'Password']],
+                                 'first_name' => ['class' => 'form-control','required' => false,'id' => 'first_name','label' => ['text'=>'First name']],
+                                 'last_name' => ['class' => 'form-control','required' => false,'id' => 'last_name','label' => ['text'=>'Last name']],
+                                 'date_birth' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','id'=>'','label' => ['text'=>'Date birth']],
+                                 'class' => ['class' => 'form-control','required' => false,'id' => 'class','label' => ['text'=>'Class']],
                                 ],['legend' => '']
                             );
                             $i = 0;
+                            $id = 0;
+                            $id ++;
                         ?>
                     </div>
                 </div>
@@ -85,7 +87,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
-                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.')','escape' => false]) ?>
+                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTest('.$i.')','escape' => false]) ?>
                                 </div>
                             </div>                        
                         </div>
@@ -99,91 +101,6 @@
         </fieldset>
     <?= $this->Form->end() ?>  
 </div>
-<script type="text/javascript">
-    var mouse_is_inside=''; 
+<script>
     var id = <?php echo json_encode($i)?>;
-    $(document).ready(function()
-    {
-        $('.autocomplete').hover(function(){ 
-            mouse_is_inside=true; 
-        }, function(){ 
-            mouse_is_inside=false; 
-        });
-
-        $("body").mouseup(function(){ 
-            if(! mouse_is_inside) $('.autocomplete').hide(0);
-        });
-    });
-    $('#datepicker').datepicker({
-                uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd'
-            });
-    function autoclick(i)
-    {
-      $('.autocomplete'+i).slideDown(0); 
-    }
-    function list(event,index,id)
-    {
-        check = false;
-        $('#subjects'+id).val('');
-        $( ".auto" ).each(function(index,e) {
-            if ($(event).text() == $(e).val())
-            {
-                alert('Môn đăng ký của bạn bị trùng');
-                check = true;
-            }
-        });
-        if (!check){
-        $('#subjects'+id).attr('name','subjects['+index+']');
-        $('#subjects'+id).val($(event).text());
-        }
-        $('.autocomplete'+id).hide(0);
-
-    }
-    function autoComplete(i,name,url)
-    {
-        $.ajax({
-            url: baseUrl + url,
-            type: 'post',
-            data: {
-                name : name,
-                id : i
-            },
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            dataType: 'html',
-            success: function (res) {
-                $('.autocomplete'+i).html(res);
-            },
-            error: function () {
-
-            }
-        })    
-    }
-    function addSubjects()
-    {
-        id++;
-        $.ajax({
-                url: baseUrl + 'admin/users/addSubjects',
-                type: 'post',
-                data: {
-                    id :id,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                dataType: 'html',
-                success: function (res) {
-                    $('.add_content').append(res);
-                },
-                error: function () {
-
-                }
-            })    
-    }
-    function deleteTests(id)
-    {
-        $(".subject_content"+id).remove();
-    }
 </script>

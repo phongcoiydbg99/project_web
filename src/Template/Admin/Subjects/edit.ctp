@@ -24,7 +24,6 @@
             // 'formStart' => '<form{{attrs}}>',
             'error' => '<div class="text-danger mt-2">{{content}}</div>',
             'inputContainer' => '<div class="form-group{{required}}">{{content}}<span class="help">{{help}}</span></div>',
-            'input' => '<input type="{{type}}" name="{{name}}" class="form-control " {{attrs}}/>',
             'inputContainerError' => '<div class="form-group {{type}}{{required}}">{{content}}{{error}}</div>',
         ];
     $this->Form->setTemplates($myTemplates);
@@ -39,9 +38,16 @@
                 <div class="card-body">
                     <?php
 
-                        echo $this->Form->control('code');
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('test_day',['type'=> 'text','id'=>'datepicker','value'=>date("Y-m-d", strtotime($subject->test_day))]);
+                        // echo $this->Form->control('code');
+                        // echo $this->Form->control('name');
+                        // echo $this->Form->control('test_day',['type'=> 'text','class'=>'datepicker','value'=>date("Y-m-d", strtotime($subject->test_day))]);
+                        echo $this->Form->controls(
+                            ['code' => ['class' => 'form-control','required' => false,'id' => 'code','label' => ['text'=>'Username']],
+                                                
+                             'name' => ['class' => 'form-control','required' => false,'id' => 'name','label' => ['text'=>'Password']],
+                             'test_day' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($subject->test_day)),'label' => ['text'=>'date_birth']],
+                            ],['legend' => '']
+                        );
                         // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);
                     ?>
                 </div>
@@ -70,18 +76,24 @@
                             $start_time = date('H:i',strtotime($test->start_time));
                             $last_time = date('H:i',strtotime($test->last_time));
                             ?>
-                            <script type="text/javascript">
+                            <script>
                                 var i = <?php echo json_encode($i) ?>;
                                 var start_time = <?php echo json_encode($start_time) ?>;
                                 var last_time = <?php echo json_encode($last_time) ?>;
                                 console.log(i);
                                  $('#start_time'+i).timepicker({
                                             uiLibrary: 'bootstrap4',
-                                            value: start_time
+                                            value: start_time,
+                                            icons: {
+                                                 rightIcon: '<i class="fas fa-clock"></i>'
+                                             }
                                         }); 
                                  $('#last_time'+i).timepicker({
                                             uiLibrary: 'bootstrap4',
-                                            value: last_time
+                                            value: last_time,
+                                            icons: {
+                                                 rightIcon: '<i class="fas fa-clock"></i>'
+                                             }
                                         });
                             </script>
                         <?php 
@@ -96,13 +108,8 @@
 <?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
 <?= $this->Form->end() ?>
 </div>
-<script type="text/javascript">
+<script>
     var id = <?php echo json_encode($i) ?>;
-    $('#datepicker').datepicker({
-                uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd'
-            });
-    
     function addTests()
     {
     id++;
