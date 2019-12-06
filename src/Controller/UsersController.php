@@ -10,6 +10,7 @@ use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Security;
 use Cake\Mailer\TransportFactory;
 use Cake\Datasource\EntityInterface;
+
 /**
  * Users Controller
  *
@@ -34,7 +35,7 @@ class UsersController extends AppController
         // All registered users can add articles
         // Admin can access every action
         // 
-        if($this->request->action === 'profile' || $this->request->action === 'editProfile'){
+        if($this->request->action === 'profile' || $this->request->action === 'editProfile' || $this->request->action === 'firstlogin'){
             return true;
         }
         if (isset($user['role']) && $user['role'] === 'user') {
@@ -158,7 +159,14 @@ class UsersController extends AppController
                         {
                            return $this->redirect(['controller' => 'users', 'action' => 'index','prefix'=>'admin']);
                         }
-                        else return $this->redirect(['controller' => 'subjects', 'action' => 'view_test']);
+                        else
+                        {
+                            // dd($this->Auth->user('email'));
+                            if($this->Auth->user('email') === ''){
+                                return $this->redirect(['controller' => 'users', 'action' => 'firstlogin']);
+                            }
+                            return $this->redirect(['controller' => 'subjects', 'action' => 'view_test']);
+                        } 
                     }
                     $this->Flash->error("Tài khoản hoặc mật khẩu của bạn chưa đúng!");
                 }
@@ -211,18 +219,39 @@ class UsersController extends AppController
     public function resetpassword($token){
         $this->viewBuilder()->setLayout('login');
         if($this->request->is('post')){
-            // $hasher = new DefaultPasswordHasher();
             $mypass = $this->request->getData('password');
-            // dd($mypass);
             $userTable = TableRegistry::get('users');
             $user = $userTable->find('all')->where(['token'=>$token])->first();
-            // dd($userTable->find('all')->where(['token'=>$token])->first());
             $user->password = $mypass;
             if($userTable->save($user)){
-                // dd($user->password);
                 return $this->redirect(['action'=>'login']);
             }
         }
+    }
+
+    public function firstlogin()
+    {
+        $this->viewBuilder()->setLayout('login');
+        $users = $this->paginate($this->Users);
+        $user = $this->Users->get($this->Auth->user('id'), [
+            'contain' => ['Subjects', 'Tests']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData(),['validate'=>'Firstlogin']);
+             // dd($user->errors());
+            if ($this->Users->save($user)) {
+
+                $this->Auth->setUser($user);
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['controller'=>'users','action' => 'profile']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
+        $tests = $this->Users->Tests->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'subjects', 'tests'));
+        $this->set(compact('users'));
     }
     public function profile()
     {
