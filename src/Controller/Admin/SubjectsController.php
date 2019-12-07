@@ -19,8 +19,11 @@ class SubjectsController extends AppController
      */
     public function index()
     {
-        $subjects = $this->paginate($this->Subjects);
+        $session = $this->request->session();
+        $session_id = $session->read('Auth.session_id');
 
+        $query = $this->Subjects->find() ->where(['Subjects.session_id'=>$session_id]);
+        $subjects = $this->paginate($query);
         $this->set(compact('subjects'));
     }
 
@@ -48,35 +51,44 @@ class SubjectsController extends AppController
     public function add()
     {
         $subject = $this->Subjects->newEntity();
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
-            $check_tests = $this->Subjects->find()->contain(['Tests'])
-            ->where(['Subjects.test_day' => $data['test_day']]);
-            $check_time = false;
-            foreach ($data['tests'] as $key) {
-                if ($key['start_time'] < $key['last_time'])
-                {
-                    foreach ($check_tests as $check_test) {
-                        foreach ($check_test->tests as $test) {
-                            $start_time = date('H:i',strtotime($test->start_time));
-                            $last_time = date('H:i',strtotime($test->last_time));
-                            if ($test->test_room_id == $key['test_room_id'])
-                            {
-                              if (($key['start_time'] > $start_time && $key['start_time']  < $last_time)||($key['last_time']  > $start_time&& $key['last_time']  < $last_time) || ($key['start_time']  == $start_time && $key['last_time']  == $last_time))
-                                {
-                                    $check_time = true;
-                                    $this->Flash->error("Thời gian đăng ký của bạn trùng với môn: ".$check_test->code);
-                                }  
-                            }
-                        }                
-                    }
-                }
-                else 
-                {
-                    $check_time = true;
-                    $this->Flash->error("Thời gian bắt đầu lớn hơn thời gian kết thúc.");
-                }
+            if(!empty($data['tests']))
+            {
+              $subject = $this->Subjects->patchEntity($subject, $data,['contain' => ['Tests']]);
+              $subject->session_id = $session_id;
+              $check_tests = $this->Subjects->find()->contain(['Tests'])
+              ->where(['Subjects.test_day' => $data['test_day'],'Subjects.session_id'=>$session_id]);
+              $check_time = false;
+              foreach ($data['tests'] as $key) {
+                  if ($key['start_time'] < $key['last_time'])
+                  {
+                      foreach ($check_tests as $check_test) {
+                          foreach ($check_test->tests as $test) {
+                              $start_time = date('H:i',strtotime($test->start_time));
+                              $last_time = date('H:i',strtotime($test->last_time));
+                              if ($test->test_room_id == $key['test_room_id'])
+                              {
+                                if (($key['start_time'] > $start_time && $key['start_time']  < $last_time)||($key['last_time']  > $start_time&& $key['last_time']  < $last_time) || ($key['start_time']  == $start_time && $key['last_time']  == $last_time))
+                                  {
+                                      $check_time = true;
+                                      $this->Flash->error("Thời gian đăng ký của bạn trùng với môn: ".$check_test->code);
+                                  }  
+                              }
+                          }                
+                      }
+                  }
+                  else 
+                  {
+                      $check_time = true;
+                      $this->Flash->error("Thời gian bắt đầu lớn hơn thời gian kết thúc.");
+                  }
+              }
+            }
+            else {
+                $check_time = true;
+                $this->Flash->error("Bạn chưa nhập Thời gian");
             }
             if ($check_time)
             {
@@ -109,15 +121,16 @@ class SubjectsController extends AppController
         $subject = $this->Subjects->get($id, [
             'contain' => ['Tests']
         ]);
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $tests = $subject->tests;
 
             $check_tests = $this->Subjects->find()->contain(['Tests'])
-            ->where(['Subjects.test_day' => $data['test_day'],'Subjects.id !='=> $id]);
+            ->where(['Subjects.test_day' => $data['test_day'],'Subjects.id !='=> $id,'Subjects.session_id'=>$session_id]);
 
             $check_time = false;
-
+            // dd($subject->tests);
 
             if(!empty($data['tests']))
             {
@@ -128,31 +141,31 @@ class SubjectsController extends AppController
                 {
                   $st = date('H:i:s',strtotime($key['start_time']));
                   $lt = date('H:i:s',strtotime($key['last_time']));
-                  $temp = $this->Subjects->find()
-                              ->matching('Tests', function($q) use ($st,$lt){ 
-                                    return $q->where(['Tests.start_time' => $st,'Tests.last_time'=> $lt]);})->first();
-                  if (!empty($temp)) 
-                  {
-                    $data['tests'][$i] = array_merge($key,['id'=> $temp->_matchingData['Tests']['id']]);
-                  }            
-                  
-                    foreach ($check_tests as $check_test) {
-                        foreach ($check_test->tests as $test) {
-                            $start_time = date('H:i',strtotime($test->start_time));
-                            $last_time = date('H:i',strtotime($test->last_time));
-                            if ($test->test_room_id == $key['test_room_id'])
-                            {
-                              if (($key['start_time'] > $start_time && $key['start_time']  < $last_time)||($key['last_time']  > $start_time&& $key['last_time']  < $last_time) || ($key['start_time']  == $start_time && $key['last_time']  == $last_time))
-                                {
-                                    $check_time = true;
-                                    $this->Flash->error("Thời gian đăng ký của bạn trùng với môn: ".$check_test->code);
-                                }  
-                            }
-                            if (!$check_time)
-                            {
-                              
-                            }
-                        }                
+                  // $temp = $this->Subjects->find()
+                  //             ->matching('Tests', function($q) use ($st,$lt){ 
+                  //                   return $q->where(['Tests.start_time' => $st,'Tests.last_time'=> $lt]);})->first();
+                  // if (!empty($temp)) 
+                  // {
+                  //   $data['tests'][$i] = array_merge($key,['id'=> $temp->_matchingData['Tests']['id']]);
+                  // }            
+                  if($i < count($subject->tests) && count($subject->tests)!= 0) $data['tests'][$i]['id'] = $subject['tests'][$i]['id'];
+                  foreach ($check_tests as $check_test) {
+                      foreach ($check_test->tests as $test) {
+                          $start_time = date('H:i',strtotime($test->start_time));
+                          $last_time = date('H:i',strtotime($test->last_time));
+                          if ($test->test_room_id == $key['test_room_id'])
+                          {
+                            if (($key['start_time'] > $start_time && $key['start_time']  < $last_time)||($key['last_time']  > $start_time&& $key['last_time']  < $last_time) || ($key['start_time']  == $start_time && $key['last_time']  == $last_time))
+                              {
+                                  $check_time = true;
+                                  $this->Flash->error("Thời gian đăng ký của bạn trùng với môn: ".$check_test->code);
+                              }  
+                          }
+                          if (!$check_time)
+                          {
+                            
+                          }
+                      }                
                     }
                   }
                   else 
@@ -163,8 +176,10 @@ class SubjectsController extends AppController
                 $i++;
               }  
             }
-                  // dd($data); 
-            
+            else {
+                $check_time = true;
+                $this->Flash->error("Bạn chưa nhập Thời gian");
+            }
             if ($check_time)
             {
                 // $this->Flash->error("Thời gian đăng ký của bạn trùng nhau");
@@ -173,6 +188,7 @@ class SubjectsController extends AppController
             {
                 $subject = $this->Subjects->patchEntity($subject, $data);
                 // dd($subject->toArray());
+                
                 if ($this->Subjects->save($subject)) {
                     $this->Flash->success(__('The subject has been saved.'));
                     return $this->redirect(['action' => 'index']);
@@ -217,11 +233,12 @@ class SubjectsController extends AppController
     public function searchTable()
     {
       $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
           $query = $this->Subjects->find('all',[
               'conditions' => ['name LIKE' => '%'.$data['name'].'%']
-          ]);
+          ])->where(['Subjects.session_id'=>$session_id]);
           $subjects = $this->paginate($query);
           $this->set(compact('subjects'));
       }

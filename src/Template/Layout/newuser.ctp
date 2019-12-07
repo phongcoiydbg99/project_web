@@ -49,7 +49,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->script('gijgo.min.js') ?>
     <?= $this->Html->script('common.js') ?>
     <?= $this->Html->script('myfile.js') ?>
-    
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"></script>
 
     <script type="text/javascript">
         var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"
@@ -72,7 +73,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
                     '<i class="fa fa-home"></i> Home ',
-                    '/users/index',
+                    '/admin/sessions/index',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
       </li>
@@ -84,12 +85,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-              
-                  <!-- <div class="dropdown-item" onclick="alertify.alert('Username: <?= $current['username'].'<br/>' ?>Họ và tên: <?=  $current['first_name'].' '. $current['last_name'].'<br/>' ?> Email: <?= $current['email'].'<br/>'?> Ngày sinh: <?= $current['date_birth'].'<br/>' ?> Lớp: <?= $current['class'].'<br/>' ?>')">
-
-                    <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
-                    Profile
-                  </div> -->
                 <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
                 <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
@@ -112,7 +107,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-                <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Sinh viên</p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
+                <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Sinh viên </p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
           </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">

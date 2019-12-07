@@ -53,6 +53,11 @@ class SubjectsTable extends Table
             'targetForeignKey' => 'user_id',
             'joinTable' => 'users_subjects'
         ]);
+
+        $this->belongsTo('Sessions', [
+            'foreignKey' => 'session_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -88,7 +93,7 @@ class SubjectsTable extends Table
     }
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['code']));
+        $rules->add($rules->isUnique(['code','session_id']));
 
         return $rules;
     }

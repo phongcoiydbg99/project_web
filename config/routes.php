@@ -103,8 +103,9 @@ Router::prefix('admin', function (RouteBuilder $routes) {
     // Because you are in the admin scope,
     // you do not need to include the /admin prefix
     // or the admin route element.
-    $routes->connect('/', ['controller' => 'users', 'action' => 'index']);
+    $routes->connect('/', ['controller' => 'sessions', 'action' => 'index']);
     $routes->connect('/users/index', ['controller' => 'users', 'action' => 'index']);
+    $routes->connect('/sessions/index', ['controller' => 'sessions', 'action' => 'index']);
     
     $routes->fallbacks(DashedRoute::class);
 });

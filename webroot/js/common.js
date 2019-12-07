@@ -22,4 +22,5 @@ $(document).ready(function()
                      rightIcon: '<i class="fas fa-clock"></i>'
                  }
             }); 
+        
     });

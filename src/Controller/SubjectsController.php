@@ -22,8 +22,13 @@ class SubjectsController extends AppController
      */
     public function index()
     {
+        $sessions = TableRegistry::getTableLocator()->get('sessions');
+        $session = $sessions->find()->where(['choose'=> 1])->first();
+        $session_id = $session['choose'];
+        $this->request->session()->write('Auth.session_id', $session_id); 
+
         $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        })->order(['Subjects.test_day' => 'ASC']);
+        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
 
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
@@ -44,7 +49,6 @@ class SubjectsController extends AppController
                 {
                     foreach($test_times as $test_time)
                     {
-                        // dump($test_day.' '.$start_time.' '.$last_time);
                         if ($test_day == $test_time[0])
                         {
                             if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
@@ -95,7 +99,7 @@ class SubjectsController extends AppController
             else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
             return $this->redirect(['action' => 'viewTest']);
         }
-        $this->set(compact(['subjects','id']));
+        $this->set(compact(['subjects','id','session']));
     }
 
     public function beforeFilter(Event $event)

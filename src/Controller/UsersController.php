@@ -157,7 +157,7 @@ class UsersController extends AppController
                         $this->Auth->setUser($cuser);
                         if($this->Auth->user('role') === 'admin')
                         {
-                           return $this->redirect(['controller' => 'users', 'action' => 'index','prefix'=>'admin']);
+                           return $this->redirect(['controller' => 'sessions', 'action' => 'index','prefix'=>'admin']);
                         }
                         else
                         {
@@ -177,6 +177,7 @@ class UsersController extends AppController
     }
     public function logout()
     {
+        $this->request->session()->write('Auth.session_id', 0); 
         return $this->redirect($this->Auth->logout());
     }
     public function forgotpassword(){

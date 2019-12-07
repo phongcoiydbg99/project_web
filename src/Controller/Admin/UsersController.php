@@ -60,6 +60,7 @@ class UsersController extends AppController
     {
         $user = $this->Users->newEntity();
         $check_edit = false; 
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $key = $data['subjects'];
@@ -69,11 +70,11 @@ class UsersController extends AppController
                     if($index == 0) $check_edit = true;
                     array_push($data['subjects']['_ids'],(string)$index);
                 }
-            $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
-            $user->role = 'user';
             if (!$check_edit)
             {
               $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+              $user->role = 'user';
+              dd($user);
               if ($this->Users->save($user)) {
                   $this->Flash->success(__('The user has been saved.'));
 
@@ -88,7 +89,7 @@ class UsersController extends AppController
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->code . '- ' . $e->name ;
-          },'limit' => 200]);
+          },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);
         // dd($subjects->toArray());
         $this->set(compact('user', 'subjects', 'tests'));
@@ -134,7 +135,7 @@ class UsersController extends AppController
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->code . '- ' . $e->name ;
-          },'limit' => 200]);
+          },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);
         $this->set(compact('user', 'subjects', 'tests'));
     }
@@ -200,6 +201,7 @@ class UsersController extends AppController
             $subject->code = $code;
             $subject->name = $name;
             $subject->test_day = date("Y-m-d", strtotime($test_day));
+            $subject->session_id = $this->request->session()->read('Auth.session_id');
             if($subjects->save($subject))
             {
               foreach ($worksheet->getRowIterator(10) as $row) {
@@ -370,6 +372,7 @@ class UsersController extends AppController
     public function searchTable()
     {
       $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
           $query = $this->Users->find('all',[
@@ -382,13 +385,14 @@ class UsersController extends AppController
     public function autoComplete()
     {
       $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
           $i = $data['id'];
           $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
           'valueField' => function ($e) {
                 return $e->code . '- ' . $e->name ;
-            },'limit' => 200,'conditions' => ['or'=>['code LIKE' => '%'.$data['name'].'%','name LIKE' => '%'.$data['name'].'%']]]);
+            },'limit' => 200,'conditions' => ['or'=>['code LIKE' => '%'.$data['name'].'%','name LIKE' => '%'.$data['name'].'%']]])->where(['Subjects.session_id'=>$session_id]);
           $this->set(compact('subjects','i'));
       }
     }
@@ -401,7 +405,7 @@ class UsersController extends AppController
         $subjects = $this->Users->Subjects->find('list',['keyField' => 'id',
           'valueField' => function ($e) {
                 return $e->code . '- ' . $e->name ;
-            },'limit' => 200]);
+            },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
         $this->set(compact('subjects','i'));
       }
     }
