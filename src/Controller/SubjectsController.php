@@ -126,8 +126,9 @@ class SubjectsController extends AppController
     }
     public function viewTest()
     {
+        $session_id = $this->request->session()->read('Auth.session_id');
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        })->order(['Subjects.test_day' => 'ASC']);
+        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
         $this->set(compact(['subjects','id']));
