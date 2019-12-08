@@ -35,7 +35,7 @@ class UsersController extends AppController
         // All registered users can add articles
         // Admin can access every action
         // 
-        if($this->request->action === 'profile' || $this->request->action === 'editProfile' || $this->request->action === 'firstlogin'){
+        if($this->request->action === 'profile' || $this->request->action === 'editProfile' || $this->request->action === 'firstlogin'||$this->request->action === 'changepassword'){
             return true;
         }
         if (isset($user['role']) && $user['role'] === 'user') {
@@ -292,4 +292,33 @@ class UsersController extends AppController
         }
         
     }
+    public function changepassword()
+    {
+        $user = $this->Users->newEntity();
+        $key = array();
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $check_user = $this->Users->get($this->Auth->user('id'));
+            $key= array_merge($key,['password'=>$data['password2']]);
+            $user = $this->Users->patchEntity($check_user, $key,['validate'=>'firstLogin']);
+            // debug($user->errors()); die;
+            if($data['password1'] == '' || $data['password2']== '' ||$data['password3']== '' )
+            { $this->Flash->error(__('Bạn cần điền đầy đủ thông tin'));
+            }
+            else
+            if ((new DefaultPasswordHasher)->check($data['password1'],$check_user->password) )
+            {
+                if($data['password2'] === $data['password3'])
+                {
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('The user has been saved.'));
+
+                        return $this->redirect(['action' => 'profile']);
+                    }
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                } else $this->Flash->error(__('Mật khẩu mới nhập sai'));
+            } else $this->Flash->error(__('Mật khẩu cũ không đúng'));
+        }
+        $this->set(compact('user'));
+    }    
 }

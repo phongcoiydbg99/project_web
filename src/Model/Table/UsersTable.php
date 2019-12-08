@@ -119,7 +119,7 @@ class UsersTable extends Table
             ->scalar('password')
             ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin')
             ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
-                'message' => 'Mật khẩu có chứa ký tự đặc biệt']);
+                'message' => 'Mật khẩu chưa đúng']);
         $validator
             ->email('email')
             ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin')

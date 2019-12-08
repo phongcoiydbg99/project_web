@@ -90,6 +90,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                   </div> -->
                 <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
+                <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Đổi mật khẩu', ['controller'=>'users','action'=>'changepassword'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <div class="dropdown-divider"></div>
                 <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
             </div>
         </li>

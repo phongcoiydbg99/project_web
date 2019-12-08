@@ -66,7 +66,6 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         $this->set('current',$this->Auth->user());
-        $this->set('session_id',$this->request->session()->read('Auth.session_id'));
     }
     public function isAuthorized($user = null)
     {

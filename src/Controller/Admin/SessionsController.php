@@ -113,4 +113,18 @@ class SessionsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function radioSession()
+    {
+        if ($this->request->is('ajax')) {
+            $data = $this->request->getData();
+            $session = $this->Sessions->find()->where(['choose'=> 1])->first();
+            $session->choose = 0;
+            $this->Sessions->save($session);
+            $session = $this->Sessions->find()->where(['id'=> $data['id']])->first();
+            $session->choose = 1;
+            $this->Sessions->save($session);
+            return $this->redirect(['action' => 'index']);
+        }
+    }
 }

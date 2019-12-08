@@ -1,4 +1,4 @@
-
+<div class="content">
     <div class="row">
 		<div class="col-lg-4"></div>
 			<div class="col-lg-4 mt-sm-5 mt-md-5 border border-light rounded p-3 mb-5 card container">
@@ -24,7 +24,8 @@
 			        echo $this->Form->button('submit',array('class' =>'btn btn-primary','style'=>'margin-top: 20px;'));
 			        echo $this->Form->end();
 			    ?>
+			</div>
+			</div>
+		<div class="col-lg-4"></div>
 	</div>
-	</div>
-	<div class="col-lg-4"></div>
 </div>

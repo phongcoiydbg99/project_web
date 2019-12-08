@@ -103,7 +103,7 @@
     </div>
 </div>
 <br>
-<script type="text/javascript">
+<script>
     function printTest()
     {
         var restorepage = document.body.innerHTML;

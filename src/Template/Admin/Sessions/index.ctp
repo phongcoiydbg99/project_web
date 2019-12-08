@@ -24,18 +24,17 @@
                 <table class="table table-hover border" cellpadding="0" cellspacing="0">
                     <thead class="thead-light"> 
                         <tr>
-                            <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('year') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('start_time') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('last_time') ?></th>
                             <th scope="col" class="actions "><?= __('Actions') ?></th>
+                            <th colspan="" rowspan="" headers="" scope="col">Chọn</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($sessions as $session): ?>
                         <tr>
-                            <td><?= $this->Number->format($session->id) ?></td>
                             <td><?= h($session->name) ?></td>
                             <td><?= h($session->year) ?></td>
                             <td><?= h($session->start_time) ?></td>
@@ -45,6 +44,21 @@
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $session->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
                                 <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $session->id], ['confirm' => __('Are you sure you want to delete # {0}?', $session->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
+                            <?php if ($session->choose == 1) {?>
+                            <td>
+                                <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" id="customRadio<?=$session->id?>" name="example" onchange='radioSession(<?=$session->id?>)' checked>
+                                  <label class="custom-control-label" for="customRadio<?=$session->id?>"></label>
+                                </div>
+                            </td>
+                            <?php }else{ ?>
+                            <td>
+                                <div class="custom-control custom-radio">
+                                  <input type="radio" class="custom-control-input" id="customRadio<?=$session->id?>" name="example" onchange='radioSession(<?=$session->id?>)'>
+                                  <label class="custom-control-label" for="customRadio<?=$session->id?>"></label>
+                                </div>
+                            </td>
+                            <?php }?>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -74,3 +88,24 @@
         </div>
     </div>
 </div>
+<script>
+    function radioSession(id)
+    {
+        $.ajax({
+            url: baseUrl + 'admin/sessions/radioSession',
+            type: 'post',
+            data: {
+                id : id
+            },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            dataType: 'html',
+            success: function (res) {
+            },
+            error: function () {
+
+            }
+        })  
+    }
+</script>
