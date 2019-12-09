@@ -85,7 +85,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
                 <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
             </div>
