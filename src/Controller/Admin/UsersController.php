@@ -73,7 +73,6 @@ class UsersController extends AppController
             {
               $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
               $user->role = 'user';
-              dd($user);
               if ($this->Users->save($user)) {
                   $this->Flash->success(__('The user has been saved.'));
 
@@ -107,6 +106,7 @@ class UsersController extends AppController
             'contain' => ['Subjects']
         ]);
         $check_edit = false; 
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $key = $data['subjects'];
@@ -397,6 +397,7 @@ class UsersController extends AppController
     }
     public function addSubjects()
     {
+      $session_id = $this->request->session()->read('Auth.session_id');
       $this->layout = false;
       if ($this->request->is('ajax')) {
         $data = $this->request->getData();
