@@ -11,8 +11,11 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Phòng thi</a></li>
+          <li class="breadcrumb-item"><?= $this->Html->link(
+                ' Phòng thi ',
+                '/admin/testRooms',
+                ['escape' => false]
+            ) ?></li>
           <li class="breadcrumb-item active">Thêm phòng thi</li>
         </ol>
       </div><!-- /.col -->
@@ -24,7 +27,6 @@
             // 'formStart' => '<form{{attrs}}>',
             'error' => '<div class="text-danger mt-2">{{content}}</div>',
             'inputContainer' => '<div class="form-group{{required}}">{{content}}<span class="help">{{help}}</span></div>',
-            'input' => '<input type="{{type}}" name="{{name}}" class="form-control " {{attrs}}/>',
             'inputContainerError' => '<div class="form-group {{type}}{{required}}">{{content}}{{error}}</div>',
         ];
     $this->Form->setTemplates($myTemplates);
@@ -37,8 +39,8 @@
             <div class="card-header"><h3>Thêm phòng thi</h3></div>
             <div class="card-body">
                 <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('total_computer');
+                    echo $this->Form->control('name',['class'=>"form-control "]);
+                    echo $this->Form->control('total_computer',['class'=>"form-control "]);
                 ?> 
             </div>
         </div>

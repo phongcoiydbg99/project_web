@@ -4,27 +4,48 @@
  * @var \App\Model\Entity\TestRoom $testRoom
  */
 ?>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><?= $this->Html->link(
+                ' Phòng thi ',
+                '/admin/testRooms',
+                ['escape' => false]
+            ) ?></li>
+          <li class="breadcrumb-item active">Sửa phòng thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
 <?php 
     $myTemplates = [
             // 'formStart' => '<form{{attrs}}>',
             'error' => '<div class="text-danger mt-2">{{content}}</div>',
             'inputContainer' => '<div class="form-group{{required}}">{{content}}<span class="help">{{help}}</span></div>',
-            'input' => '<input type="{{type}}" name="{{name}}" class="form-control " {{attrs}}/>',
             'inputContainerError' => '<div class="form-group {{type}}{{required}}">{{content}}{{error}}</div>',
         ];
     $this->Form->setTemplates($myTemplates);
 ?>
-<?= $this->Form->create($testRoom) ?>
+<div class="content">
+<div class="testRooms form large-9 medium-8 columns content">
+    <?= $this->Form->create($testRoom) ?>
     <fieldset>
-        <legend><?= __('Edit Test Room') ?></legend>
-            <div class="testRooms form large-9 medium-8 columns content">
-
-                    <?php
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('total_computer');
-                    ?>
-                
+        <div class="card">
+            <div class="card-header"><h3>Thêm phòng thi</h3></div>
+            <div class="card-body">
+                <?php
+                    echo $this->Form->control('name',['class'=>"form-control "]);
+                    echo $this->Form->control('total_computer',['class'=>"form-control "]);
+                ?> 
             </div>
+        </div>
     </fieldset>
-<?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
-<?= $this->Form->end() ?>
+    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+    <?= $this->Form->end() ?>
+</div>
+</div>

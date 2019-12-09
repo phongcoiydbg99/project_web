@@ -11,8 +11,11 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Môn thi</a></li>
+          <li class="breadcrumb-item"><?= $this->Html->link(
+                ' Môn thi ',
+                '/admin/subjects',
+                ['escape' => false]
+            ) ?></li>
           <li class="breadcrumb-item active">Thêm môn thi</li>
         </ol>
       </div><!-- /.col -->

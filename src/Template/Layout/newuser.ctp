@@ -73,7 +73,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
                     '<i class="fa fa-home"></i> Home ',
-                    '/admin/sessions/index',
+                    '/admin',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
       </li>
