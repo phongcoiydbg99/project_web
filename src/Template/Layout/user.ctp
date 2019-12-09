@@ -50,7 +50,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="navbar navbar-expand-md bg-light navbar-light">
       <?= $this->Html->link(
-                '<i class="fa fa-home"></i> Home ',
+                '<i class="fa fa-home"></i> Trang chủ ',
                 '/',
                 ['class' => 'navbar-brand', 'escape' => false]
             ) ?>

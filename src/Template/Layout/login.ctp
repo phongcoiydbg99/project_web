@@ -50,7 +50,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <ul class="navbar-nav">
           <li class="nav-item d-none d-sm-inline-block">
              <?= $this->Html->link(
-                        '<i class="fa fa-home"></i> Home ',
+                        '<i class="fa fa-home"></i> Trang chủ ',
                         '/',
                         ['class' => 'nav-link', 'escape' => false]
                     ) ?>

@@ -86,7 +86,9 @@ class UsersTable extends Table
             ->scalar('password')
             ->maxLength('password', 60)
             ->requirePresence('password', 'create')
-            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin');  
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin') 
+            ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
 
         $validator
             ->scalar('first_name')
@@ -119,6 +121,11 @@ class UsersTable extends Table
             ->scalar('password')
             ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin')
             ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
+        $validator
+            ->scalar('password2')
+            ->notEmptyString('password2','Bạn chưa điền đầy đủ thông tin')
+            ->add('password2','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
                 'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
         $validator
             ->email('email')

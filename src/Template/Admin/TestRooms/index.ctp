@@ -23,7 +23,7 @@
         <div class="card-header">
             <h4 class="float-left">Danh sách</h4>
             <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
-            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Search name..','onkeyup'=>'searchTable(this.value,"admin/test-rooms/searchTable")']) ?>
+            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm phòng thi..','onkeyup'=>'searchTable(this.value,"admin/test-rooms/searchTable")']) ?>
         </div>
         <div class="card-body">
             <div class="content_table">
@@ -31,9 +31,9 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('total_computer') ?></th>
-                            <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('name','Phòng') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('total_computer','Tổng số máy tính') ?></th>
+                            <th scope="col" class="actions"><?= __('Hành vi') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                             <td><?= $this->Number->format($testRoom->total_computer) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $testRoom->id],['class' => 'btn btn-warning', 'escape' => false])?>
-                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $testRoom->id], ['confirm' => __('Are you sure you want to delete # {0}?', $testRoom->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
+                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $testRoom->id], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $testRoom->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

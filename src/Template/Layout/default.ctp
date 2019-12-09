@@ -69,7 +69,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
       </li>
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
-                    '<i class="fa fa-home"></i> Home ',
+                    '<i class="fa fa-home"></i> Trang chủ ',
                     '/',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
@@ -88,11 +88,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <img src="https://library.kissclipart.com/20180904/ese/kissclipart-user-icon-png-clipart-computer-icons-user-66fe7db07b02eb73.jpg" style="height="20" width="20">
                     Profile
                   </div> -->
-                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Hồ sơ', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
                 <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Đổi mật khẩu', ['controller'=>'users','action'=>'changepassword'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
-                <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Đăng xuất', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
             </div>
         </li>
     </ul>

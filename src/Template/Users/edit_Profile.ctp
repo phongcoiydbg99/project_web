@@ -35,6 +35,6 @@
             
         </div>
 </fieldset>
-<?= $this->Form->button('Submit',['class'=>'btn btn-primary']) ?>
+<?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary']) ?>
 <?= $this->Form->end() ?>
 
