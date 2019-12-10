@@ -72,7 +72,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
       </li>
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
-                    '<i class="fa fa-home"></i> Home ',
+                    '<i class="fa fa-home"></i> Trang chủ  ',
                     '/admin',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
@@ -85,9 +85,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Profile', ['action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-id-badge"></i> Hồ sơ', ['controller'=>'users','action'=>'profile'],array('escape'=>false, 'class'=>'dropdown-item'))?>
                 <div class="dropdown-divider"></div>
-                <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Logout', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
+                <?php echo $this->Html->link('<i class="fas fa-sign-out-alt"></i> Đăng xuất ', '/logout',array('escape'=>false, 'class'=>'dropdown-item'))?>
             </div>
         </li>
     </ul>

@@ -41,7 +41,7 @@
             </div>
         </div>
     </fieldset>
-    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+    <?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary float-right']) ?>
     <?= $this->Form->end() ?>
 </div>
 <script>

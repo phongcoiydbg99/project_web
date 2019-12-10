@@ -14,7 +14,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><?= $this->Html->link(
-                    ' Home ',
+                    ' Trang chủ ',
                     '/',
                     ['escape' => false]
                 ) ?></li>
@@ -32,9 +32,9 @@
             <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" colspan=><?= $this->Paginator->sort('code') ?></th>
-                    <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                    <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
+                    <th scope="col" colspan=><?= $this->Paginator->sort('Mã môn học') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('Tên môn học') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('Ngày thi') ?></th>
                     <th scope="col" class="text-primary">Phòng thi</th>
                     <th scope="col" class="text-primary">Thời gian thi</th>
                     <th scope="col" class="text-primary">Số lượng</th>
@@ -114,7 +114,7 @@
             </table>
         </div>
         <div class="card-footer">
-            <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+            <?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary float-right']) ?>
         </div>
         <?= $this->Form->end() ?>
     </div>

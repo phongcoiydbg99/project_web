@@ -16,12 +16,12 @@
 			  
 			        echo $this->Form->create($user);
 			        echo $this->Form->controls(
-					['email' => ['class' => 'form-control','required' => false,'placeholder' => 'Enter email', 'id' => 'email','label' => ['text'=>'Email']],
+					['email' => ['class' => 'form-control','required' => false,'placeholder' => 'Nhập email', 'id' => 'email','label' => ['text'=>'Email']],
 										
-					 'password' => ['class' => 'form-control','required' => false,'placeholder' => 'Enter password', 'id' => 'password','label' => ['text'=>'New password']]
+					 'password' => ['class' => 'form-control','required' => false,'placeholder' => 'Nhập password', 'id' => 'password','label' => ['text'=>'Mật khẩu mới']]
 					],['legend' => '']
 				);
-			        echo $this->Form->button('submit',array('class' =>'btn btn-primary','style'=>'margin-top: 20px;'));
+			        echo $this->Form->button('Xác nhận',array('class' =>'btn btn-primary','style'=>'margin-top: 20px;'));
 			        echo $this->Form->end();
 			    ?>
 			</div>

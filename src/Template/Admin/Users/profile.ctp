@@ -6,11 +6,11 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><?= $this->Html->link(
-                    'Home ',
+                    'Trang chủ ',
                     '/users/index',
                     ['escape' => false]
                 ) ?></li>
-          <li class="breadcrumb-item active">Profile</li>
+          <li class="breadcrumb-item active">Hồ sơ</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->

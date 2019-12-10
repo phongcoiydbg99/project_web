@@ -25,7 +25,7 @@
             <?= $this->Html->Link('<i class="fas fa-plus-circle"></i>', ['action' => 'add'], ['class' => 'btn btn-primary float-right ml-1', 'escape' => false]) ?>
             <a href="#" class="btn btn-primary float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a> 
             <?= $this->Form->postLink('<i class="fas fa-download"></i>', ['action' => 'export'], ['class' => 'btn btn-primary float-right ml-1', 'escape' => false]) ?>
-            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Search name..','onkeyup'=>'searchTable(this.value,"admin/users/searchTable")']) ?>
+            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm tên sinh viên..','onkeyup'=>'searchTable(this.value,"admin/users/searchTable")']) ?>
             <div class="modal fade" id="myModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -56,11 +56,11 @@
                     <thead class="thead-light"> 
                         <tr>
                             <!-- <th scope="col"><?= $this->Paginator->sort('id') ?></th> -->
-                            <th scope="col" class="pl-4"><?= $this->Paginator->sort('username') ?></th>
+                            <th scope="col" class="pl-4"><?= $this->Paginator->sort('username','Mã sinh viên') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('last_name','Họ và tên') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('date_birth') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('class') ?></th>
-                            <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('date_birth','Ngày sinh') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('class','Lớp') ?></th>
+                            <th scope="col" class="actions"><?= __('Hành vi') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,7 +73,7 @@
                             <td><?= h($user->class) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $user->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
-                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
+                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $user->id], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $user->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

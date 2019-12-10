@@ -39,13 +39,13 @@
             <div class="card-header"><h3>Thêm phòng thi</h3></div>
             <div class="card-body">
                 <?php
-                    echo $this->Form->control('name',['class'=>"form-control "]);
-                    echo $this->Form->control('total_computer',['class'=>"form-control "]);
+                    echo $this->Form->control('name',['class'=>"form-control", 'label'=>'Phòng']);
+                    echo $this->Form->control('total_computer',['class'=>"form-control " ,'label'=>'Tổng số máy tính']);
                 ?> 
             </div>
         </div>
     </fieldset>
-    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+    <?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary float-right']) ?>
     <?= $this->Form->end() ?>
 </div>
 </div>

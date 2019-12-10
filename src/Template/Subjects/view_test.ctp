@@ -60,9 +60,9 @@
                     <table class="table  table-bordered table-sm" cellpadding="0" cellspacing="0">
                         <thead class="thead-light">
                         <tr>
-                            <th scope="col" colspan=><?= $this->Paginator->sort('code') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
+                            <th scope="col" colspan=><?= $this->Paginator->sort('Mã môn học') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('Tên môn học') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('Ngày thi') ?></th>
                             <th scope="col" class="text-primary">Phòng thi</th>
                             <th scope="col" class="text-primary">Thời gian thi</th>
                         </tr>

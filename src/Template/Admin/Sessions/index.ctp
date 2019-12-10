@@ -24,11 +24,11 @@
                 <table class="table table-hover border" cellpadding="0" cellspacing="0">
                     <thead class="thead-light"> 
                         <tr>
-                            <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('year') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('start_time') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('last_time') ?></th>
-                            <th scope="col" class="actions "><?= __('Actions') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('name','Tên học kì') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('year','Năm') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('start_time','Bắt đầu đăng ký') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('last_time','Kết thúc đăng ký') ?></th>
+                            <th scope="col" class="actions "><?= __('Hành vi') ?></th>
                             <th colspan="" rowspan="" headers="" scope="col">Chọn</th>
                         </tr>
                     </thead>
@@ -42,7 +42,7 @@
                             <td class="actions"> 
                                 <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['action' => 'view', $session->id],['class' => 'btn btn-success', 'escape' => false]) ?>
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $session->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
-                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $session->id], ['confirm' => __('Are you sure you want to delete # {0}?', $session->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
+                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $session->id], ['confirm' => __('Bạn chắc chắn xóa # {0}?', $session->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
                             <?php if ($session->choose == 1) {?>
                             <td>
