@@ -23,7 +23,6 @@ class TestsController extends AppController
             'contain' => ['Subjects', 'TestRooms']
         ];
         $tests = $this->paginate($this->Tests);
-
         $this->set(compact('tests'));
     }
 

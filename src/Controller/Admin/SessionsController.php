@@ -40,7 +40,7 @@ class SessionsController extends AppController
         $session = $this->request->session();
         $session->write('Auth.session_id', $id); 
         $this->set('session', $session);
-        return $this->redirect(['controller'=>'users','action' => 'index']);
+        return $this->redirect(['controller'=>'tests','action' => 'index']);
     }
 
     /**
