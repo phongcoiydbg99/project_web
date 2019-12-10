@@ -55,7 +55,7 @@ class AppController extends Controller
                     ]
                 ]
             ],
-            'loginAction' => ['/login'],
+            'loginAction' => ['controller' => 'Users', 'action' =>'login'],
             // 'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
             'authorize' => 'Controller', // Added this line
@@ -84,7 +84,6 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        
         if($this->Auth->user('role') === 'admin')
         {
             $this->viewBuilder()->setLayout('newuser');
