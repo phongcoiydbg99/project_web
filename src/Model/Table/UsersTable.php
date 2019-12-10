@@ -116,6 +116,55 @@ class UsersTable extends Table
         return $validator;
     }
 
+    public function validationProfile(Validator $validator)
+    {
+
+        $validator
+            ->scalar('username')
+            ->requirePresence('username', 'create')
+            ->notEmptyString('username','Bạn chưa điền đầy đủ thông tin')
+            ->add('username','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{3,16}$/'),
+                'message' => 'Tên đăng nhập phải có 3-16 ký tự,không chứa ký tự đặc biệt']);
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 60)
+            ->requirePresence('password', 'create')
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin') 
+            ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
+
+        $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 100)
+            ->requirePresence('first_name', 'create')
+            ->notEmptyString('first_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('last_name')
+            ->maxLength('last_name', 100)
+            ->requirePresence('last_name', 'create')
+            ->notEmptyString('last_name','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->date('date_birth')
+            ->requirePresence('date_birth', 'create')
+            ->notEmptyDate('date_birth','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->scalar('class')
+            ->maxLength('class', 60)
+            ->requirePresence('class', 'create')
+            ->notEmptyString('class','Bạn chưa điền đầy đủ thông tin');
+
+        $validator
+            ->email('email')
+            ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin')
+            ->add('email','vaildFormat',['rule' => array('custom', '/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/'),
+                'message' => 'Định dạng email chưa đúng']);
+        return $validator;
+    }
+
     public function validationFirstLogin(Validator $validator){
         $validator
             ->scalar('password')
@@ -123,15 +172,29 @@ class UsersTable extends Table
             ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
                 'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
         $validator
-            ->scalar('password2')
-            ->notEmptyString('password2','Bạn chưa điền đầy đủ thông tin')
-            ->add('password2','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
-                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
-        $validator
             ->email('email')
             ->notEmptyString('email','Bạn chưa điền đầy đủ thông tin')
             ->add('email','vaildFormat',['rule' => array('custom', '/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/'),
                 'message' => 'Định dạng email chưa đúng']);
+        return $validator;
+    }
+
+    public function validationChangePassword(Validator $validator){
+        $validator
+            ->scalar('password')
+            ->notEmptyString('password','Bạn chưa điền đầy đủ thông tin')
+            ->add('password','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
+        $validator
+            ->scalar('password1')
+            ->notEmptyString('password1','Bạn chưa điền đầy đủ thông tin')
+            ->add('password1','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
+        $validator
+            ->scalar('password2')
+            ->notEmptyString('password2','Bạn chưa điền đầy đủ thông tin')
+            ->add('password2','vaildFormat',['rule' => array('custom', '/^[a-zA-Z0-9_-]{6,18}$/'),
+                'message' => 'Mật khẩu phải từ 6-18 ký tự, không chứa ký tự đặc biệt']);
         return $validator;
     }
 

@@ -242,7 +242,7 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
 
                 $this->Auth->setUser($user);
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('Thông tin đã được lưu.'));
 
                 return $this->redirect(['controller'=>'users','action' => 'profile']);
             }
@@ -253,7 +253,7 @@ class UsersController extends AppController
 
             }
             if(!$check)
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Thông tin chưa được lưu, xin hãy thử lại.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
         $this->set(compact('user', 'subjects'));
@@ -265,14 +265,13 @@ class UsersController extends AppController
             'contain' => ['Subjects', 'Tests']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user = $this->Users->patchEntity($user, $this->request->getData(),['validate'=>'profile']);
             if ($this->Users->save($user)) {
                 $this->Auth->setUser($user);
-                $this->Flash->success(__('The user has been saved.'));
-
+                $this->Flash->success(__('Thông tin đã được lưu.'));
                 return $this->redirect(['controller'=>'users','action' => 'profile']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Thông tin chưa được lưu, xin hãy thử lại.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);
@@ -295,29 +294,30 @@ class UsersController extends AppController
     public function changepassword()
     {
         $user = $this->Users->newEntity();
-        $key = array();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            $check_user = $this->Users->get($this->Auth->user('id'));
-            $key= array_merge($key,['password'=>$data['password2']]);
-            $user = $this->Users->patchEntity($check_user, $key,['validate'=>'firstLogin']);
-            // debug($user->errors()); die;
-            if($data['password1'] == '' || $data['password2']== '' ||$data['password3']== '' )
-            { $this->Flash->error(__('Bạn cần điền đầy đủ thông tin'));
+            $user = $this->Users->patchEntity($this->Users->get($this->Auth->user('id')),
+                [
+                    'password1' => $this->request->data['password1'],
+                    'password2' => $this->request->data['password2'],
+                ],['validate'=>'changePassword']);
+            if($data['password1'] == '' || $data['password2'] == '' || $data['password3'] == '' )
+            { $this->Flash->error(__('Bạn cần điền đầy đủ thông tin')); 
             }
-            else
-            if ((new DefaultPasswordHasher)->check($data['password1'],$check_user->password) )
-            {
-                if($data['password2'] === $data['password3'])
+            else{
+                if ((new DefaultPasswordHasher)->check($data['password1'],$this->Users->get($this->Auth->user('id'))->password) )
                 {
-                    if ($this->Users->save($user)) {
-                        $this->Flash->success(__('The user has been saved.'));
+                    if($data['password2'] === $data['password3'])
+                    {
+                        if ($this->Users->save($user)) {
+                            $this->Flash->success(__('Thông tin đã được lưu.'));
 
-                        return $this->redirect(['action' => 'profile']);
-                    }
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                } else $this->Flash->error(__('Mật khẩu mới nhập sai'));
-            } else $this->Flash->error(__('Mật khẩu cũ không đúng'));
+                            return $this->redirect(['action' => 'profile']);
+                        }
+                        $this->Flash->error(__('Thông tin chưa được lưu, xin hãy thử lại.'));
+                    } else $this->Flash->error(__('Mật khẩu mới nhập sai'));
+                } else $this->Flash->error(__('Mật khẩu cũ không đúng'));
+            }
         }
         $this->set(compact('user'));
     }    

@@ -35,7 +35,7 @@
                     echo $this->Form->create($user);
                     
                     echo $this->Form->controls(
-                        [                             
+                        [                       
                          'password1' => ['type'=>'password','class' => 'form-control ','required' => false,'id' => 'password1','label' => ['text'=>'Mật khẩu cũ:']],
                          'password2' => ['type'=>'password','class' => 'form-control ','required' => false,'id' => 'password2','label' => ['text'=>'Mật khẩu mới:']],
                          'password3' => ['type'=>'password','class' => 'form-control ','required' => false,'id' => 'password3','label' => ['text'=>'Nhập lại mật khẩu:']],
