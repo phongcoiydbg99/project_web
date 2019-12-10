@@ -93,13 +93,13 @@
                         'first' => '<li class="page-item "><a class="page-link" href="{{url}}">{{text}}</a></li>',
                         'last' => '<li class="page-item "><a class="page-link" href="{{url}}">{{text}}</a></li>'
                     ]); ?>
-                    <?= $this->Paginator->first('<< ' . __('First')) ?>
-                    <?= $this->Paginator->prev('< ' . __('Previous')) ?>
+                    <?= $this->Paginator->first('<< ' . __('Đầu')) ?>
+                    <?= $this->Paginator->prev('< ' . __('Trước')) ?>
                     <?= $this->Paginator->numbers() ?>
-                    <?= $this->Paginator->next(__('Next') . ' >') ?>
-                    <?= $this->Paginator->last(__('Last') . ' >>') ?>
+                    <?= $this->Paginator->next(__('Sau') . ' >') ?>
+                    <?= $this->Paginator->last(__('Cuối') . ' >>') ?>
                 </ul>
-                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+                <p><?= $this->Paginator->counter(['format' => __('Trang {{page}} của {{pages}}, Hiển thị {{current}} bản ghi trong tổng số {{count}} bản ghi')]) ?></p>
             </div>
         </div>
     </div>

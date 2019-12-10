@@ -72,7 +72,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
       </li>
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
-                    '<i class="fa fa-home"></i> Trang chủ ',
+                    '<i class="fa fa-home"></i> Trang chủ  ',
                     '/admin',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
