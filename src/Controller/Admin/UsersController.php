@@ -162,6 +162,22 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function deleteTest($user_test)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $user_test = explode(" ",$user_test);
+        $users_tests = TableRegistry::getTableLocator()->get('users_tests');
+        $check = $users_tests->find()->where(['user_id'=> $user_test[0],'test_id'=> $user_test[1]])->first();
+        if ($users_tests->delete($check)) {
+            $test = $this->Users->Tests->get($user_test[1]);
+            if ($test->computer_registered != 0) $test->computer_registered--;
+            $this->Users->Tests->save($test);
+            $this->Flash->success(__('Bạn đã xóa thành công'));
+        } else {
+            $this->Flash->error(__('Có lỗi xảy ra, xin thử lại'));
+        }
+        return $this->redirect(['controller'=>'tests','action' => 'view',$user_test[1]]);
+    }
     public function import()
     {
       $users_subjects = TableRegistry::getTableLocator()->get('users_subjects');
