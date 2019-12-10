@@ -31,6 +31,8 @@ class SubjectsController extends AppController
         })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
 
         $subjects = $this->paginate($query);
+
+        // dd($query->toArray());
         $id = $this->Auth->user('id');
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
@@ -61,20 +63,50 @@ class SubjectsController extends AppController
                 }
                 array_push($test_times,[$test_day,$start_time,$last_time]); 
             }
-            // dd($test_times);
+            $arr_id = array();
+            foreach ($subjects as $subject)
+            {
+                foreach ($subject->tests as $tests)
+                    {
+                        if(!empty($tests->users) && $tests->users[0]['id'] === $id)
+                        {
+                            array_push($arr_id,$tests['id']);
+                        }
+                    }
+            }
+            dump($arr_id);
+            dump($data['subject']);
+            $result=array_diff($arr_id,$data['subject']);
+            dd($result); die;
+
             $check_error = false;
-            $q = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
-            $i =0;
-            foreach ($data['subject'] as $index => $value) {
-                if (!empty($q[$i])) {
-                    $users_test = $users_tests->get($q[$i]['id']);
-                    $test = $tests->get($q[$i]['test_id']);
-                    if ($test->computer_registered != 0) $test->computer_registered--;
-                    $tests->save($test);
+            $check_user_test = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
+            if (!empty($check_user_test)) {
+                    
+                    foreach ($check_user_test as $key) {
+                        $test = $tests->get($key['test_id']);
+                        if ($test->computer_registered != 0) $test->computer_registered--;
+                        $tests->save($test);
+                    }
                 }
+            $user_test_id = '';
+            $test_id = '';
+            foreach ($data['subject'] as $index => $value) {
+                if (!empty($check_user_test)) {
+                    foreach ($check_user_test as $key) {
+                        if($key['test_id'] == $value) 
+                        {
+                            $user_test_id = $key['id'];
+                        }
+                    }
+                }
+
+                if ($user_test_id != '') $users_test = $users_tests->get($user_test_id);
                 else $users_test = $users_tests->newEntity();
+
                 $users_test->user_id = $this->Auth->user('id');
                 $users_test->test_id = (int)$value;
+
                 $test = $tests->get($value);
                 $test_room = $test_rooms->get($test->test_room_id);
                 $test->computer_registered++;
@@ -86,17 +118,18 @@ class SubjectsController extends AppController
                         $check_error = true;
                     }
                 }
-                else 
-                    {
+                else {
                         $check_error = true;
-                        $test = $tests->get($q[$i]['test_id']);
-                        $test->computer_registered++;
-                        $tests->save($test);
+                        if ($user_test_id == '') {
+                            $test = $tests->get($check_user_test[$i]['test_id']);
+                            $test->computer_registered++;
+                            $tests->save($test);
+                        }
+                        $this->Flash->error('Số lượng đăng kí đầy');
                     }
-                $i++;
+                $user_test_id = '';
             }
             if(!$check_error) $this->Flash->success(__('The subject has been saved.'));
-            else $this->Flash->error(__('The subject could not be saved. Please, try again.'));
             return $this->redirect(['action' => 'viewTest']);
         }
         $this->set(compact(['subjects','id','session']));
@@ -229,15 +262,26 @@ class SubjectsController extends AppController
     public function checkTesttime()
     {
         $this->layout = false;
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('ajax')) {
             $data = $this->request->getData();
             $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-            })->where(['Subjects.id'=>$data['subject_id']]);
+            })->where(['Subjects.id'=>$data['subject_id'],'Subjects.session_id'=>$session_id]);
             $subjects = $this->paginate($query);
             // dd($subjects);
             // dd($data['check_name']);
         $this->set('check_name', $data['check_name']);
         $this->set('subjects', $subjects);
+        }
+    }
+    public function checkTest()
+    {
+        $this->layout = false;
+        $session_id = $this->request->session()->read('Auth.session_id');
+        if ($this->request->is('ajax')) {
+            $data = $this->request->getData();
+            $tests = $this->Subjects->Tests->get($data['id'],['contain'=>'TestRooms'])->toArray();
+            $this->set('tests', $tests);
         }
     }
 }

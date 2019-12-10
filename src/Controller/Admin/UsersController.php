@@ -63,25 +63,29 @@ class UsersController extends AppController
         $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            $key = $data['subjects'];
-            unset($data['subjects']);
-            $data['subjects']['_ids'] = array();
-            foreach ($key as $index => $value) {
-                    if($index == 0) $check_edit = true;
-                    array_push($data['subjects']['_ids'],(string)$index);
-                }
-            if (!$check_edit)
+            if(!empty($data['subjects']))
             {
-              $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
-              $user->role = 'user';
-              if ($this->Users->save($user)) {
-                  $this->Flash->success(__('The user has been saved.'));
+              $key = $data['subjects'];
+              unset($data['subjects']);
+              $data['subjects']['_ids'] = array();
+              foreach ($key as $index => $value) {
+                      if($index == 0) $check_edit = true;
+                      array_push($data['subjects']['_ids'],(string)$index);
+                  }
+              if (!$check_edit)
+              {
+                $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+                $user->role = 'user';
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('The user has been saved.'));
 
-                  return $this->redirect(['action' => 'index']);
-              }else{
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                // debug($user->errors()); die;
+                    return $this->redirect(['action' => 'index']);
+                }else{
+                  $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                  // debug($user->errors()); die;
+                }
               }
+              else $this->Flash->error(__('Môn thi của bạn bị trống'));
             }
             else $this->Flash->error(__('Môn thi của bạn bị trống'));
         }

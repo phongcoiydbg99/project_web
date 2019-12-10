@@ -37,6 +37,7 @@
                     <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
                     <th scope="col" class="text-primary">Phòng thi</th>
                     <th scope="col" class="text-primary">Thời gian thi</th>
+                    <th scope="col" class="text-primary">Số lượng</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -76,7 +77,7 @@
                                 </select>
                             </td>
                             <td >
-                                <select class="form-control" id="test_time_<?= $subject->id?>" name = 'subject[<?= $subject->id?>]'>
+                                <select class="form-control test" id="test_time_<?= $subject->id?>" name = 'subject[<?= $subject->id?>]' onclick="selectTest(this,<?= $subject->id?>)">
                                     <?php 
                                         $data = Array();
                                         foreach ($subject->test_rooms as $test_rooms)
@@ -85,8 +86,9 @@
                                             {
                                                 $test_time = date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time));
                                                 // $data = array_merge($data,[$test_time=>$test_rooms->_joinData->id]);
+                                                if($check_id == '') $check_id = $test_rooms->_joinData->id;
                                                 if ($check_id == $test_rooms->_joinData->id) {
-                                                    echo '<option value='.$test_rooms->_joinData->id.' selected>'.$test_time.'</option>';
+                                                    echo '<option value='.$test_rooms->_joinData->id.'  selected>'.$test_time.'</option>';
                                                 }
                                                 else
                                                 echo '<option value='.$test_rooms->_joinData->id.'>'.$test_time.'</option>';
@@ -95,7 +97,18 @@
                                     ?>
                                 </select>
                             </td>
-                    </tr>
+                            <td colspan="" rowspan="" headers="" class="test<?= $subject->id?>">
+                            <?php 
+                                foreach ($subject->tests as $tests)
+                                    {
+                                        if($tests->id == $check_id)
+                                        {
+                                            echo $tests->computer_registered.'/'.$tests->test_room->total_computer;
+                                        }
+                                    }
+                            ?>
+                            </td>
+                   </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
@@ -108,8 +121,38 @@
 </div>
 
 <script>
+    function createArr(name)
+    {
+        var arr = [];
+        $('.'+name).each(function(index) {
+             arr.push($(this).val());
+        })
+
+        return arr;
+    }
+    $(document).ready(function()
+    {
+        var arr = createArr('test');
+        console.log(arr);
+        // $.ajax({
+        //         url: baseUrl + '/subjects/checkTest',
+        //         type: 'post',
+        //         data: {
+        //             arr: arr
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': csrfToken
+        //         },
+        //         dataType: 'json',
+        //         success: function (res) {
+        //               alert(data);
+        //         },
+        //         error: function () {
+
+        //         }
+        //     })
+    });
     function selectTesttime(check_name,subject_id){
-        console.log('#test_time_'+subject_id);
     $.ajax({
                 url: baseUrl + '/subjects/checkTesttime',
                 type: 'post',
@@ -123,12 +166,55 @@
                 dataType: 'html',
                 success: function (res) {
                     $('#test_time_'+subject_id).html(res);
+                    console.log($('#test_time_'+subject_id).val());
+                    var id = $('#test_time_'+subject_id).val();
+                    $.ajax({
+                        url: baseUrl + '/subjects/checkTest',
+                        type: 'post',
+                        data: {
+                            id: id
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        dataType: 'html',
+                        success: function (ress) {
+                            $('.test'+subject_id).html(ress);
+                        },
+                        error: function () {
+
+                        }
+                    })    
                 },
                 error: function () {
 
                 }
             })    
     }
+        
+    function selectTest(check_test,subject_id)
+    {
+        var id = $(check_test).val();
+        $.ajax({
+            url: baseUrl + '/subjects/checkTest',
+            type: 'post',
+            data: {
+                id: id
+            },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            dataType: 'html',
+            success: function (ress) {
+                $('.test'+subject_id).html(ress);
+            },
+            error: function () {
+
+            }
+        })    
+    }
+
+
     function testCheckBox(check,subject_id,test_room_id,id) {
         if ($(check).is(':checked'))
         {
@@ -179,7 +265,6 @@
                 }
             })
         }
-        
     }
 
 </script>
