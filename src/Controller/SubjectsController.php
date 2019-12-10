@@ -32,7 +32,7 @@ class SubjectsController extends AppController
 
         $subjects = $this->paginate($query);
 
-        // dd($query->toArray());
+        // dd($query->toArray()); 
         $id = $this->Auth->user('id');
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
@@ -66,25 +66,21 @@ class SubjectsController extends AppController
             $arr_id = array();
             foreach ($subjects as $subject)
             {
-                foreach ($subject->tests as $tests)
+                foreach ($subject->tests as $test)
                     {
-                        if(!empty($tests->users) && $tests->users[0]['id'] === $id)
+                        if(!empty($test->users) && $test->users[0]['id'] === $id)
                         {
-                            array_push($arr_id,$tests['id']);
+                            array_push($arr_id,$test['id']);
                         }
                     }
             }
-            dump($arr_id);
-            dump($data['subject']);
-            $result=array_diff($arr_id,$data['subject']);
-            dd($result); die;
-
+            // dump($arr_id);
+            // dump($data['subject']);
             $check_error = false;
             $check_user_test = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
-            if (!empty($check_user_test)) {
-                    
-                    foreach ($check_user_test as $key) {
-                        $test = $tests->get($key['test_id']);
+            if (!empty($arr_id)) {
+                    foreach ($arr_id as $key) {
+                        $test = $tests->get($key);
                         if ($test->computer_registered != 0) $test->computer_registered--;
                         $tests->save($test);
                     }
@@ -113,6 +109,18 @@ class SubjectsController extends AppController
                 if($test_room->total_computer >= $test->computer_registered)
                 {
                     $tests->save($test);
+                    if ($user_test_id == ''){
+                        $test = $tests->get($value);
+                        foreach ($arr_id as $key) {
+                            $check_test = $tests->get($key);
+                            if($check_test->subject_id == $test->subject_id)
+                            {
+                                $check = $users_tests->find()->where(['user_id'=> $this->Auth->user('id'),'test_id'=> $check_test->id])->first();
+                                $users_test = $users_tests->get($check->id);
+                                $users_test->test_id = (int)$value;
+                            }
+                        }
+                    }
                     if (!$users_tests->save($users_test)) 
                     { 
                         $check_error = true;
@@ -120,10 +128,14 @@ class SubjectsController extends AppController
                 }
                 else {
                         $check_error = true;
-                        if ($user_test_id == '') {
-                            $test = $tests->get($check_user_test[$i]['test_id']);
-                            $test->computer_registered++;
-                            $tests->save($test);
+                        $test = $tests->get($value);
+                        foreach ($arr_id as $key) {
+                            $check_test = $tests->get($key);
+                            if($check_test->subject_id == $test->subject_id)
+                            {
+                                $check_test->computer_registered++;
+                                $tests->save($check_test);
+                            }
                         }
                         $this->Flash->error('Số lượng đăng kí đầy');
                     }
