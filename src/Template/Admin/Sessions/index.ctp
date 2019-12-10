@@ -25,7 +25,7 @@
                     <thead class="thead-light"> 
                         <tr>
                             <th scope="col"><?= $this->Paginator->sort('name','Tên học kì') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('year','Năm') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('year','Năm học') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('start_time','Bắt đầu đăng ký') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('last_time','Kết thúc đăng ký') ?></th>
                             <th scope="col" class="actions "><?= __('Hành vi') ?></th>

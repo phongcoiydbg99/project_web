@@ -45,10 +45,10 @@
                         // echo $this->Form->control('name');
                         // echo $this->Form->control('test_day',['type'=> 'text','class'=>'datepicker','value'=>date("Y-m-d", strtotime($subject->test_day))]);
                         echo $this->Form->controls(
-                            ['code' => ['class' => 'form-control','required' => false,'id' => 'code','label' => ['text'=>'Username']],
+                            ['code' => ['class' => 'form-control','required' => false,'id' => 'code','label' => ['text'=>'Mã môn học:']],
                                                 
-                             'name' => ['class' => 'form-control','required' => false,'id' => 'name','label' => ['text'=>'Password']],
-                             'test_day' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($subject->test_day)),'label' => ['text'=>'date_birth']],
+                             'name' => ['class' => 'form-control','required' => false,'id' => 'name','label' => ['text'=>'Tên môn học']],
+                             'test_day' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($subject->test_day)),'label' => ['text'=>'Ngày thi']],
                             ],['legend' => '']
                         );
                         // echo $this->Form->control('users._ids', ['options' => $users,'class'=>"form-control"]);

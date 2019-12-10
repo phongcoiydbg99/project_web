@@ -48,13 +48,13 @@
                             // echo $this->Form->control('class' , ['class' => 'form-control']);
                             // echo $this->Form->control('subjects._ids', ['options' => $subjects]);
                             echo $this->Form->controls(
-                                ['username' => ['class' => 'form-control ','required' => false,'id' => 'username','label' => ['text'=>'Username']],
+                                ['username' => ['class' => 'form-control ','required' => false,'id' => 'username','label' => ['text'=>'Mã sinh viên']],
                                                     
-                                 'password' => ['class' => 'form-control ','required' => false,'id' => 'password','label' => ['text'=>'Password']],
-                                 'first_name' => ['class' => 'form-control','required' => false,'id' => 'first_name','label' => ['text'=>'First name']],
-                                 'last_name' => ['class' => 'form-control','required' => false,'id' => 'last_name','label' => ['text'=>'Last name']],
-                                 'date_birth' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','id'=>'','label' => ['text'=>'Date birth']],
-                                 'class' => ['class' => 'form-control','required' => false,'id' => 'class','label' => ['text'=>'Class']],
+                                 'password' => ['class' => 'form-control ','required' => false,'id' => 'password','label' => ['text'=>'Mật khẩu']],
+                                 'first_name' => ['class' => 'form-control','required' => false,'id' => 'first_name','label' => ['text'=>'Họ và tên đệm']],
+                                 'last_name' => ['class' => 'form-control','required' => false,'id' => 'last_name','label' => ['text'=>'Tên']],
+                                 'date_birth' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','id'=>'','label' => ['text'=>'Ngày sinh']],
+                                 'class' => ['class' => 'form-control','required' => false,'id' => 'class','label' => ['text'=>'Lớp']],
                                 ],['legend' => '']
                             );
                             $i = 0;
