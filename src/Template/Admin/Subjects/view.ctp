@@ -4,101 +4,122 @@
  * @var \App\Model\Entity\Subject $subject
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Subject'), ['action' => 'edit', $subject->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Subject'), ['action' => 'delete', $subject->id], ['confirm' => __('Are you sure you want to delete # {0}?', $subject->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Subjects'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Subject'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Test Rooms'), ['controller' => 'TestRooms', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Test Room'), ['controller' => 'TestRooms', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="subjects view large-9 medium-8 columns content">
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><?= $this->Html->link(
+                ' Quản lý ',
+                '/admin/tests',
+                ['escape' => false]
+            ) ?></li>
+          <li class="breadcrumb-item active">Môn thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<div class="content">
+    <div class="card">
+        <div class="card-header">
     <h3><?= h($subject->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Code') ?></th>
-            <td><?= h($subject->code) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($subject->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($subject->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Test Day') ?></th>
-            <td><?= h($subject->test_day) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Time') ?></th>
-            <td><?= h($subject->time) ?></td>
-        </tr>
-    </table>
-    <div class="related">
-        <h4><?= __('Related Test Rooms') ?></h4>
-        <?php if (!empty($subject->test_rooms)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Name') ?></th>
-                <th scope="col"><?= __('Total Computer') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($subject->test_rooms as $testRooms): ?>
-            <tr>
-                <td><?= h($testRooms->id) ?></td>
-                <td><?= h($testRooms->name) ?></td>
-                <td><?= h($testRooms->total_computer) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'TestRooms', 'action' => 'view', $testRooms->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'TestRooms', 'action' => 'edit', $testRooms->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'TestRooms', 'action' => 'delete', $testRooms->id], ['confirm' => __('Are you sure you want to delete # {0}?', $testRooms->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
     </div>
-    <div class="related">
-        <h4><?= __('Related Users') ?></h4>
+    <div class="row container">
+            <div class="col-sm-6">
+            <table class="table table-borderless">
+            <tr>
+                <th scope="row"><?= __('Mã môn học') ?></th>
+                <td><?= h($subject->code) ?></td>
+            </tr>
+            <tr>
+                <th scope="row"><?= __('ID') ?></th>
+                <td><?= h($subject->id) ?></td>
+            </tr> 
+            </table>  
+            </div>
+            <div class="col-sm-6">
+            <table class="table table-borderless">
+            <tr>
+                <th scope="row"><?= __('Ngày thi') ?></th>
+                <td><?= $time = date('d/m/Y',strtotime($subject->test_day)) ?></td>
+            </tr>
+            </table>  
+            </div>
+        
+        </div>
+        <div class="card-header">
+            <h4 class="float-left">Danh sách phòng thi</h4>
+        </div>
+        <div class="card-body">
+            <div class="content_table">
+                <?php if (!empty($subject->test_rooms)): ?>
+                <table class="table table-hover" cellpadding="0" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col"><?= $this->Paginator->sort('id','ID') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('name','Phòng') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('total_computer','Tổng số máy tính') ?></th>
+                            <th scope="col" class="actions"><?= __('Hành vi') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($subject->test_rooms as $testRooms): ?>
+                        <tr>
+                            <td><?= $this->Number->format($testRooms->id) ?></td>
+                            <td><?= h($testRooms->name) ?></td>
+                            <td><?= $this->Number->format($testRooms->total_computer) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $testRooms->id],['class' => 'btn btn-warning', 'escape' => false])?>
+                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $testRooms->id], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $testRooms->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
+        <div class="card-header">
+            <h4 class="float-left">Danh sách thí sinh</h4>
+        </div>
         <?php if (!empty($subject->users)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Username') ?></th>
-                <th scope="col"><?= __('Password') ?></th>
-                <th scope="col"><?= __('Role') ?></th>
-                <th scope="col"><?= __('First Name') ?></th>
-                <th scope="col"><?= __('Last Name') ?></th>
-                <th scope="col"><?= __('Date Birth') ?></th>
-                <th scope="col"><?= __('Class') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($subject->users as $users): ?>
-            <tr>
-                <td><?= h($users->id) ?></td>
-                <td><?= h($users->username) ?></td>
-                <td><?= h($users->password) ?></td>
-                <td><?= h($users->role) ?></td>
-                <td><?= h($users->first_name) ?></td>
-                <td><?= h($users->last_name) ?></td>
-                <td><?= h($users->date_birth) ?></td>
-                <td><?= h($users->class) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
+        <div class="card-body">
+            <div class="content_table">
+                <table class="table table-hover" cellpadding="0" cellspacing="0">
+                    <thead class="thead-light"> 
+                        <tr>
+                            <th scope="col"><?= $this->Paginator->sort('id','ID') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('username','Mã sinh viên') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('first_ame','Họ và tên đệm') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('last_name','Tên') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('date_birth','Ngày sinh') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('class','Lớp') ?></th>
+                            <th scope="col" class="actions"><?= __('Hành vi') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($subject->users as $users): ?>
+                        <tr>
+                            <td><?= h($users->id) ?></td>
+                            <td><?= h($users->username) ?></td>
+                            <td><?= h($users->first_name) ?></td>
+                            <td><?= h($users->last_name) ?></td>
+                            <td><?= h($users->date_birth) ?></td>
+                            <td><?= h($users->class) ?></td>
+                            <!-- <?php $user_test = $users->id.' '.$test->id;?> -->
+                            <td class="actions">
+                                <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['controller' => 'Users', 'action' => 'edit', $users->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
+                                <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['controller' => 'Users', 'action' => 'deleteTest',$user_test], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $users->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>   
+            </div>
+        </div>
         <?php endif; ?>
-    </div>
+</div>
 </div>

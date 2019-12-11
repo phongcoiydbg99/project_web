@@ -39,7 +39,6 @@ class SubjectsController extends AppController
         $subject = $this->Subjects->get($id, [
             'contain' => ['TestRooms', 'Users']
         ]);
-
         $this->set('subject', $subject);
     }
 

@@ -29,14 +29,14 @@
                     <thead class="thead-light">
                         <tr>
                         <!-- <th scope="col"><?= $this->Paginator->sort('id') ?></th> -->
-                        <th scope="col"><?= $this->Paginator->sort('subject_id') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('test_room_id') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('test_day') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('start_time') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('last_time') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('computer_registered') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('total') ?></th>
-                        <th scope="col" class="actions"><?= __('Actions') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('subject_id','Tên môn') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('test_room_id','Phòng thi') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('test_day','Ngày thi') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('start_time','Bắt đầu') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('last_time','Kết thúc') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('computer_registered','Máy đã đăng ký') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('total','Tổng') ?></th>
+                        <th scope="col" class="actions"><?= __('Hành vi') ?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,13 +72,13 @@
                         'first' => '<li class="page-item "><a class="page-link" href="{{url}}">{{text}}</a></li>',
                         'last' => '<li class="page-item "><a class="page-link" href="{{url}}">{{text}}</a></li>'
                     ]); ?>
-                    <?= $this->Paginator->first('<< ' . __('First')) ?>
-                    <?= $this->Paginator->prev('< ' . __('Previous')) ?>
+                    <?= $this->Paginator->first('<< ' . __('Đầu')) ?>
+                    <?= $this->Paginator->prev('< ' . __('Trước')) ?>
                     <?= $this->Paginator->numbers() ?>
-                    <?= $this->Paginator->next(__('Next') . ' >') ?>
-                    <?= $this->Paginator->last(__('Last') . ' >>') ?>
+                    <?= $this->Paginator->next(__('Sau') . ' >') ?>
+                    <?= $this->Paginator->last(__('Cuối') . ' >>') ?>
                 </ul>
-                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+                <p><?= $this->Paginator->counter(['format' => __('Trang {{page}} của {{pages}}, Hiển thị {{current}} bản ghi trong tổng số {{count}} bản ghi')]) ?></p>
             </div>
         </div>
     </div>

@@ -32,11 +32,11 @@
             <div class="col-sm-6">
             <table class="table table-borderless">
             <tr>
-                <th scope="row"><?= __('Test Room') ?></th>
+                <th scope="row"><?= __('Phòng thi') ?></th>
                 <td><?= $test->has('test_room') ? $this->Html->link($test->test_room->name, ['controller' => 'TestRooms', 'action' => 'view', $test->test_room->id]) : '' ?></td>
             </tr>
             <tr>
-                <th scope="row"><?= __('Computer Registered') ?></th>
+                <th scope="row"><?= __('Máy đã đăng ký') ?></th>
                 <td><?= $this->Number->format($test->computer_registered) ?></td>
             </tr> 
             </table>  
@@ -44,11 +44,11 @@
             <div class="col-sm-6">
             <table class="table table-borderless">
             <tr>
-                <th scope="row"><?= __('Start Time') ?></th>
+                <th scope="row"><?= __('Thời gian bắt đầu') ?></th>
                 <td><?= h($test->start_time) ?></td>
             </tr>
             <tr>
-                <th scope="row"><?= __('Last Time') ?></th>
+                <th scope="row"><?= __('Thời gian kết thúc') ?></th>
                 <td><?= h($test->last_time) ?></td>
             </tr> 
             </table>  
@@ -99,12 +99,12 @@
                     <thead class="thead-light"> 
                         <tr>
                             <th scope="col"><?= __('Id') ?></th>
-                            <th scope="col"><?= __('Username') ?></th>
-                            <th scope="col"><?= __('First Name') ?></th>
-                            <th scope="col"><?= __('Last Name') ?></th>
-                            <th scope="col"><?= __('Date Birth') ?></th>
-                            <th scope="col"><?= __('Class') ?></th>
-                            <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            <th scope="col"><?= __('Mã sinh viên') ?></th>
+                            <th scope="col"><?= __('Họ và tên đệm') ?></th>
+                            <th scope="col"><?= __('Tên') ?></th>
+                            <th scope="col"><?= __('Ngày sinh') ?></th>
+                            <th scope="col"><?= __('Lớp') ?></th>
+                            <th scope="col" class="actions"><?= __('Hành vi') ?></th>
                         </tr>
                     </thead>
                     <tbody>
