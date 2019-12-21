@@ -43,8 +43,10 @@
                         <?php foreach ($tests as $test): ?>
                         <tr>
                             <!-- <td><?= $this->Number->format($test->id) ?></td> -->
-                            <td><?= $test->has('subject') ? $this->Html->link($test->subject->name, ['controller' => 'Subjects', 'action' => 'view', $test->subject->id]) : '' ?></td>
-                            <td><?= $test->has('test_room') ? $this->Html->link($test->test_room->name, ['controller' => 'TestRooms', 'action' => 'view', $test->test_room->id]) : '' ?></td>
+                            <!-- <td><?= $test->has('subject') ? $this->Html->link($test->subject->name, ['controller' => 'Subjects', 'action' => 'view', $test->subject->id]) : '' ?></td>
+                            <td><?= $test->has('test_room') ? $this->Html->link($test->test_room->name, ['controller' => 'TestRooms', 'action' => 'view', $test->test_room->id]) : '' ?></td> -->
+                            <td><?= $test->has('subject') ? $test->subject->name : '' ?></td>
+                            <td><?= $test->has('test_room') ? $test->test_room->name: '' ?></td> 
                             <td><?= $test->has('subject') ? $test->subject->test_day->i18nFormat('dd/MM/yyyy') : '' ?></td>
                             <td><?= h(date('H:i',strtotime($test->start_time))) ?></td>
                             <td><?= h(date('H:i',strtotime($test->last_time))) ?></td>

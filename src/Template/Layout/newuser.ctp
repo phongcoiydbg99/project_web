@@ -110,9 +110,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý đăng kí</p>', ['controller'=>'tests','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
           </li>
           <li class="nav-item">
-                <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Sinh viên </p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
+                <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý sinh viên </p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
           </li>
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>

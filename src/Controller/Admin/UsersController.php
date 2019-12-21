@@ -216,6 +216,8 @@ class UsersController extends AppController
             $code = $worksheet->getCellByColumnAndRow(2, 6)->getValue();
             $name = $worksheet->getCellByColumnAndRow(2, 7)->getValue();
             $test_day = $worksheet->getCellByColumnAndRow(6, 7)->getFormattedValue();
+            // dd(empty($this->Users->Subjects->find()->where(['code' => $code,'session_id'=>$this->request->session()->read('Auth.session_id')])->toArray()));
+            // die;
             $subject = $subjects->newEntity();
             $subject->code = $code;
             $subject->name = $name;
