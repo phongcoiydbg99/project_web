@@ -27,12 +27,11 @@ class SubjectsController extends AppController
         $session_id = $session['choose'];
         $this->request->session()->write('Auth.session_id', $session_id); 
 
-        $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
 
         $subjects = $this->paginate($query);
-
-        // dd($query->toArray()); 
+        // dd($query->toArray());
         $id = $this->Auth->user('id');
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
@@ -43,9 +42,12 @@ class SubjectsController extends AppController
             $test_times = Array();
 
             foreach ($data['subject'] as $index => $value) {
-                $test_day = date('d:m:Y',strtotime($this->Subjects->get($index)->test_day));
-                $start_time = date('H:i',strtotime($tests->get($value)->start_time));
-                $last_time = date('H:i',strtotime($tests->get($value)->last_time));
+                $test_temp = $this->Subjects->Tests->get($value, [
+                    'contain' => ['Times']
+                ]);
+                $test_day = date('d:m:Y',strtotime($test_temp['time']['test_day']));
+                $start_time = date('H:i',strtotime($test_temp['time']['start_time']));
+                $last_time = date('H:i',strtotime($test_temp['time']['last_time']));
 
                 if (!empty($test_times))
                 {
@@ -141,7 +143,7 @@ class SubjectsController extends AppController
                     }
                 $user_test_id = '';
             }
-            if(!$check_error) $this->Flash->success(__('The subject has been saved.'));
+            if(!$check_error) $this->Flash->success(__('Bạn đã đăng ký thành công'));
             return $this->redirect(['action' => 'viewTest']);
         }
         $this->set(compact(['subjects','id','session']));
@@ -174,7 +176,7 @@ class SubjectsController extends AppController
         $sessions = TableRegistry::getTableLocator()->get('sessions');
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['choose'];
-        $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
@@ -277,12 +279,27 @@ class SubjectsController extends AppController
         $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('ajax')) {
             $data = $this->request->getData();
-            $query = $this->Subjects->find()->contain(['TestRooms','Tests.TestRooms','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+            $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
             })->where(['Subjects.id'=>$data['subject_id'],'Subjects.session_id'=>$session_id]);
             $subjects = $this->paginate($query);
             // dd($subjects);
             // dd($data['check_name']);
         $this->set('check_name', $data['check_name']);
+        $this->set('subjects', $subjects);
+        }
+    }
+    public function checkTestday()
+    {
+        $this->layout = false;
+        $session_id = $this->request->session()->read('Auth.session_id');
+        if ($this->request->is('ajax')) {
+            $data = $this->request->getData();
+            $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+            })->where(['Subjects.id'=>$data['subject_id'],'Subjects.session_id'=>$session_id]);
+            $subjects = $this->paginate($query);
+            // dd($subjects);
+            // dd($data['check_name']);
+        $this->set('check_day', $data['check_name']);
         $this->set('subjects', $subjects);
         }
     }

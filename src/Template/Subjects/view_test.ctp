@@ -81,9 +81,9 @@
                                             {?>
                                                 <td><?= $subject->code?></td>
                                                 <td><?= $subject->name?></td>
-                                                <td><?= $subject->test_day->i18nFormat('dd/MM/yyyy')?></td>
+                                                <td><?= date('d/m/Y',strtotime($tests->time->test_day))?></td>
                                                 <td><?= $tests->test_room->name?></td>
-                                                <td><?= date('H:i',strtotime($tests->start_time)).' - '.date('H:i',strtotime($tests->last_time))?></td>
+                                                <td><?= date('H:i',strtotime($tests->time->start_time)).' - '.date('H:i',strtotime($tests->time->last_time))?></td>
                                 <?php       }
                                         }
                                     }

@@ -45,9 +45,37 @@
                     <tr>
                             <td class='subject_code'><?= $subject->code?></td>
                             <td><?= $subject->name?></td>
-                            <td class='test_day'><?= $subject->test_day->i18nFormat('dd/MM/yyyy')?></td>
+                            <td class='test_day'>
+                                <select class="form-control" id="test_day<?= $subject->id?>" onchange="selectTestday(this,<?= $subject->id?>)" >
+                                <?php 
+                                    $check_day = '';
+                                    $check_time_id = '';
+                                    foreach ($subject->tests as $tests)
+                                    {
+                                        if(!empty($tests->users) && $tests->users[0]['id'] === $id)
+                                        {
+                                            $check_day = date('d/m/Y',strtotime($tests->time->test_day));
+                                            $check_time_id = $tests->time->id;
+                                        }
+                                    }
+                                    $names = Array();
+                                    foreach ($subject->tests as $tests)
+                                    {
+                                        array_push($names, date('d/m/Y',strtotime($tests->time->test_day)));
+                                    }
+                                    $names = array_count_values($names);
+                                    foreach ($names as $index => $value)
+                                    {
+                                        if ($check_day == '') {$check_day = $index;}
+                                        if ($index == $check_day)
+                                                {echo '<option selected>'.$index.'</option>'; }
+                                            else echo '<option>'.$index.'</option>'; 
+                                    }
+                                 ?>
+                                </select>
+                            </td>
                             <td>
-                                <select class="form-control" id="test_room" onchange="selectTesttime(this,<?= $subject->id?>)" >
+                                <select class="form-control" id="test_room<?= $subject->id?>" onchange="selectTesttime(this,<?= $subject->id?>)" >
                                 <?php 
                                     $i = 0;
                                     $check_name = '';
@@ -58,12 +86,16 @@
                                         {
                                             $check_name = $tests->test_room->name;
                                             $check_id = $tests->id;
-                                        }
+                                        }   
                                     }
                                     $names = Array();
-                                    foreach ($subject->test_rooms as $test_rooms)
+                                    foreach ($subject->tests as $tests)
                                     {
-                                        array_push($names,$test_rooms->name);
+                                        $test_day = date('d/m/Y',strtotime($tests->time->test_day));
+                                        if ($test_day == $check_day  )
+                                        {
+                                        array_push($names,$tests->test_room->name);
+                                        }
                                     }
                                     $names = array_count_values($names);
                                     foreach ($names as $index => $value)
@@ -80,18 +112,18 @@
                                 <select class="form-control test" id="test_time_<?= $subject->id?>" name = 'subject[<?= $subject->id?>]' onclick="selectTest(this,<?= $subject->id?>)">
                                     <?php 
                                         $data = Array();
-                                        foreach ($subject->test_rooms as $test_rooms)
+                                        foreach ($subject->tests as $tests)
                                         {
-                                            if ($test_rooms->name == $check_name)
+                                            if ($tests->test_room->name == $check_name)
                                             {
-                                                $test_time = date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time));
+                                                $test_time = date('H:i',strtotime($tests->time->start_time)).' - '.date('H:i',strtotime($tests->time->last_time));
                                                 // $data = array_merge($data,[$test_time=>$test_rooms->_joinData->id]);
-                                                if($check_id == '') $check_id = $test_rooms->_joinData->id;
-                                                if ($check_id == $test_rooms->_joinData->id) {
-                                                    echo '<option value='.$test_rooms->_joinData->id.'  selected>'.$test_time.'</option>';
+                                                if($check_id == '') $check_id = $tests->id;
+                                                if ($check_id == $tests->id) {
+                                                    echo '<option value='.$tests->id.'  selected>'.$test_time.'</option>';
                                                 }
                                                 else
-                                                echo '<option value='.$test_rooms->_joinData->id.'>'.$test_time.'</option>';
+                                                echo '<option value='.$tests->id.'>'.$test_time.'</option>';
                                             }
                                         }
                                     ?>
@@ -103,7 +135,7 @@
                                     {
                                         if($tests->id == $check_id)
                                         {
-                                            echo $tests->computer_registered.'/'.$tests->test_room->total_computer;
+                                            echo '<input class="form-control border-0 bg-white" style="width: 80px" value='.$tests->computer_registered.'/'.$tests->test_room->total_computer.' readonly>';
                                         }
                                     }
                             ?>
@@ -152,12 +184,27 @@
         //         }
         //     })
     });
-    function selectTesttime(check_name,subject_id){
+    function selectTestday(check_name,subject_id){
     $.ajax({
+        url: baseUrl + '/subjects/checkTestday',
+        type: 'post',
+        data: {
+            check_name: check_name.value,
+            subject_id: subject_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        dataType: 'html',
+        success: function (res) {
+            $('#test_room'+subject_id).html(res); 
+            var check_name = $('#test_room'+subject_id).val();
+            console.log(check_name);
+            $.ajax({
                 url: baseUrl + '/subjects/checkTesttime',
                 type: 'post',
                 data: {
-                    check_name: check_name.value,
+                    check_name: check_name,
                     subject_id: subject_id
                 },
                 headers: {
@@ -189,7 +236,51 @@
                 error: function () {
 
                 }
+            })     
+        },
+        error: function () {
+
+        }
+    })    
+    }
+    function selectTesttime(check_name,subject_id){
+    $.ajax({
+        url: baseUrl + '/subjects/checkTesttime',
+        type: 'post',
+        data: {
+            check_name: check_name.value,
+            subject_id: subject_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        dataType: 'html',
+        success: function (res) {
+            $('#test_time_'+subject_id).html(res);
+            console.log($('#test_time_'+subject_id).val());
+            var id = $('#test_time_'+subject_id).val();
+            $.ajax({
+                url: baseUrl + '/subjects/checkTest',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                dataType: 'html',
+                success: function (ress) {
+                    $('.test'+subject_id).html(ress);
+                },
+                error: function () {
+
+                }
             })    
+        },
+        error: function () {
+
+        }
+    })    
     }
         
     function selectTest(check_test,subject_id)

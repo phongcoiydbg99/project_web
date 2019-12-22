@@ -1,15 +1,15 @@
 <?php 
 foreach ($subjects as $subject)
 {
-    foreach ($subject->test_rooms as $test_rooms)
+    foreach ($subject->tests as $tests)
     {
-        if ($test_rooms->name == $check_name)
+        if ($tests->test_room->name == $check_name)
         {
-            if ($check_id == $test_rooms->_joinData->id) {
-                echo '<option value='.$test_rooms->_joinData->id.'selected>'.date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time)).'</option>';
+            if ($check_id == $tests->id) {
+                echo '<option value='.$tests->id.'selected>'.date('H:i',strtotime($tests->time->start_time)).' - '.date('H:i',strtotime($tests->time->last_time)).'</option>';
             }
             else
-            echo '<option value='.$test_rooms->_joinData->id.'>'.date('H:i',strtotime($test_rooms->_joinData->start_time)).' - '.date('H:i',strtotime($test_rooms->_joinData->last_time)).'</option>';
+            echo '<option value='.$tests->id.'>'.date('H:i',strtotime($tests->time->start_time)).' - '.date('H:i',strtotime($tests->time->last_time)).'</option>';
         }
     }
 }

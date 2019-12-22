@@ -40,16 +40,20 @@ class TestsTable extends Table
 
         $this->belongsTo('Subjects', [
             'foreignKey' => 'subject_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
         $this->belongsTo('TestRooms', [
             'foreignKey' => 'test_room_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Times', [
+            'foreignKey' => 'time_id',
+            'joinType' => 'INNER',
         ]);
         $this->belongsToMany('Users', [
             'foreignKey' => 'test_id',
             'targetForeignKey' => 'user_id',
-            'joinTable' => 'users_tests'
+            'joinTable' => 'users_tests',
         ]);
     }
 

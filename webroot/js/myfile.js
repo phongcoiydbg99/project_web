@@ -63,7 +63,7 @@ function listTest(event,index,id)
             if (i != id&& i!= t && i%2 == 0)
             {
                 var j = i+1;
-                if($('#tests'+i).val() == room || $('#tests'+j).val() == sub && room != '' && sub != '')
+                if($('#tests'+i).val() == room && $('#tests'+j).val() == sub && room != '' && sub != '')
                 {
                     alert('Ca đăng ký của bạn bị trùng');
                     check = true;

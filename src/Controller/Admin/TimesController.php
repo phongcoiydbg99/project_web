@@ -114,21 +114,17 @@ class TimesController extends AppController
             for ($i=0; $i < $n; $i++) { 
                 $subject_id = $tests[$i]['subject_id'];
                 $test_room_id = $tests[$i]['test_room_id'];
-                if(empty($this->Times->Tests->find()->where(['Tests.subject_id'=>$subject_id])->toArray()))
-                {
-                    $times = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room_id){ return $q->where(['Tests.test_room_id' => $test_room_id]);});
-                    $test_time = array();
-                    foreach ($times as $check_time) {
-                        $test_time[1] = date('H:i',strtotime($check_time['start_time']));
-                        $test_time[2] = date('H:i',strtotime($check_time['last_time']));
-                        if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
-                        {
-                            $check_error = true;
-                            $check_test = true;
-                        }
+                $times = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room_id){ return $q->where(['Tests.test_room_id' => $test_room_id]);});
+                $test_time = array();
+                foreach ($times as $check_time) {
+                    $test_time[1] = date('H:i',strtotime($check_time['start_time']));
+                    $test_time[2] = date('H:i',strtotime($check_time['last_time']));
+                    if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
+                    {
+                        $check_error = true;
+                        $check_test = true;
                     }
                 }
-                else $check_test = true;
             }
             if($check_error) $this->Flash->error(__('Thời gian ca thi của bạn đã trùng'));
             else 
@@ -184,7 +180,7 @@ class TimesController extends AppController
             $test_day =  date("Y-m-d", strtotime($check['test_day']));
             $start_time= date('H:i',strtotime($check['start_time']));
             $last_time= date('H:i',strtotime($check['last_time']));
-            if(empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.subject_id'=>$subject,'Tests.test_room_id'=>$test_room])->toArray()) && empty($this->Times->Tests->find()->where(['Tests.subject_id'=>$subject])->toArray()))
+            if(empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.subject_id'=>$subject,'Tests.test_room_id'=>$test_room])->toArray()))
             {
                 $time = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room){ return $q->where(['Tests.test_room_id' => $test_room]);});
                 $test_time = array();
