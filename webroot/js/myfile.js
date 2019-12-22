@@ -63,11 +63,11 @@ function listTest(event,index,id)
             if (i != id&& i!= t && i%2 == 0)
             {
                 var j = i+1;
-            if($('#tests'+i).val() == room && $('#tests'+j).val() == sub && room != '' && sub != '')
-            {
-                alert('Môn đăng ký của bạn bị trùng');
-                check = true;
-            }
+                if($('#tests'+i).val() == room || $('#tests'+j).val() == sub && room != '' && sub != '')
+                {
+                    alert('Ca đăng ký của bạn bị trùng');
+                    check = true;
+                }
             }
             i++;
         });
@@ -78,7 +78,27 @@ function listTest(event,index,id)
         }
         $('.autocomplete'+id).hide(0);
     }
-
+function listTestByTime(event,index,id,time_id)
+    {
+        check = false;
+        var name = '';
+        var t = 0;
+        var room = '';
+        var sub = '';
+        var n = time_id;
+        if (id%2 == 0) {
+            name = 'testRooms';
+        }
+        else {
+            name = 'subjects';
+        } 
+        $('#tests'+id).val('');
+        if (!check){
+        $('#tests'+id).attr('name',name+'['+n+']['+index+']');
+        $('#tests'+id).val($(event).text());
+        }
+        $('.autocomplete'+id).hide(0);
+    }
 function addSubjects()
     {
         id++;
@@ -127,6 +147,10 @@ function autoComplete(i,name,url)
         })    
     }
     
+function deleteTestByTime(id)
+    {
+         $(".test_content"+id).remove();
+    }
 function deleteTests(id,subject_id)
     {
         $(".subject_content"+id).remove();

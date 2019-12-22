@@ -53,6 +53,7 @@ class SubjectsController extends AppController
         $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            dd($data); die;
             if(!empty($data['tests']))
             {
               $subject = $this->Subjects->patchEntity($subject, $data,['contain' => ['Tests']]);

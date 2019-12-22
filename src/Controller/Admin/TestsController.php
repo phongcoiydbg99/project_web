@@ -125,7 +125,6 @@ class TestsController extends AppController
             $data_new = array_merge($data_new,['last_time'=>$data['last_time']]);
             
             $test_room = array();
-            debug($data_new);
             foreach ($data['testRooms'] as $testRooms) {
               foreach ($testRooms as $key => $value) {
                 array_push($test_room,$key);
@@ -137,9 +136,6 @@ class TestsController extends AppController
                 array_push($subject,$key);
               }
             }
-            debug($test_room);
-            debug($subject);
-            die;
             $n = count($subject);
             for ($i=0; $i < $n; $i++) { 
               $data_save = array();
@@ -150,11 +146,11 @@ class TestsController extends AppController
               if ($this->Tests->save($test)) {
                 $this->Flash->success(__('The test has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
               }
               $this->Flash->error(__('The test could not be saved. Please, try again.'));
             }
         }
+        return $this->redirect(['action' => 'index']);
         $subjects = $this->Tests->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->code . '- ' . $e->name ;
