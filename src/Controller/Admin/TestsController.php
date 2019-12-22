@@ -24,7 +24,7 @@ class TestsController extends AppController
             'contain' => ['Subjects', 'TestRooms']
         ];
         $session_id = $this->request->session()->read('Auth.session_id');
-        $tests = $this->paginate($this->Tests->find()->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);}));
+        $tests = $this->paginate($this->Tests->find()->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);})->distinct(['start_time','last_time'])->order(['start_time' => 'ASC']));
         $this->set(compact('tests'));
     }
 
@@ -117,21 +117,107 @@ class TestsController extends AppController
     public function add()
     {
         $test = $this->Tests->newEntity();
+        $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
-            $test = $this->Tests->patchEntity($test, $this->request->getData());
-            if ($this->Tests->save($test)) {
+            $data = $this->request->getData();
+            $data_new = array();
+            $data_new = array_merge($data_new,['start_time'=>$data['start_time']]);
+            $data_new = array_merge($data_new,['last_time'=>$data['last_time']]);
+            
+            $test_room = array();
+            debug($data_new);
+            foreach ($data['testRooms'] as $testRooms) {
+              foreach ($testRooms as $key => $value) {
+                array_push($test_room,$key);
+              }
+            }
+            $subject = array();
+            foreach ($data['subjects'] as $subjects) {
+              foreach ($subjects as $key => $value) {
+                array_push($subject,$key);
+              }
+            }
+            debug($test_room);
+            debug($subject);
+            die;
+            $n = count($subject);
+            for ($i=0; $i < $n; $i++) { 
+              $data_save = array();
+              $data_save = array_merge($data_save,$data_new);
+              $data_save = array_merge($data_save,['test_room_id'=>$test_room[$i]]);
+              $data_save = array_merge($data_save,['subject_id'=>$subject[$i]]);
+              $test = $this->Tests->patchEntity($test, $data_save);
+              if ($this->Tests->save($test)) {
                 $this->Flash->success(__('The test has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
+              }
+              $this->Flash->error(__('The test could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The test could not be saved. Please, try again.'));
         }
-        $subjects = $this->Tests->Subjects->find('list', ['limit' => 200]);
-        $testRooms = $this->Tests->TestRooms->find('list', ['limit' => 200]);
+        $subjects = $this->Tests->Subjects->find('list',['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->code . '- ' . $e->name ;
+          },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
+        // dd($subjects->toArray()); die;
+        $testRooms = $this->Tests->TestRooms->find('list', ['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->name ;
+          },'limit' => 200]);
         $users = $this->Tests->Users->find('list', ['limit' => 200]);
         $this->set(compact('test', 'subjects', 'testRooms', 'users'));
     }
 
+    public function addTests()
+    {
+      $session_id = $this->request->session()->read('Auth.session_id');
+      $this->layout = false;
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $id = $data['id'];
+          $subjects = $this->Tests->Subjects->find('list',['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->code . '- ' . $e->name ;
+          },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
+
+          $testRooms = $this->Tests->TestRooms->find('list', ['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->name ;
+          },'limit' => 200]);
+        $users = $this->Tests->Users->find('list', ['limit' => 200]);
+          $this->set(compact('id','subjects','testRooms'));
+      }
+    }
+
+    public function autoCompleteRoom()
+    {
+      $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $i = $data['id'];
+          $testRooms = $this->Tests->TestRooms->find('list', ['keyField' => 'id',
+        'valueField' => function ($e) {
+              return $e->name ;
+          },'limit' => 200,'conditions' => ['name LIKE' => '%'.$data['name'].'%']]);
+          $this->set(compact('testRooms','i'));
+      }
+    }
+
+    public function autoCompleteSubject()
+    {
+      $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $i = $data['id'];
+          $subjects = $this->Tests->Subjects->find('list',['keyField' => 'id',
+          'valueField' => function ($e) {
+                return $e->code . '- ' . $e->name ;
+            },'limit' => 200,'conditions' => ['or'=>['code LIKE' => '%'.$data['name'].'%','name LIKE' => '%'.$data['name'].'%']]])->where(['Subjects.session_id'=>$session_id]);
+          $this->set(compact('subjects','i'));
+      }
+    }
     /**
      * Edit method
      *

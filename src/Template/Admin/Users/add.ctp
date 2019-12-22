@@ -74,7 +74,6 @@
                         <div class="add_content mt-3">
                             <div class="row subject_content<?=$i?> mb-3">
                                 <div class="col-lg-10">
-                                    <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
                                     <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="" name='subjects[0]' id='subjects<?=$i?>'>
                                     <div class="autocomplete autocomplete<?=$i?>" >
                                         <ul name='ul' class="autocomplete-list" style="" >

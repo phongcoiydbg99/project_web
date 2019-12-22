@@ -36,6 +36,48 @@ function list(event,index,id)
         $('.autocomplete'+id).hide(0);
 
     }
+function listTest(event,index,id)
+    {
+        check = false;
+        var name = '';
+        var t = 0;
+        var room = '';
+        var sub = '';
+        var n = Math.floor(id/2);
+        if (id%2 == 0) {
+            name = 'testRooms';
+            t = id + 1;
+            room = $(event).text();
+            sub = $('#tests'+t).val();
+        }
+        else {
+            name = 'subjects';
+            t = id - 1;
+            room = $('#tests'+t).val();
+            sub = $(event).text();
+        } 
+        $('#tests'+id).val('');
+        
+        var i = 0;
+        $( ".auto" ).each(function(index,e) {
+            if (i != id&& i!= t && i%2 == 0)
+            {
+                var j = i+1;
+            if($('#tests'+i).val() == room && $('#tests'+j).val() == sub && room != '' && sub != '')
+            {
+                alert('Môn đăng ký của bạn bị trùng');
+                check = true;
+            }
+            }
+            i++;
+        });
+        $('#tests'+id).val('');
+        if (!check){
+        $('#tests'+id).attr('name',name+'['+n+']['+index+']');
+        $('#tests'+id).val($(event).text());
+        }
+        $('.autocomplete'+id).hide(0);
+    }
 
 function addSubjects()
     {
@@ -60,7 +102,8 @@ function addSubjects()
     }
 function autoclick(i)
     {
-      $('.autocomplete'+i).slideDown(0); 
+
+        $('.autocomplete'+i).slideDown(0); 
     }
 function autoComplete(i,name,url)
     {
