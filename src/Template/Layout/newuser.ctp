@@ -107,7 +107,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
            <li class="nav-item">
-            <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý đăng kí</p>', ['controller'=>'times','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
+            <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý ca thi</p>', ['controller'=>'times','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
           </li>
           <li class="nav-item">
                 <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý sinh viên </p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>

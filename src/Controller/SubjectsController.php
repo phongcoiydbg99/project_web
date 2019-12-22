@@ -28,7 +28,7 @@ class SubjectsController extends AppController
         $this->request->session()->write('Auth.session_id', $session_id); 
 
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
+        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.name' => 'ASC']);
 
         $subjects = $this->paginate($query);
         // dd($query->toArray());
@@ -177,7 +177,7 @@ class SubjectsController extends AppController
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['choose'];
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.test_day' => 'ASC']);
+        })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.name' => 'ASC']);
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
         $this->set(compact(['subjects','id']));

@@ -70,16 +70,6 @@ class TestsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->time('start_time')
-            ->requirePresence('start_time', 'create')
-            ->notEmptyTime('start_time');
-
-        $validator
-            ->time('last_time')
-            ->requirePresence('last_time', 'create')
-            ->notEmptyTime('last_time');
-
-        $validator
             ->integer('computer_registered')
             ->notEmptyString('computer_registered');
 

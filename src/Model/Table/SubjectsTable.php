@@ -76,18 +76,13 @@ class SubjectsTable extends Table
             ->scalar('code')
             ->maxLength('code', 15)
             ->requirePresence('code', 'create')
-            ->notEmptyString('code');
+            ->notEmptyString('code','Điền đầy đủ thông tin');
 
         $validator
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
-
-        $validator
-            ->date('test_day')
-            ->requirePresence('test_day', 'create')
-            ->notEmptyDate('test_day');
+            ->notEmptyString('name','Điền đầy đủ thông tin');
 
         return $validator;
     }

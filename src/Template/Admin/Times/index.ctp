@@ -8,6 +8,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Quản lý ca thi</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -22,7 +23,7 @@
         <div class="card-header">
             <h3 class="float-left"><?= __('Danh sách') ?></h3>
             <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
-            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm tên môn học..','onkeyup'=>'searchTable(this.value,"admin/tests/searchTable")']) ?>
+            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm ngày thi','onkeyup'=>'searchTable(this.value,"admin/tests/searchTable")']) ?>
         </div>
         <div class="card-body">
             <div class="content_table">
@@ -38,7 +39,7 @@
                 <tbody>
                     <?php foreach ($times as $time): ?>
                     <tr>
-                        <td><?= date("Y-m-d", strtotime($time->test_day)) ?></td>
+                        <td><?= date("d/m/Y", strtotime($time->test_day)) ?></td>
                         <td><?= h(date('H:i',strtotime($time->start_time))) ?></td>
                         <td><?= h(date('H:i',strtotime($time->last_time))) ?></td>
                         <td class="actions">

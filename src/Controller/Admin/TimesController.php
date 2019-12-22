@@ -21,7 +21,7 @@ class TimesController extends AppController
         $this->paginate = [
             'contain' => ['Tests','Tests.Subjects','Tests.TestRooms']
         ];
-        $times = $this->paginate($this->Times);
+        $times = $this->paginate($this->Times->find()->order(['test_day'=>'ASC']));
 
         $this->set(compact('times'));
     }

@@ -22,7 +22,6 @@
     <div class="card">
         <div class="card-header">
             <h3 class="float-left"><?= __('Môn thi') ?></h3>
-            <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
             <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm tên môn học..','onkeyup'=>'searchTable(this.value,"admin/subjects/searchTable")']) ?>
         </div>
         <div class="card-body">
@@ -32,7 +31,6 @@
                         <tr>
                             <th scope="col"><?= $this->Paginator->sort('code','Mã môn') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('name','Tên môn') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('test_day','Ngày thi') ?></th>
                             <th scope="col" class="actions"><?= __('Hành vi') ?></th>
                         </tr>
                     </thead>
@@ -41,9 +39,10 @@
                         <tr>
                             <td><?= h($subject->code) ?></td>
                             <td><?= h($subject->name) ?></td>
-                            <td><?= h($subject->test_day->i18nFormat('dd/MM/yyyy')) ?></td>
                             <td class="actions">
-                                <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $subject->id],['class' => 'btn btn-warning', 'escape' => false])?>
+
+                                <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>',['action' => 'edit', $subject->id],['class' => 'btn btn-warning', 'escape' => false])?>
+                                
                                 <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $subject->id], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $subject->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
                         </tr>
@@ -75,6 +74,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    
+
+<script>
+
 </script>

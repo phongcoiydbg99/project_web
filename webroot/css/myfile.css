@@ -10,11 +10,11 @@
 .auto:focus{
   outline: none;
 }
-/* .autocompleteuser{
+.autocompleteuser{
   position: relative;
   width: 100%;
   display: block;
-} */
+}
 .autocomplete-list {
   position: absolute;
   width: 100%;

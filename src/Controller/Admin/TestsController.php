@@ -38,7 +38,7 @@ class TestsController extends AppController
     public function view($id = null)
     {
         $test = $this->Tests->get($id, [
-            'contain' => ['Subjects', 'TestRooms', 'Users']
+            'contain' => ['Subjects', 'TestRooms', 'Users','Times']
         ]);
         $session_id = $this->request->session()->read('Auth.session_id');
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
@@ -52,30 +52,32 @@ class TestsController extends AppController
                     $add->user_id = $key;
                     $add->test_id = $id;
                     $check = $users_tests->find()->where(['user_id'=>$key,'test_id'=>$id])->first();
-                    // dd($check); die;
                     if(empty($check))
                     {
-                        $user_test= $this->Tests->find()->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);})->matching('Users', function($q) use ($key){ return $q->where(['Users.id' => $key]);});
-                        foreach ($user_test as $key) {
-                            if($key->subject_id != $test->subject_id)
-                            {
-                                if($key->_matchingData['Subjects']->test_day == $test->subject->test_day)
-                                {
-                                    $start_time = $key->start_time;
-                                    $last_time = $key->last_time;
-                                    if (($test->start_time > $start_time && $test->start_time < $last_time)||($test->last_time > $start_time && $test->last_time < $last_time) || ($test->start_time == $start_time && $test->last_time == $last_time))
-                                    {
-                                        $this->Flash->error("Thời gian đăng ký của sinh viên trùng nhau");
-                                        return $this->redirect(['action' => 'view',$id]);
-                                    }
-                                }
-                            }
-                            else 
-                            {
-                                $this->Flash->error("Sinh viên đã có môn đăng kí rồi");
-                                return $this->redirect(['action' => 'view',$id]);
-                            }                            
-                        }
+                        $user_test= $this->Tests->find()->contain('Times')->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);})->matching('Users', function($q) use ($key){ return $q->where(['Users.id' => $key]);});
+                        if(!empty($user_test))
+                        {
+                          foreach ($user_test as $key) {
+                              if($key->subject_id != $test->subject_id)
+                              {
+                                  if($key->time->test_day == $test->time->test_day)
+                                  {
+                                      $start_time = $key->time->start_time;
+                                      $last_time = $key->time->last_time;
+                                      if (($test->time->start_time > $start_time && $test->time->start_time < $last_time)||($test->time->last_time > $start_time && $test->time->last_time < $last_time) || ($test->time->start_time == $start_time && $test->time->last_time == $last_time))
+                                      {
+                                          $this->Flash->error("Thời gian đăng ký của sinh viên trùng nhau");
+                                          return $this->redirect(['action' => 'view',$id]);
+                                      }
+                                  }
+                              }
+                              else 
+                              {
+                                  $this->Flash->error("Sinh viên đã có môn đăng kí rồi");
+                                  return $this->redirect(['action' => 'view',$id]);
+                              }                            
+                          }
+                        } 
                         $test->computer_registered++;
                         if ($users_tests->save($add))
                         {

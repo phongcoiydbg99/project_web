@@ -24,7 +24,25 @@ class SubjectsController extends AppController
 
         $query = $this->Subjects->find() ->where(['Subjects.session_id'=>$session_id]);
         $subjects = $this->paginate($query);
-        $this->set(compact('subjects'));
+        $add =  $this->Subjects->newEntity();
+        
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $data = $this->request->getData();
+            foreach ($data['subject'] as $key => $value) {
+            $subject = $this->Subjects->get($key, [
+            'contain' => []
+            ]);
+            $subject = $this->Subjects->patchEntity($subject, $value);
+            if ($this->Subjects->save($subject)) {
+                $this->Flash->success(__('Sửa môn thi thành công'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Sửa môn thi không thành công'));
+            }
+        }
+        // $this->set(compact('subject'));
+        $this->set(compact('subjects','add'));
     }
 
     /**
@@ -116,7 +134,7 @@ class SubjectsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit2($id = null)
     {
         $subject = $this->Subjects->get($id, [
             'contain' => ['Tests']
@@ -200,7 +218,22 @@ class SubjectsController extends AppController
         $users = $this->Subjects->Users->find('list', ['limit' => 200]);
         $this->set(compact('subject', 'testRooms', 'users'));
     }
+    public function edit($id = null)
+    {
+        $subject = $this->Subjects->get($id, [
+            'contain' => ['Tests']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $subject = $this->Subjects->patchEntity($subject, $this->request->getData());
+            if ($this->Subjects->save($subject)) {
+                $this->Flash->success(__('Bạn đã sửa thành công.'));
 
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Bạn đã không sửa thành công.'));
+        }
+        $this->set(compact('subject'));
+    }
     /**
      * Delete method
      *
@@ -230,6 +263,18 @@ class SubjectsController extends AppController
             $this->set(compact('testRooms','id'));
         }
     }
+    public function addModal()
+    {
+      $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
+      if ($this->request->is('ajax')) {
+          $data = $this->request->getData();
+          $subject = $this->Subjects->get($data['id'], [
+            'contain' => ['Tests']
+          ]);
+          $this->set(compact('subject'));
+      }
+    } 
     public function searchTable()
     {
       $this->layout = false;
