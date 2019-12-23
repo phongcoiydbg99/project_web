@@ -32,7 +32,7 @@
     $this->Form->setTemplates($myTemplates);
 ?>
 <div class="content">
-    <?= $this->Form->create($user) ?>
+    <?= $this->Form->create($user,['id'=>'form1']) ?>
         <fieldset>
         <div class="row">
             <div class="col-md-8 col-lg-8">
@@ -70,30 +70,37 @@
                         <h3 class="float-left">Thêm môn thi</h3>
                         <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-primary float-right",'type'=>'button','onclick'=>'addSubjects()','escape' => false]) ?>
                     </div>
-                    <div class="card-body">
-                        <div class="add_content mt-3">
-                            <div class="row subject_content<?=$i?> mb-3">
-                                <div class="col-lg-10">
-                                    <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="" name='subjects[0]' id='subjects<?=$i?>'>
-                                    <div class="autocomplete autocomplete<?=$i?>" >
-                                        <ul name='ul' class="autocomplete-list" style="" >
-                                          <?php 
+                        <table class="table border border-bottom-0"cellpadding="0" cellspacing="0">
+                            <thead class="">
+                                <tr>
+                                <th scope="col">Môn thi</th>
+                                <th scope="col" class="actions"><?= __('Hành vi') ?></th>
+                            </tr>
+                            </thead>
+                            <tbody class="add_content">
+                                <tr class="subject_content<?=$i?>">     
+                                    <td>
+                                        <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="" name='subjects[0]' id='subjects<?=$i?>'>
+                                        <div class="autocomplete autocomplete<?=$i?>" >
+                                            <ul name='ul' class="autocomplete-list" style="" >
+                                              <?php 
 
-                                            foreach ($subjects as $index => $value) 
-                                            {
-                                                echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
+                                                foreach ($subjects as $index => $value) 
+                                                {
+                                                    echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
 
-                                            }
-                                          ?>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTest('.$i.')','escape' => false]) ?>
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
+                                                }
+                                              ?>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="ml-2 btn btn-danger" onclick="deleteTest(<?=$i?>)"><i class="far fa-trash-alt"></i></button>
+                                        <!--  <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTest('.$i.')','escape' => false]) ?> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>  
                     <div class="card-footer">
                     <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
                     </div>
@@ -105,4 +112,17 @@
 </div>
 <script>
     var id = <?php echo json_encode($i)?>;
+    $('#form1').submit(function(){
+        var check = true;
+        
+        $( ".auto" ).each(function(index,e) {
+            if ($(e).val() == '')
+            {
+                alert('Bạn chưa điền đủ thông tin');
+                check = false;
+                return false;   
+            }
+        });
+        return check;
+    })
 </script>

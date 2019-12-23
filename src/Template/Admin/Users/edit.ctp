@@ -67,33 +67,40 @@
                     <h3 class="float-left">Thêm môn thi</h3>
                     <?= $this->Form->button('<i class="fas fa-plus-square"></i>',['class' => "btn btn-primary float-right",'type'=>'button','onclick'=>'addSubjects()','escape' => false]) ?>
                 </div>
-                <div class="card-body">
-                    <div class="add_content">
+                <table class="table border border-bottom-0"cellpadding="0" cellspacing="0">
+                    <thead class="">
+                        <tr>
+                        <th scope="col">Môn thi</th>
+                        <th scope="col" class="actions"><?= __('Hành vi') ?></th>
+                    </tr>
+                    </thead>
+                    <tbody class="add_content">
                         <?php foreach ($user->subjects as $subject): ?>
-                        <div class="row subject_content<?=$i?> mb-3">
-                            <div class="col-lg-10">
-                                <!-- <?= $this->Form->control('subjects'.$i, ['type'=>'text','class'=>"subject_value form-control",'label'=>false,'onclick'=>'autoclick('.$i.')','onkeyup'=>'autoComplete('.$i.',this.value,"admin/users/autoComplete")','name'=>'subjects[0]']) ?> -->
-                                <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="<?=$subject->code.'- '.$subject->name?>" name='subjects[<?=$subject->id?>]' id='subjects<?=$i?>'>
-                                
-                                <div class="autocomplete autocomplete<?=$i?>" >
-                                    <ul name='ul' class="autocomplete-list" style="" >
-                                      <?php 
-                                        foreach ($subjects as $index => $value) 
-                                        {
-                                            echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
-                                        }
-                                      ?>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                 <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?>
-                            </div>
-                        </div>    
+                            <?php if($subject->session_id == $session_id) {?>
+                            <tr class="subject_content<?=$i?>">     
+                                <td>
+                                    <input type="text" class="auto form-control"  onclick="autoclick(<?=$i?>)" onkeyup="autoComplete(<?=$i?>,this.value,'admin/users/autoComplete')"  value="<?=$subject->code.'- '.$subject->name?>" name='subjects[<?=$subject->id?>]' id='subjects<?=$i?>'>
+                                    
+                                    <div class="autocomplete autocomplete<?=$i?>" >
+                                        <ul name='ul' class="autocomplete-list" style="" >
+                                          <?php 
+                                            foreach ($subjects as $index => $value) 
+                                            {
+                                                echo '<li  value="'.$index.'" class="list'.$index.'" onclick="list(this,'.$index.','.$i.')">'.$value.'</li>';
+                                            }
+                                          ?>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?>
+                                </td>
+                            </tr>    
+                        <?php } ?>
                         <?php $i++;?>
                         <?php endforeach ?>
-                    </div>
-                </div>
+                    </tbody>
+                </table>  
             </div>
         </div>
     </div>

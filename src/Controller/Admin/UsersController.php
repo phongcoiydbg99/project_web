@@ -109,8 +109,8 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['Subjects']
         ]);
-        $check_edit = false; 
         $session_id = $this->request->session()->read('Auth.session_id');
+        $check_edit = false; 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $key = $data['subjects'];
@@ -140,7 +140,7 @@ class UsersController extends AppController
               return $e->code . '- ' . $e->name ;
           },'limit' => 200])->where(['Subjects.session_id'=>$session_id]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'subjects', 'tests'));
+        $this->set(compact('user', 'subjects', 'tests','session_id'));
     }
 
     /**
@@ -397,7 +397,7 @@ class UsersController extends AppController
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
           $query = $this->Users->find('all',[
-              'conditions' => ['or'=>['first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%']]
+              'conditions' => ['or'=>['first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%','username LIKE' => '%'.$data['name'].'%']]
           ])->where(['Users.role' => 'user']);
           $users = $this->paginate($query,['limit'=>15]);
           $this->set(compact('users'));
