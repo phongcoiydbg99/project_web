@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 22, 2019 lúc 10:04 PM
+-- Thời gian đã tạo: Th12 23, 2019 lúc 12:21 PM
 -- Phiên bản máy phục vụ: 10.4.8-MariaDB-log
 -- Phiên bản PHP: 7.3.10
 
@@ -42,7 +42,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `name`, `year`, `start_time`, `last_time`, `choose`) VALUES
-(1, 'Học kì 1', 2019, '2019-12-10 02:00:00', '2019-12-19 05:00:00', 1),
+(1, 'Học kì 1', 2019, '2019-12-10 02:00:00', '2019-12-22 00:00:00', 1),
 (10, '2', 2002, '2019-12-27 23:12:00', '2019-12-28 17:12:00', 0);
 
 -- --------------------------------------------------------
@@ -89,7 +89,7 @@ CREATE TABLE `tests` (
 --
 
 INSERT INTO `tests` (`id`, `subject_id`, `test_room_id`, `time_id`, `computer_registered`) VALUES
-(69, 5, 2, 3, 2),
+(69, 5, 2, 3, 7),
 (73, 3, 2, 1, 0),
 (76, 14, 3, 1, 2),
 (78, 23, 2, 4, 4),
@@ -97,7 +97,13 @@ INSERT INTO `tests` (`id`, `subject_id`, `test_room_id`, `time_id`, `computer_re
 (81, 3, 2, 6, 0),
 (82, 2, 3, 6, 0),
 (83, 2, 1, 3, 30),
-(84, 2, 3, 7, 1);
+(84, 2, 3, 7, 1),
+(85, 3, 3, 3, 0),
+(86, 2, 4, 3, 0),
+(88, 3, 5, 3, 0),
+(89, 22, 3, 9, 0),
+(90, 22, 2, 9, 0),
+(91, 22, 4, 9, 0);
 
 -- --------------------------------------------------------
 
@@ -130,6 +136,7 @@ INSERT INTO `test_rooms` (`id`, `name`, `total_computer`) VALUES
 
 CREATE TABLE `times` (
   `id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
   `test_day` date NOT NULL,
   `start_time` time NOT NULL,
   `last_time` time NOT NULL
@@ -139,12 +146,13 @@ CREATE TABLE `times` (
 -- Đang đổ dữ liệu cho bảng `times`
 --
 
-INSERT INTO `times` (`id`, `test_day`, `start_time`, `last_time`) VALUES
-(1, '2019-12-22', '07:00:00', '09:00:00'),
-(3, '2019-12-22', '17:20:00', '19:20:00'),
-(4, '2019-12-22', '17:40:00', '21:40:00'),
-(6, '2019-12-23', '09:40:00', '12:40:00'),
-(7, '2019-12-23', '13:00:00', '15:00:00');
+INSERT INTO `times` (`id`, `session_id`, `test_day`, `start_time`, `last_time`) VALUES
+(1, 1, '2019-12-22', '07:00:00', '09:00:00'),
+(3, 1, '2019-12-21', '17:20:00', '19:20:00'),
+(4, 1, '2019-12-22', '17:40:00', '21:40:00'),
+(6, 1, '2019-12-22', '09:40:00', '12:40:00'),
+(7, 1, '2019-12-23', '13:00:00', '15:00:00'),
+(9, 10, '2019-12-23', '17:46:00', '19:46:00');
 
 -- --------------------------------------------------------
 
@@ -435,7 +443,12 @@ INSERT INTO `users_tests` (`id`, `user_id`, `test_id`) VALUES
 (63, 2, 69),
 (64, 2, 76),
 (65, 102, 78),
-(67, 12, 78);
+(67, 12, 78),
+(68, 13, 69),
+(69, 4, 69),
+(70, 5, 69),
+(71, 7, 69),
+(72, 6, 69);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -473,7 +486,8 @@ ALTER TABLE `test_rooms`
 -- Chỉ mục cho bảng `times`
 --
 ALTER TABLE `times`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_session_time` (`session_id`);
 
 --
 -- Chỉ mục cho bảng `users`
@@ -517,7 +531,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT cho bảng `tests`
 --
 ALTER TABLE `tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT cho bảng `test_rooms`
@@ -529,7 +543,7 @@ ALTER TABLE `test_rooms`
 -- AUTO_INCREMENT cho bảng `times`
 --
 ALTER TABLE `times`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
@@ -547,7 +561,7 @@ ALTER TABLE `users_subjects`
 -- AUTO_INCREMENT cho bảng `users_tests`
 --
 ALTER TABLE `users_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -566,6 +580,12 @@ ALTER TABLE `tests`
   ADD CONSTRAINT `fk_subject_` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_test_room_` FOREIGN KEY (`test_room_id`) REFERENCES `test_rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_test_time_` FOREIGN KEY (`time_id`) REFERENCES `times` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `times`
+--
+ALTER TABLE `times`
+  ADD CONSTRAINT `fk_session_time` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `users_subjects`
