@@ -36,6 +36,11 @@ class TimesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Sessions', [
+            'foreignKey' => 'session_id',
+            'joinType' => 'INNER',
+        ]);
+        
         $this->hasMany('Tests', [
             'foreignKey' => 'time_id',
         ]);

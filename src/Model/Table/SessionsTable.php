@@ -39,6 +39,9 @@ class SessionsTable extends Table
         $this->hasMany('Subjects', [
             'foreignKey' => 'session_id'
         ]);
+        $this->hasMany('Times', [
+            'foreignKey' => 'session_id',
+        ]);
     }
 
     /**

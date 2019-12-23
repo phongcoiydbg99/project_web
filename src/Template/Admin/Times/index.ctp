@@ -21,9 +21,26 @@
 <div class="content">
     <div class="card">
         <div class="card-header">
-            <h3 class="float-left"><?= __('Danh sách') ?></h3>
-            <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
-            <?= $this->Form->control('search',['class'=>'form-control float-right w-25 ml-1','type'=> 'text','id'=>'search','label'=>false,'placeholder'=>'Tìm kiếm ngày thi','onkeyup'=>'searchTable(this.value,"admin/tests/searchTable")']) ?>
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <h3 class="float-left"><?= __('Danh sách') ?></h3>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="row">
+                         <div class="col-lg-1">
+                         </div>
+                        <div class="col-lg-10">
+                            <input type="text" class="float-right ml-5 datepicker" required="false" name="test_day" placeholder="Tìm kiếm ngày thi" onchange="searchTable(this.value,'admin/times/searchTable')">
+                        </div>
+                         <div class="col-lg-1">
+                              <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
+                         </div>
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
         </div>
         <div class="card-body">
             <div class="content_table">
@@ -75,3 +92,6 @@
         </div>
     </div>
 </div>
+<script>
+
+</script>

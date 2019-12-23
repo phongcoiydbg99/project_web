@@ -14,7 +14,7 @@
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><?= $this->Html->link(
                 ' Quản lý ',
-                '/admin/tests',
+                '/admin/times',
                 ['escape' => false]
             ) ?></li>
           <li class="breadcrumb-item active">Môn thi</li>
@@ -67,7 +67,7 @@
                 <table class="table table-borderless">
                 <tr>
                     <th scope="row"><?= __('Phòng thi:') ?></th>
-                    <td><?= $test->has('test_room') ? $this->Html->link($test->test_room->name, ['controller' => 'TestRooms', 'action' => 'view', $test->test_room->id]) : '' ?></td>
+                    <td><?= $test->has('test_room') ? $test->test_room->name : '' ?></td>
                 </tr>
                 <tr>
                     <th scope="row"><?= __('Máy đã đăng ký:') ?></th>
@@ -91,7 +91,8 @@
             </div>
             <?php if (!empty($test->users)): ?>
                 <div class="content_table">
-                    <table class="table table-hover border" cellpadding="0" cellspacing="0">
+                    <div class=" table-responsive p-0" style="height:400px">
+                    <table class="table table-hover border table-head-fixed" cellpadding="0" cellspacing="0">
                         <thead class="thead-light"> 
                             <tr>
                                 <th scope="col"><?= __('Id') ?></th>
@@ -120,7 +121,8 @@
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
-                    </table>   
+                    </table> 
+                    </div>  
                 </div>
             <?php endif; ?>  
         </div>

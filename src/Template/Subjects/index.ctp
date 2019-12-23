@@ -4,12 +4,46 @@
  * @var \App\Model\Entity\Subject[]|\Cake\Collection\CollectionInterface $subjects
  */
 ?>
+
+<?php 
+$check_test = false;
+if (date('d/m/Y, h:i A') > date('d/m/Y, h:i A',strtotime($session['last_time'])))
+   {
+    echo '<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h4 class="text-danger">Thông báo:</h4>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">';
+          echo $this->Html->link(
+                    ' Trang chủ ',
+                    '/',
+                    ['escape' => false]
+                ) ;
+          echo '</li>
+          <li class="breadcrumb-item active">Đăng kí thi</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<div class="content h-25">
+    <div class="bg-danger container rounded p-lg-2">    
+    <p><h4>Đang khóa đăng ký học, bạn vui lòng thử lại sau!</h4></p>
+</div>
+    </div>';
+      }
+else {?>
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
         <h4 class="text-danger">Thời gian đăng kí:</h4>
-        <h4><?= $session['start_time'] ?> - <?= $session['last_time'] ?></h4>
+        
+        <h4><?= date('d/m/Y, h:i A',strtotime($session['start_time'])) ?> - <?= date('d/m/Y, h:i A',strtotime($session['last_time'])) ?></h4> 
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -42,7 +76,7 @@
                 </thead>
                 <tbody>
                 <?php foreach ($subjects as $subject): ?>
-                    <tr>
+                    <tr class="content_subject<?= $subject->id?>">
                             <td class='subject_code'><?= $subject->code?></td>
                             <td><?= $subject->name?></td>
                             <td class='test_day'>
@@ -114,7 +148,8 @@
                                         $data = Array();
                                         foreach ($subject->tests as $tests)
                                         {
-                                            if ($tests->test_room->name == $check_name)
+                                            $test_day = date('d/m/Y',strtotime($tests->time->test_day));
+                                            if ($tests->test_room->name == $check_name&& $test_day == $check_day)
                                             {
                                                 $test_time = date('H:i',strtotime($tests->time->start_time)).' - '.date('H:i',strtotime($tests->time->last_time));
                                                 // $data = array_merge($data,[$test_time=>$test_rooms->_joinData->id]);
@@ -151,40 +186,16 @@
         <?= $this->Form->end() ?>
     </div>
 </div>
-
+<?php } ?>
 <script>
-    function createArr(name)
-    {
-        var arr = [];
-        $('.'+name).each(function(index) {
-             arr.push($(this).val());
-        })
-
-        return arr;
-    }
     $(document).ready(function()
     {
-        var arr = createArr('test');
-        console.log(arr);
-        // $.ajax({
-        //         url: baseUrl + '/subjects/checkTest',
-        //         type: 'post',
-        //         data: {
-        //             arr: arr
-        //         },
-        //         headers: {
-        //             'X-CSRF-TOKEN': csrfToken
-        //         },
-        //         dataType: 'json',
-        //         success: function (res) {
-        //               alert(data);
-        //         },
-        //         error: function () {
-
-        //         }
-        //     })
+        var check = <?php echo json_encode($check_test)?>;
+        console.log(check);
     });
     function selectTestday(check_name,subject_id){
+        var check_day = check_name.value;
+        console.log(check_day);
     $.ajax({
         url: baseUrl + '/subjects/checkTestday',
         type: 'post',
@@ -197,46 +208,7 @@
         },
         dataType: 'html',
         success: function (res) {
-            $('#test_room'+subject_id).html(res); 
-            var check_name = $('#test_room'+subject_id).val();
-            console.log(check_name);
-            $.ajax({
-                url: baseUrl + '/subjects/checkTesttime',
-                type: 'post',
-                data: {
-                    check_name: check_name,
-                    subject_id: subject_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                dataType: 'html',
-                success: function (res) {
-                    $('#test_time_'+subject_id).html(res);
-                    console.log($('#test_time_'+subject_id).val());
-                    var id = $('#test_time_'+subject_id).val();
-                    $.ajax({
-                        url: baseUrl + '/subjects/checkTest',
-                        type: 'post',
-                        data: {
-                            id: id
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        dataType: 'html',
-                        success: function (ress) {
-                            $('.test'+subject_id).html(ress);
-                        },
-                        error: function () {
-
-                        }
-                    })    
-                },
-                error: function () {
-
-                }
-            })     
+            $('.content_subject'+subject_id).html(res); 
         },
         error: function () {
 
@@ -244,10 +216,13 @@
     })    
     }
     function selectTesttime(check_name,subject_id){
+        console.log($('#test_day'+subject_id).val());
+        var chech_day = $('#test_day'+subject_id).val();
     $.ajax({
         url: baseUrl + '/subjects/checkTesttime',
         type: 'post',
         data: {
+            check_day: chech_day,
             check_name: check_name.value,
             subject_id: subject_id
         },

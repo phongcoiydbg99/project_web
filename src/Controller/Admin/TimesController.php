@@ -21,7 +21,8 @@ class TimesController extends AppController
         $this->paginate = [
             'contain' => ['Tests','Tests.Subjects','Tests.TestRooms']
         ];
-        $times = $this->paginate($this->Times->find()->order(['test_day'=>'ASC']));
+        $session_id = $this->request->session()->read('Auth.session_id');
+        $times = $this->paginate($this->Times->find()->where(['Times.session_id'=>$session_id])->order(['test_day'=>'ASC']));
 
         $this->set(compact('times'));
     }
@@ -133,6 +134,7 @@ class TimesController extends AppController
                 else
                 {
                     $time = $this->Times->patchEntity($time, $data_save,['contain' => ['Tests']]);
+                    $time->session_id = $session_id;
                     if ($this->Times->save($time)) {
                         $this->Flash->success(__('The time has been saved.'));
 
@@ -285,5 +287,19 @@ class TimesController extends AppController
           $test = $this->Times->Tests->get($data['id']);
           $this->Times->Tests->delete($test);
       }
+    }
+    public function searchTable()
+    {
+      $this->layout = false;
+      $session_id = $this->request->session()->read('Auth.session_id');
+      if ($this->request->is('ajax')) {
+        $data = $this->request->getData();
+        $this->paginate = [
+            'contain' => ['Tests','Tests.Subjects','Tests.TestRooms']
+        ];
+        $session_id = $this->request->session()->read('Auth.session_id');
+        $times = $this->paginate($this->Times->find()->where(['Times.session_id'=>$session_id,'Times.test_day'=>$data['name']])->order(['test_day'=>'ASC']));
+        $this->set(compact('times'));
+        }
     }
 }

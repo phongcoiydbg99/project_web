@@ -33,60 +33,10 @@
 ?>
 <div class="content">
     <div class="row">
-        <div class="col-md-3 col-lg-3">
+        <div class="col-md-12 col-lg-12">
             <div class="tests form large-9 medium-8 columns content card">
                 <div class="card-header ">
-                    <h3 class="float-left">Ca thi</h3>
-                    <a href="#" class="btn btn-warning float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-pencil-alt"></i></a> 
-                    <div class="modal fade" id="myModal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                  <h4 class="modal-title">Sửa ca thi</h4>
-                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <?= $this->Form->create($time,['id'=>'form1']) ?>
-                                    <?php
-                                        echo $this->Form->control('test_day' , ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($time->test_day)),'label' => ['text'=>'Ngày thi']]);
-                                        echo $this->Form->control('start_time',['type'=> 'text','id'=>'start_time','label'=>'Thời gian bắt đầu','value'=>date('H:i',strtotime($time->start_time)),'class'=>'form-group']);
-                                        echo $this->Form->control('last_time',['type'=> 'text','id'=>'last_time','label'=>'Thời gian kết thúc','value'=>date('H:i',strtotime($time->last_time)),'class'=>'form-group']);
-                                        $i = 0;
-                                    ?>
-                                    <hr >
-                                    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
-                                    
-                                    <?= $this->Form->end() ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class="table table-borderless">
-                    <tr>
-                        <th scope="row"><?= __('Ngày thi: ') ?></th>
-                        <td><?=  date("d/m/Y", strtotime($time->test_day))?></td>
-                        
-                    </tr>
-                    <tr>
-                        <th scope="row"><?= __('Bắt đầu: ') ?></th>
-                        <td><?= h(date('H:i',strtotime($time->start_time))) ?></td>
-                        
-                    </tr>
-                    <tr>
-                        <th scope="row"><?= __('Kết thúc: ') ?></th>
-                        <td><?= h(date('H:i',strtotime($time->last_time))) ?></td>
-                        
-                    </tr> 
-                    </table>  
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 col-lg-8" >
-            <div class="card" style="height: 600px">
-                <div class="card-header">
-                    <h3 class="float-left">Danh sách môn thi </h3>
+                    <h3 class="float-left">Danh sách môn thi ngày <?=  date("d/m/Y", strtotime($time->test_day))?> ca <?= h(date('H:i',strtotime($time->start_time))) ?> - <?= h(date('H:i',strtotime($time->last_time))) ?></h3>
                     <a href="#" class="btn btn-primary float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal1"><i class="fas fa-plus-square"></i></a> 
                     <div class="modal fade" id="myModal1">
                         <div class="modal-dialog">
@@ -136,11 +86,36 @@
                             </div>
                         </div>
                     </div>
+                    <a href="#" class="btn btn-warning float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal"><i class="fas fa-pencil-alt"></i></a> 
+                    <div class="modal fade" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Sửa ca thi</h4>
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <?= $this->Form->create($time,['id'=>'form1']) ?>
+                                    <?php
+                                        echo $this->Form->control('test_day' , ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($time->test_day)),'label' => ['text'=>'Ngày thi']]);
+                                        echo $this->Form->control('start_time',['type'=> 'text','id'=>'start_time','label'=>'Thời gian bắt đầu','value'=>date('H:i',strtotime($time->start_time)),'class'=>'form-group']);
+                                        echo $this->Form->control('last_time',['type'=> 'text','id'=>'last_time','label'=>'Thời gian kết thúc','value'=>date('H:i',strtotime($time->last_time)),'class'=>'form-group']);
+                                        $i = 0;
+                                    ?>
+                                    <hr >
+                                    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+                                    
+                                    <?= $this->Form->end() ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="card-body">
                 <?php if (!empty($time->tests)): ?>
-                <div class="">
                     <div class="content_table">
-                        <table class="table table-hover border"cellpadding="0" cellspacing="0">
+                        <div class=" table-responsive p-0" style="height:400px">
+                        <table class="table table-hover border table-head-fixed"cellpadding="0" cellspacing="0">
                             <thead class="thead-light">
                                 <tr>
                                 <th scope="col"><?= $this->Paginator->sort('subject_id','Mã môn') ?></th>
@@ -168,12 +143,12 @@
                             <?php endforeach; ?>
                         </tbody>
                         </table>
+                        </div>
                     </div>
-                <?php endif; ?>   
-                </div>              
+                <?php endif; ?>  
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 <script>

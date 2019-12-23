@@ -1,5 +1,3 @@
-
-
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -77,7 +75,7 @@
                                     {
                                         foreach ($tests->users as $key)
                                         {
-                                            if($key->id == $id)
+                                            if($key->id == $id )
                                             {?>
                                                 <td><?= $subject->code?></td>
                                                 <td><?= $subject->name?></td>

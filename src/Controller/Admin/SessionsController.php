@@ -58,11 +58,11 @@ class SessionsController extends AppController
             {
                 $session = $this->Sessions->patchEntity($session, $this->request->getData());
                 if ($this->Sessions->save($session)) {
-                    $this->Flash->success(__('The session has been saved.'));
+                    $this->Flash->success(__('Bạn đã lưu thành công.'));
 
                     return $this->redirect(['action' => 'index']);
                 } else {debug($session->errors()); die;}
-                $this->Flash->error(__('The session could not be saved. Please, try again.'));
+                $this->Flash->error(__('Có lỗi xảy ra xin thử lại.'));
             }
             else $this->Flash->error(__('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc'));
         }
@@ -83,13 +83,18 @@ class SessionsController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $session = $this->Sessions->patchEntity($session, $this->request->getData());
-            if ($this->Sessions->save($session)) {
-                $this->Flash->success(__('The session has been saved.'));
+            $data = $this->request->getData();
+            if ($data['start_time'] < $data['last_time'])
+            {
+                $session = $this->Sessions->patchEntity($session, $this->request->getData());
+                if ($this->Sessions->save($session)) {
+                    $this->Flash->success(__('Bạn đã lưu thành công.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                } else {debug($session->errors()); die;}
+                $this->Flash->error(__('Có lỗi xảy ra xin thử lại.'));
             }
-            $this->Flash->error(__('The session could not be saved. Please, try again.'));
+            else $this->Flash->error(__('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc'));
         }
         $this->set(compact('session'));
     }
