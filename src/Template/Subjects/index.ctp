@@ -76,6 +76,7 @@ else {?>
                 </thead>
                 <tbody>
                 <?php foreach ($subjects as $subject): ?>
+                    <?php if($subject->_matchingData['UsersSubjects']['status'] == 0){ ?>
                     <tr class="content_subject<?= $subject->id?>">
                             <td class='subject_code'><?= $subject->code?></td>
                             <td><?= $subject->name?></td>
@@ -175,7 +176,9 @@ else {?>
                                     }
                             ?>
                             </td>
+                        
                    </tr>
+                <?php }?>
                 <?php endforeach; ?>
                 </tbody>
             </table>

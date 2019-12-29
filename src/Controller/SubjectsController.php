@@ -33,8 +33,8 @@ class SubjectsController extends AppController
 
         $subjects = $this->paginate($query);
         
-        // dd($query->toArray());
-        // die;
+            // dd($query->toArray());
+            // die;
         $id = $this->Auth->user('id');
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $tests = TableRegistry::getTableLocator()->get('tests');
@@ -44,6 +44,8 @@ class SubjectsController extends AppController
             $data = $this->request->getData();
             $test_times = Array();
 
+            dd($data);
+            die;
             foreach ($data['subject'] as $index => $value) {
                 $test_temp = $this->Subjects->Tests->get($value, [
                     'contain' => ['Times']

@@ -260,6 +260,8 @@ class UsersController extends AppController
                   $users_subject = $users_subjects->newEntity();
                   $users_subject->user_id = $user_id;
                   $users_subject->subject_id = $subject->id;
+                  if($data[5] != '') $users_subject->status = 1;
+
                   $users_subjects->save($users_subject);
                 }
               }
