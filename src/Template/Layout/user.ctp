@@ -31,6 +31,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('adminlte.min.css') ?>
     <?= $this->Html->css('alertify.min.css') ?>
     <?= $this->Html->css('default.min.css') ?>
+    <?= $this->Html->css('myfile.css') ?>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     <?= $this->Html->script('jquery-3.3.1.slim.min.js') ?>
@@ -39,6 +40,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('jquery-3.4.1.js') ?>
     <?= $this->Html->script('alertify.min.js') ?>
+    <?= $this->Html->script('myfile.js') ?>
     <script type="text/javascript">
         var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"
         var baseUrl = "<?= $this->Url->build('/', true) ?>";

@@ -14,7 +14,11 @@
 <div class="content">
     <div class="card">
         <div class="card-body">
-            <?= $this->Form->control('<i class="fas fa-print"></i> In kết quả',['class'=>'btn btn-primary','type'=> 'button','id'=>'search','label'=>false,'onclick'=>'printTest()']) ?>
+            <div class="row">
+                <?= $this->Form->control('<i class="fas fa-print"></i> In kết quả',['class'=>'btn btn-primary ','type'=> 'button','id'=>'search','label'=>false,'onclick'=>'printTest()']) ?>
+            <?= $this->Form->control('<i class="far fa-save"></i> Xuất kết quả ra file Word',['class'=>'btn btn-success float-left ml-2','type'=> 'button','id'=>'export','label'=>false,'onclick'=>'exportNote()']) ?> 
+
+            </div>
             <div class="print_area mt-5" id = 'print_area'>
                 <table style="width: 100%; border: none; border-collapse: collapse;">
                     <tr>
@@ -56,13 +60,13 @@
                         else {
                     ?>
                     <table class="table  table-bordered table-sm" cellpadding="0" cellspacing="0">
-                        <thead class="thead-light">
+                        <thead class="">
                         <tr>
-                            <th scope="col" colspan=><?= $this->Paginator->sort('Mã môn học') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('Tên môn học') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('Ngày thi') ?></th>
-                            <th scope="col" class="text-primary">Phòng thi</th>
-                            <th scope="col" class="text-primary">Thời gian thi</th>
+                            <th scope="col" colspan=><?='Mã môn học' ?></th>
+                            <th scope="col"><?= 'Tên môn học' ?></th>
+                            <th scope="col">Ngày thi</th>
+                            <th scope="col" >Phòng thi</th>
+                            <th scope="col">Thời gian thi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -102,12 +106,4 @@
 </div>
 <br>
 <script>
-    function printTest()
-    {
-        var restorepage = document.body.innerHTML;
-        var printcontent = document.getElementById('print_area').innerHTML;
-        document.body.innerHTML = printcontent;
-        window.print();
-        document.body.innerHTML = restorepage;
-    }
 </script>

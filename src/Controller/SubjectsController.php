@@ -44,8 +44,6 @@ class SubjectsController extends AppController
             $data = $this->request->getData();
             $test_times = Array();
 
-            dd($data);
-            die;
             foreach ($data['subject'] as $index => $value) {
                 $test_temp = $this->Subjects->Tests->get($value, [
                     'contain' => ['Times']
