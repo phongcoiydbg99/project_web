@@ -112,6 +112,11 @@ function listTest(event,index,id)
                     alert('Ca đăng ký của bạn bị trùng');
                     check = true;
                 }
+                if ($('#tests'+i).val() == room && room != '')
+                {
+                    alert('Ca đăng ký của bạn bị trùng');
+                    check = true;
+                }
             }
             i++;
         });

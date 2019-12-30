@@ -29,11 +29,12 @@
                     <div class="row">
                          <div class="col-lg-1">
                          </div>
-                        <div class="col-lg-10">
+                        <div class="col-lg-8">
                             <input type="text" class="float-right ml-5 datepicker" required="false" name="test_day" placeholder="Tìm kiếm ngày thi" onchange="searchTable(this.value,'admin/times/searchTable')">
                         </div>
-                         <div class="col-lg-1">
+                         <div class="col-lg-3">
                               <?= $this->Html->link('<i class="fas fa-plus-square"></i>',['action' => 'add'],['class' => "btn btn-primary float-right ml-1",'escape' => false]) ?>
+                              <?= $this->Form->postLink('<i class="fas fa-download"></i>', ['action' => 'export'], ['class' => 'btn btn-primary float-right ml-1', 'escape' => false]) ?>
                          </div>
                         
                     </div>

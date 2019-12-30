@@ -57,21 +57,25 @@ class TimesTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
+        $validator
+            ->integer('name')
+            ->requirePresence('name', 'create')
+            ->notEmptyString('name','Bạn chưa điền đầy đủ thông tin');
 
         $validator
             ->date('test_day')
             ->requirePresence('test_day', 'create')
-            ->notEmptyDate('test_day');
+            ->notEmptyDate('test_day','Bạn chưa điền đầy đủ thông tin');
             
         $validator
             ->time('start_time','Không đúng định dạng thời gian')
             ->requirePresence('start_time', 'create')
-            ->notEmptyTime('start_time');
+            ->notEmptyTime('start_time','Bạn chưa điền đầy đủ thông tin');
 
         $validator
             ->time('last_time','Không đúng định dạng thời gian')
             ->requirePresence('last_time', 'create')
-            ->notEmptyTime('last_time');
+            ->notEmptyTime('last_time','Bạn chưa điền đầy đủ thông tin');
 
         return $validator;
     }

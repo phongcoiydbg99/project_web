@@ -2,7 +2,13 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
-
+use Cake\ORM\TableRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Cake\I18n;
 /**
  * Times Controller
  *
@@ -140,7 +146,7 @@ class TimesController extends AppController
 
                         return $this->redirect(['action' => 'index']);
                     }
-                    else{debug($time->errors()); die;}
+                    // else{debug($time->errors()); die;}
                     $this->Flash->error(__('The time could not be saved. Please, try again.'));
                 }
             }
@@ -301,5 +307,150 @@ class TimesController extends AppController
         $times = $this->paginate($this->Times->find()->where(['Times.session_id'=>$session_id,'Times.test_day'=>$data['name']])->order(['test_day'=>'ASC']));
         $this->set(compact('times'));
         }
+    }
+    public function export()
+    {
+        //dd($this->Auth->user());
+        $session_id = $this->request->session()->read('Auth.session_id');
+        $query = $this->Times->find()->contain(['Tests','Tests.Users','Tests.Subjects','Tests.TestRooms'])->where(['Times.session_id' => $session_id])->order((['test_day' => 'ASC','start_time' => 'ASC']));
+        // dd($query->toArray());die;
+        $spreadsheet = new Spreadsheet();
+        $id = 0;
+        foreach ($query as $time)
+        {
+          $spreadsheet->createSheet();
+          $sheet = $spreadsheet->setActiveSheetIndex($id);
+          $spreadsheet->getActiveSheet()->setTitle(date("Y-m-d", strtotime($time->test_day)));
+          $spreadsheet->getDefaultStyle()
+                      ->getFont()
+                      ->setName('Times New Roman')
+                      ->setSize(14);
+          $sheet->setCellValue('A1', 'ĐẠI HỌC QUỐC GIA HÀ NỘI');            
+          $sheet->setCellValue('A2', 'TRƯỜNG ĐẠI HỌC CÔNG NGHỆ');
+          $sheet->setCellValue('A4', 'Ngày thi:');
+          $sheet->mergeCells('A4:B4');
+          $sheet->setCellValue('C4', date("Y-m-d", strtotime($time->test_day)));
+          $sheet->setCellValue('D4', 'Thời gian bắt đầu:');
+          $sheet->setCellValue('E4', date('H:i',strtotime($time->start_time)));
+          $sheet->setCellValue('D5', 'Thời gian kết thúc:');
+          $sheet->setCellValue('E5', date('H:i',strtotime($time->last_time)));
+          $sheet->setCellValue('A7', 'DANH SÁCH CA THI CỦA SINH VIÊN');
+          $sheet->mergeCells("A7:F7");
+          $sheet->getStyle('A7')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+          $sheet->getStyle('C4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+          $sheet->getStyle('E4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+          $sheet->getStyle('E5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+          $sheet->getStyle('A1')->applyFromArray(['font'=>['bold'=>true]]);
+          $sheet->getStyle('A2')->applyFromArray(['font'=>['bold'=>true]]);
+          $sheet->getStyle('A4')->applyFromArray(['font'=>['bold'=>true]]);
+          $sheet->getStyle('D4')->applyFromArray(['font'=>['bold'=>true]]);
+          $sheet->getStyle('D5')->applyFromArray(['font'=>['bold'=>true]]);
+          $sheet->getStyle('A7')->applyFromArray(['font'=>['bold'=>true]]);
+
+          $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+          $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(11);
+          $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+          $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(18);
+          $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+          $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+
+          $styleArray = [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ]
+            ];$styleArray1 = [
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ]
+            ];
+          $k = 9;
+          foreach ($time->tests as $tests)
+          {
+            $sheet->setCellValue('A'.$k, 'Môn thi');
+            $sheet->getStyle('A'.$k)->applyFromArray(['font'=>['bold'=>true]]);
+            $sheet->mergeCells('A'.$k.':B'.$k);
+            $sheet->setCellValue('C'.$k, $tests->subject->name);
+            $sheet->setCellValue('D'.$k, 'Phòng thi');
+            $sheet->getStyle('D'.$k)->applyFromArray(['font'=>['bold'=>true]]);
+            $sheet->setCellValue('E'.$k, $tests->test_room->name);
+            $k = $k + 2;
+            $sheet->setCellValue('A'.$k, 'STT');
+            $sheet->setCellValue('B'.$k, 'Mã SV');
+            $sheet->setCellValue('C'.$k, 'Họ và tên');
+            $sheet->setCellValue('D'.$k, 'Ngày sinh');
+            $sheet->setCellValue('E'.$k, 'Lớp');
+            $sheet->setCellValue('F'.$k, 'Chú thích');
+
+            
+            $sheet->getStyle('A'.$k)->applyFromArray($styleArray);
+            $sheet->getStyle('B'.$k)->applyFromArray($styleArray);
+            $sheet->getStyle('C'.$k)->applyFromArray($styleArray);
+            $sheet->getStyle('D'.$k)->applyFromArray($styleArray);
+            $sheet->getStyle('E'.$k)->applyFromArray($styleArray);
+            $sheet->getStyle('F'.$k)->applyFromArray($styleArray);
+            $i = $k+1;
+            foreach ($tests->users as $user)
+            {
+              $sheet->setCellValue('A'.$i, $i-5);
+              $sheet->setCellValue('B'.$i, $user->username);
+              $sheet->setCellValue('C'.$i, $user->first_name.' '.$user->last_name);
+              $sheet->setCellValue('D'.$i, date("Y-m-d", strtotime($user->date_birth)));
+              $sheet->setCellValue('E'.$i, $user->class);
+              $sheet->setCellValue('F'.$i, '');
+              $sheet->getStyle('A'.$i)->applyFromArray($styleArray);
+              $sheet->getStyle('B'.$i)->applyFromArray($styleArray);
+              $sheet->getStyle('C'.$i)->applyFromArray($styleArray1);
+              $sheet->getStyle('D'.$i)->applyFromArray($styleArray);
+              $sheet->getStyle('E'.$i)->applyFromArray($styleArray);
+              $sheet->getStyle('F'.$i)->applyFromArray($styleArray);
+              $i++;
+            }
+            $k = $i+3;
+          }
+          $id++;
+        }
+        $filename = 'Lich_thi-'.time().'.xls';
+        // Redirect output to a client's web browser (Xlsx)
+        $writer = new Xls($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Fri, 11 Nov 2011 11:11:11 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+        $writer->save('php://output');
+   
+        // $writer->save(ROOT_UPLOAD_PATH.$fileName); 
+        // //redirect(HTTP_UPLOAD_PATH.$fileName); 
+        // $filepath = file_get_contents(ROOT_UPLOAD_PATH.$fileName);
+        // force_download($fileName, $filepath);
+        exit;
+        return $this->redirect(['controller' => 'users', 'action' => 'index']);
     }
 }

@@ -299,7 +299,7 @@ class UsersController extends AppController
         $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(12);
-        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(10);
 
         $sheet->setCellValue('A5', 'STT');
@@ -372,7 +372,7 @@ class UsersController extends AppController
           $sheet->getStyle('G'.$i)->applyFromArray($styleArray);
           $i++;
         }
-        $filename = 'sample-'.time().'.xls';
+        $filename = 'DS_tai_khoan_SV-'.time().'.xls';
         // Redirect output to a client's web browser (Xlsx)
         $writer = new Xls($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
