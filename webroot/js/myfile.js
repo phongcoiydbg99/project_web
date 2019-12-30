@@ -23,20 +23,7 @@ function exportNote(){
 function printTest()
     {
         var restorepage = document.body.innerHTML;
-        printDivCSS = new String(
-    '<link rel="stylesheet" href="/project_web/css/bootstrap.min.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/adminlte.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/adminlte.min.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/myfile.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/alertify.min.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/default.min.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/summernote-bs4.css"/>'+
-    '<link rel="stylesheet" href="/project_web/css/icheck-bootstrap.min.css"/>'+
-    '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">'+
-    '<link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">'+
-    '<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />'
-        );
-        var printcontent = printDivCSS+document.getElementById('print_area').innerHTML;
+        var printcontent = document.getElementById('print_area').innerHTML;
         document.body.innerHTML = printcontent;
         window.print();
         document.body.innerHTML = restorepage;

@@ -151,7 +151,10 @@ class SubjectsController extends AppController
         }
         $this->set(compact(['subjects','id','session']));
     }
-
+    public function home()
+    {
+        
+    }
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
