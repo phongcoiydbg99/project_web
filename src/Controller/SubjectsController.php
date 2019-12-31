@@ -72,19 +72,26 @@ class SubjectsController extends AppController
             {
                 foreach ($subject->tests as $test)
                     {
-                        if(!empty($test->users) && $test->users[0]['id'] === $id)
+                        if(!empty($test->users) )
                         {
-                            array_push($arr_id,$test['id']);
+                            foreach ($test->users as $user) {
+                                if($user['id'] === $id)
+                                {
+                                    array_push($arr_id,$test['id']);
+                                }
+                            }
                         }
                     }
             }
             // dump($arr_id);
             // dump($data['subject']);
+             // die;
             $check_error = false;
             $check_user_test = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
             if (!empty($arr_id)) {
                     foreach ($arr_id as $key) {
                         $test = $tests->get($key);
+                        
                         if ($test->computer_registered != 0) $test->computer_registered--;
                         $tests->save($test);
                     }
@@ -98,6 +105,7 @@ class SubjectsController extends AppController
                         {
                             $user_test_id = $key['id'];
                         }
+
                     }
                 }
 
@@ -110,6 +118,7 @@ class SubjectsController extends AppController
                 $test = $tests->get($value);
                 $test_room = $test_rooms->get($test->test_room_id);
                 $test->computer_registered++;
+                
                 if($test_room->total_computer >= $test->computer_registered)
                 {
                     $tests->save($test);
@@ -181,8 +190,7 @@ class SubjectsController extends AppController
         $sessions = TableRegistry::getTableLocator()->get('sessions');
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['choose'];
-        // $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
-        // })->where(['Subjects.session_id'=>$session_id])->order(['Subjects.name' => 'ASC']);
+        
          $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Tests.Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;})->where(['Subjects.session_id'=>$session_id])->order(['Times.test_day' => 'ASC']);
         $subjects = $this->paginate($query);
