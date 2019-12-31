@@ -29,7 +29,7 @@
                             <th scope="col"><?= $this->Paginator->sort('start_time','Bắt đầu đăng ký') ?></th>
                             <th scope="col"><?= $this->Paginator->sort('last_time','Kết thúc đăng ký') ?></th>
                             <th scope="col" class="actions "><?= __('Hành vi') ?></th>
-                            <!-- <th colspan="" rowspan="" headers="" scope="col">Chọn</th> -->
+                            <th colspan="" rowspan="" headers="" scope="col">Chọn</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $session->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
                                 <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'delete', $session->id], ['confirm' => __('Bạn chắc chắn xóa # {0}?', $session->id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                             </td>
-                            <!-- <?php if ($session->choose == 1) {?>
+                            <?php if ($session->choose == 1) {?>
                             <td>
                                 <div class="custom-control custom-radio">
                                   <input type="radio" class="custom-control-input" id="customRadio<?=$session->id?>" name="example" onchange='radioSession(<?=$session->id?>)' checked>
@@ -58,7 +58,7 @@
                                   <label class="custom-control-label" for="customRadio<?=$session->id?>"></label>
                                 </div>
                             </td>
-                            <?php }?> -->
+                            <?php }?>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

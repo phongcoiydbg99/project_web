@@ -166,6 +166,7 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $user_test = explode(" ",$user_test);
+        $time_id = $user_test[1].' '.$user_test[2];
         $users_tests = TableRegistry::getTableLocator()->get('users_tests');
         $check = $users_tests->find()->where(['user_id'=> $user_test[0],'test_id'=> $user_test[1]])->first();
         if ($users_tests->delete($check)) {
@@ -176,7 +177,7 @@ class UsersController extends AppController
         } else {
             $this->Flash->error(__('Có lỗi xảy ra, xin thử lại'));
         }
-        return $this->redirect(['controller'=>'tests','action' => 'view',$user_test[1]]);
+        return $this->redirect(['controller'=>'tests','action' => 'view',$time_id]);
     }
     public function import()
     {
