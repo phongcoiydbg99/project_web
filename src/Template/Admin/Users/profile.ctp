@@ -49,10 +49,6 @@
 								<dt>Ngày sinh:</dt>
 								<dd style="margin-left: 25px"> <?= $time = date('d/m/Y',strtotime($current['date_birth']))  ?> </dd>
 							</dl>
-							<dl class="row">
-								<dt>Lớp:</dt>
-								<dd style="margin-left: 25px"> <?= $current['class']  ?> </dd>
-							</dl>
 						</li>
 					</ul>
 				</div>

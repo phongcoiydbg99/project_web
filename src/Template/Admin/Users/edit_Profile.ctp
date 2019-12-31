@@ -30,7 +30,6 @@
                              'last_name' => ['class' => 'form-control','required' => false,'id' => 'last_name','label' => ['text'=>'Tên']],
                              'email' => ['class' => 'form-control','required' => false,'id' => 'email','label' => ['text'=>'Email']],
                              'date_birth' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','value'=>date("Y-m-d", strtotime($user->date_birth)),'label' => ['text'=>'Ngày sinh']],
-                             'class' => ['class' => 'form-control','required' => false,'id' => 'class','label' => ['text'=>'Lớp']],
                             ],['legend' => '']
                         );
                 ?>
