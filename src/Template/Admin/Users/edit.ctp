@@ -93,7 +93,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                     <?= $this->Form->button('<i class="fas fa-minus"></i>',['class' => "btn btn-danger float-right",'type'=>'button','onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?>
+                                     <!-- <?= $this->Form->button('<i class="far fa-trash-alt">',['class' => "btn btn-danger ml-2",'onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?> -->
+                                     <button type="button" class="ml-2 btn btn-danger" onclick="deleteTests(<?=$i?>,<?=$subject->_joinData->id?>)"><i class="far fa-trash-alt"></i></button>
                                 </td>
                             </tr>    
                         <?php } ?>

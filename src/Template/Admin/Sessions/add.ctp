@@ -46,9 +46,9 @@
 </div>
 <script>
         $('#start-time').datetimepicker({ uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd HH:mm:ss',
+                format: 'yyyy-mm-dd HH:MM:ss',
                 iconsLibrary: 'fontawesome',footer: true, modal: true });
         $('#last-time').datetimepicker({ uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd HH:mm:ss',
+                format: 'yyyy-mm-dd HH:MM:ss',
                 iconsLibrary: 'fontawesome',footer: true, modal: true });
 </script>

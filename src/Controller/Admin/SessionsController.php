@@ -61,7 +61,8 @@ class SessionsController extends AppController
                     $this->Flash->success(__('Bạn đã lưu thành công.'));
 
                     return $this->redirect(['action' => 'index']);
-                } else {debug($session->errors()); die;}
+                } 
+                // else {debug($session->errors()); die;}
                 $this->Flash->error(__('Có lỗi xảy ra xin thử lại.'));
             }
             else $this->Flash->error(__('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc'));
