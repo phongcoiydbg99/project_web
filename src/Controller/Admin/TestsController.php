@@ -38,6 +38,7 @@ class TestsController extends AppController
     public function view($id = null)
     {
         $check_test = explode(" ",$id);
+        $test_id = $check_test[0];
         $time_id = $check_test[1];
         $test = $this->Tests->get($check_test[0], [
             'contain' => ['Subjects', 'TestRooms', 'Users','Times']
@@ -49,14 +50,16 @@ class TestsController extends AppController
             $data = $this->request->getData();
             foreach ($data['user'] as $key => $value)
             {
+
                 if($key != 0)
                 {
                     $add->user_id = $key;
-                    $add->test_id = $id;
-                    $check = $users_tests->find()->where(['user_id'=>$key,'test_id'=>$id])->first();
+                    $add->test_id = $test_id;
+                    $check = $users_tests->find()->where(['user_id'=>$key,'test_id'=>$test_id])->first();
                     if(empty($check))
                     {
                         $user_test= $this->Tests->find()->contain('Times')->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);})->matching('Users', function($q) use ($key){ return $q->where(['Users.id' => $key]);});
+
                         if(!empty($user_test))
                         {
                           foreach ($user_test as $key) {
