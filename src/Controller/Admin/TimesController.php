@@ -47,15 +47,21 @@ class TimesController extends AppController
         ]);
         $test = $this->Times->Tests->newEntity();
         $session_id = $this->request->session()->read('Auth.session_id');
+        $session_last_time = $this->request->session()->read('Auth.last_time');
+        $session_last_time = date("Y-m-d", strtotime($session_last_time));
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = $this->Times->patchEntity($time, $this->request->getData());
-            $time->test_day = $this->request->getData('test_day');
-            if ($this->Times->save($time)) {
-                $this->Flash->success(__('Ca thi đã được sửa'));
+            $last_time = $this->request->getData('test_day');
+            if($session_last_time < $last_time)
+            {
+              $time = $this->Times->patchEntity($time, $this->request->getData());
+              $time->test_day = $this->request->getData('test_day');
+              if ($this->Times->save($time)) {
+                  $this->Flash->success(__('Ca thi đã được sửa'));
 
-                return $this->redirect(['action' => 'view',$id]);
-            }
-            $this->Flash->error(__('Kiểu thời gian của bạn không đúng'));
+                  return $this->redirect(['action' => 'view',$id]);
+              }
+              $this->Flash->error(__('Kiểu thời gian của bạn không đúng'));
+            } else  $this->Flash->error(__('Thời gian thi nhỏ hơn thời gian đăng ký'));
         }
         $subjects = $this->Times->Tests->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
@@ -80,76 +86,82 @@ class TimesController extends AppController
     {
         $time = $this->Times->newEntity();
         $session_id = $this->request->session()->read('Auth.session_id');
+        $session_last_time = $this->request->session()->read('Auth.last_time');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            $data_new = array();
-            $data_new = array_merge($data_new,['test_day'=>$data['test_day']]);
-            $data_new = array_merge($data_new,['start_time'=>$data['start_time']]);
-            $data_new = array_merge($data_new,['last_time'=>$data['last_time']]);
-            
-            $test_room = array();
-            foreach ($data['testRooms'] as $testRooms) {
-              foreach ($testRooms as $key => $value) {
-                array_push($test_room,$key);
-              }
-            }
-            $subject = array();
-            foreach ($data['subjects'] as $subjects) {
-              foreach ($subjects as $key => $value) {
-                array_push($subject,$key);
-              }
-            }
-            $n = count($subject);
-            $data_save = array();
-            $tests = array();
-            $data_save = array_merge($data_save,$data_new);
-            for ($i=0; $i < $n; $i++) { 
-              $temp = array();
-              $temp = array_merge($temp,['test_room_id'=>$test_room[$i]]);
-              $temp = array_merge($temp,['subject_id'=>$subject[$i]]);
-              $temp = array_merge($temp,['start_time'=>$data['start_time']]);
-              $temp = array_merge($temp,['last_time'=>$data['last_time']]);
-              array_push($tests,$temp);
-            }
-            $data_save = array_merge($data_save,['tests'=>$tests]);
-            $check_test = false;
-            $check_error = false;
-            $test_day =  $data['test_day'];
-            $start_time= $data['start_time'];
-            $last_time= $data['last_time'];
-
-            for ($i=0; $i < $n; $i++) { 
-                $subject_id = $tests[$i]['subject_id'];
-                $test_room_id = $tests[$i]['test_room_id'];
-                $times = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room_id){ return $q->where(['Tests.test_room_id' => $test_room_id]);});
-                $test_time = array();
-                foreach ($times as $check_time) {
-                    $test_time[1] = date('H:i',strtotime($check_time['start_time']));
-                    $test_time[2] = date('H:i',strtotime($check_time['last_time']));
-                    if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
-                    {
-                        $check_error = true;
-                        $check_test = true;
-                    }
-                }
-            }
-            if($check_error) $this->Flash->error(__('Thời gian ca thi của bạn đã trùng'));
-            else 
+            $session_last_time = date("Y-m-d", strtotime($session_last_time));
+            // dd($data); die;
+            if($session_last_time < $data['test_day'])
             {
-                if ($check_error) $this->Flash->error(__('Ca thi vừa thêm của bạn đã trùng'));
-                else
-                {
-                    $time = $this->Times->patchEntity($time, $data_save,['contain' => ['Tests']]);
-                    $time->session_id = $session_id;
-                    if ($this->Times->save($time)) {
-                        $this->Flash->success(__('The time has been saved.'));
-
-                        return $this->redirect(['action' => 'index']);
-                    }
-                    else{debug($time->errors()); die;}
-                    $this->Flash->error(__('The time could not be saved. Please, try again.'));
+              $data_new = array();
+              $data_new = array_merge($data_new,['test_day'=>$data['test_day']]);
+              $data_new = array_merge($data_new,['start_time'=>$data['start_time']]);
+              $data_new = array_merge($data_new,['last_time'=>$data['last_time']]);
+              
+              $test_room = array();
+              foreach ($data['testRooms'] as $testRooms) {
+                foreach ($testRooms as $key => $value) {
+                  array_push($test_room,$key);
                 }
-            }
+              }
+              $subject = array();
+              foreach ($data['subjects'] as $subjects) {
+                foreach ($subjects as $key => $value) {
+                  array_push($subject,$key);
+                }
+              }
+              $n = count($subject);
+              $data_save = array();
+              $tests = array();
+              $data_save = array_merge($data_save,$data_new);
+              for ($i=0; $i < $n; $i++) { 
+                $temp = array();
+                $temp = array_merge($temp,['test_room_id'=>$test_room[$i]]);
+                $temp = array_merge($temp,['subject_id'=>$subject[$i]]);
+                $temp = array_merge($temp,['start_time'=>$data['start_time']]);
+                $temp = array_merge($temp,['last_time'=>$data['last_time']]);
+                array_push($tests,$temp);
+              }
+              $data_save = array_merge($data_save,['tests'=>$tests]);
+              $check_test = false;
+              $check_error = false;
+              $test_day =  $data['test_day'];
+              $start_time= $data['start_time'];
+              $last_time= $data['last_time'];
+
+              for ($i=0; $i < $n; $i++) { 
+                  $subject_id = $tests[$i]['subject_id'];
+                  $test_room_id = $tests[$i]['test_room_id'];
+                  $times = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room_id){ return $q->where(['Tests.test_room_id' => $test_room_id]);});
+                  $test_time = array();
+                  foreach ($times as $check_time) {
+                      $test_time[1] = date('H:i',strtotime($check_time['start_time']));
+                      $test_time[2] = date('H:i',strtotime($check_time['last_time']));
+                      if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
+                      {
+                          $check_error = true;
+                          $check_test = true;
+                      }
+                  }
+              }
+              if($check_error) $this->Flash->error(__('Thời gian ca thi của bạn đã trùng'));
+              else 
+              {
+                  if ($check_error) $this->Flash->error(__('Ca thi vừa thêm của bạn đã trùng'));
+                  else
+                  {
+                      $time = $this->Times->patchEntity($time, $data_save,['contain' => ['Tests']]);
+                      $time->session_id = $session_id;
+                      if ($this->Times->save($time)) {
+                          $this->Flash->success(__('The time has been saved.'));
+
+                          return $this->redirect(['action' => 'index']);
+                      }
+                      else{debug($time->errors()); die;}
+                      $this->Flash->error(__('The time could not be saved. Please, try again.'));
+                  }
+              }
+            }else  $this->Flash->error(__('Thời gian thi nhỏ hơn thời gian đăng ký'));
         }
         $subjects = $this->Times->Tests->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {

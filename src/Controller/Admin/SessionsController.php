@@ -37,8 +37,10 @@ class SessionsController extends AppController
         $session = $this->Sessions->get($id, [
             'contain' => ['Subjects']
         ]);
+        $last_time = $session->last_time;
         $session = $this->request->session();
         $session->write('Auth.session_id', $id); 
+        $session->write('Auth.last_time', $last_time); 
         $this->set('session', $session);
         return $this->redirect(['controller'=>'times','action' => 'index']);
     }
