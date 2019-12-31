@@ -44,7 +44,7 @@
                         <!-- Modal body -->
                         <?= $this->Form->create($add) ?>
                         <div class="modal-body" style="height: 200px">
-                            <input type="text" class="auto form-control"  value="" onkeyup="autoComplete(this.value)" name='user[0]'>
+                            <input type="text" class="auto form-control"  value="" onkeyup="autoComplete(this.value,<?= $test->subject->id?>)" name='user[0]'>
                             <div class="autocompleteuser" >
                                 <ul name='ul' class="autocomplete-list" style="" >
                                   <?php 
@@ -135,7 +135,7 @@
     </div>
 </div>
 <script>
-    function autoComplete(name)
+    function autoComplete(name,id)
     {
         console.log(name);
         $.ajax({
@@ -143,6 +143,7 @@
             type: 'post',
             data: {
                 name : name,
+                id:id
             },
             headers: {
                 'X-CSRF-TOKEN': csrfToken

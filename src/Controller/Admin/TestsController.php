@@ -95,7 +95,7 @@ class TestsController extends AppController
         $users = $this->Tests->Users->find('list', ['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->username . '- ' . $e->first_name.' '.$e->last_name ;
-          },'limit' => 200])->matching('Subjects', function($q) use ($test){ return $q->where(['Subjects.id' => $test->subject_id]);
+          },'limit' => 200])->matching('Subjects', function($q) use ($test){ return $q->where(['Subjects.id' => $test->subject_id,'status'=>0]);
         });
         $this->set(compact('test','users','time_id'));
         $this->set('add', $add);
@@ -106,10 +106,11 @@ class TestsController extends AppController
       $session_id = $this->request->session()->read('Auth.session_id');
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
+          $id = $data['id'];
           $users = $this->Tests->Users->find('list', ['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->username . '- ' . $e->first_name.' '.$e->last_name ;
-          },'limit' => 200,'conditions' => ['or'=>['username LIKE' => '%'.$data['name'].'%','first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%']]]);
+          },'limit' => 200,'conditions' => ['or'=>['username LIKE' => '%'.$data['name'].'%','first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%']]])->matching('Subjects', function($q) use ($id){ return $q->where(['Subjects.id' => $id,'status'=>0]);});
         $this->set(compact('users'));
       }
     }
