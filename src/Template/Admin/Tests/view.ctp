@@ -14,7 +14,7 @@
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><?= $this->Html->link(
                 ' Quản lý ',
-                '/admin/times',
+                '/admin/ca-thi',
                 ['escape' => false]
             ) ?></li>
             <li class="breadcrumb-item"><?= $this->Html->link(
@@ -118,7 +118,7 @@
                                 <td><?= h($users->last_name) ?></td>
                                 <td><?= h($users->date_birth) ?></td>
                                 <td><?= h($users->class) ?></td>
-                                <?php $user_test = $users->id.' '.$test->id.' '.$time_id;?>
+                                <?php $user_test = $users->id.' '.$test->id;?>
                                 <td class="actions">
                                     <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['controller' => 'Users', 'action' => 'edit', $users->id],['class' => 'btn btn-warning', 'escape' => false]) ?>
                                     <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['controller' => 'Users', 'action' => 'deleteTest',$user_test], ['confirm' => __('Bạn chắc chắn muốn xóa # {0}?', $users->id),'class' => 'btn btn-danger', 'escape' => false]) ?>

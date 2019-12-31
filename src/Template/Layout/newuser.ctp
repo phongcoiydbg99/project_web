@@ -72,7 +72,7 @@ $cakeDescription = 'ABCUni';
       <li class="nav-item d-none d-sm-inline-block">
          <?= $this->Html->link(
                     '<i class="fa fa-home"></i> Trang chủ  ',
-                    '/admin',
+                    '/admin/ki-thi',
                     ['class' => 'nav-link', 'escape' => false]
                 ) ?>
       </li>

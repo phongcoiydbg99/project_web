@@ -37,10 +37,10 @@ class TestsController extends AppController
      */
     public function view($id = null)
     {
-        $check_test = explode(" ",$id);
-        $test_id = $check_test[0];
-        $time_id = $check_test[1];
-        $test = $this->Tests->get($check_test[0], [
+        // $check_test = explode(" ",$id);
+        $test_id = $id;
+        $time_id = $session_id = $this->request->session()->read('Auth.time_id');;
+        $test = $this->Tests->get($id, [
             'contain' => ['Subjects', 'TestRooms', 'Users','Times']
         ]);
         $session_id = $this->request->session()->read('Auth.session_id');

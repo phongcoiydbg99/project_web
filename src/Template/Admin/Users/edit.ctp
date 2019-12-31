@@ -13,7 +13,7 @@
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><?= $this->Html->link(
                 ' Sinh viên ',
-                '/admin/users',
+                '/admin/quan-ly-sinh-vien',
                 ['escape' => false]
             ) ?></li>
           <li class="breadcrumb-item active">Sửa sinh viên</li>

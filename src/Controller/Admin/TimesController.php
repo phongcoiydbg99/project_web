@@ -72,6 +72,10 @@ class TimesController extends AppController
         'valueField' => function ($e) {
               return $e->name ;
           },'limit' => 200]);
+
+        $session = $this->request->session();
+        $session->write('Auth.time_id', $id);
+
         $this->set(compact('subjects', 'testRooms'));
         $this->set('time', $time);
         $this->set('test', $test);

@@ -13,7 +13,7 @@
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><?= $this->Html->link(
                 ' Quản lý ',
-                '/admin/times',
+                '/admin/ca-thi',
                 ['escape' => false]
             ) ?></li>
           <li class="breadcrumb-item active">Ca thi</li>
@@ -163,7 +163,7 @@
                                 <td><?= $test->has('test_room') ? $test->test_room->total_computer: '' ?></td>
                                 <td class="actions">
                                     <?php $test_id = $test->id.' '.$time->id?>
-                                    <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['controller'=>'tests','action' => 'view',$test_id],['class' => 'btn btn-success', 'escape' => false]) ?>
+                                    <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['controller'=>'tests','action' => 'view',$test->id],['class' => 'btn btn-success', 'escape' => false]) ?>
                                     <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'deleteTest', $test_id], ['confirm' => __('Bạn chắc chắn xóa # {0}?', $test_id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                                 </td>
                             </tr>

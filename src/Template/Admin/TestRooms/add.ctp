@@ -13,7 +13,7 @@
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><?= $this->Html->link(
                 ' Phòng thi ',
-                '/admin/testRooms',
+                '/admin/phong-thi',
                 ['escape' => false]
             ) ?></li>
           <li class="breadcrumb-item active">Thêm phòng thi</li>
