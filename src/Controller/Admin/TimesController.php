@@ -200,7 +200,8 @@ class TimesController extends AppController
             $test_day =  date("Y-m-d", strtotime($check['test_day']));
             $start_time= date('H:i',strtotime($check['start_time']));
             $last_time= date('H:i',strtotime($check['last_time']));
-            if(empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.subject_id'=>$subject,'Tests.test_room_id'=>$test_room])->toArray()))
+            
+            if(empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.subject_id'=>$subject,'Tests.test_room_id'=>$test_room])->toArray()) && empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.test_room_id'=>$test_room])->toArray()))
             {
                 $time = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room){ return $q->where(['Tests.test_room_id' => $test_room]);});
                 $test_time = array();
