@@ -37,7 +37,9 @@ class TestsController extends AppController
      */
     public function view($id = null)
     {
-        $test = $this->Tests->get($id, [
+        $check_test = explode(" ",$id);
+        $time_id = $check_test[1];
+        $test = $this->Tests->get($check_test[0], [
             'contain' => ['Subjects', 'TestRooms', 'Users','Times']
         ]);
         $session_id = $this->request->session()->read('Auth.session_id');
@@ -95,7 +97,7 @@ class TestsController extends AppController
               return $e->username . '- ' . $e->first_name.' '.$e->last_name ;
           },'limit' => 200])->matching('Subjects', function($q) use ($test){ return $q->where(['Subjects.id' => $test->subject_id]);
         });
-        $this->set(compact('test','users'));
+        $this->set(compact('test','users','time_id'));
         $this->set('add', $add);
     }
     public function autoComplete()

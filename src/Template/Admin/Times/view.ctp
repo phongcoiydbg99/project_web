@@ -12,11 +12,11 @@
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><?= $this->Html->link(
-                ' Ca thi ',
+                ' Quản lý ',
                 '/admin/times',
                 ['escape' => false]
             ) ?></li>
-          <li class="breadcrumb-item active">Thêm ca thi</li>
+          <li class="breadcrumb-item active">Ca thi</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -36,7 +36,7 @@
         <div class="col-md-12 col-lg-12">
             <div class="tests form large-9 medium-8 columns content card">
                 <div class="card-header ">
-                    <h3 class="float-left">Danh sách môn thi ngày <?=  date("d/m/Y", strtotime($time->test_day))?> ca <?= h(date('H:i',strtotime($time->start_time))) ?> - <?= h(date('H:i',strtotime($time->last_time))) ?></h3>
+                    <h3 class="float-left">Danh sách môn thi</h3>
                     <a href="#" class="btn btn-primary float-right ml-1" onclick="upload(this)" data-toggle="modal" data-target="#myModal1"><i class="fas fa-plus-square"></i></a> 
                     <div class="modal fade" id="myModal1">
                         <div class="modal-dialog">
@@ -112,6 +112,33 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row container">
+                        <div class="col-sm-6">
+                        <table class="table table-borderless">
+                        <tr>
+                            <th scope="row"><?= __('Ngày thi:') ?></th>
+                            <td><?= date("d/m/Y", strtotime($time->test_day)) ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><?= __('Thời gian bắt đầu:') ?></th>
+                            <td><?= h(date('H:i',strtotime($time->start_time)))  ?></td>
+                        </tr> 
+                        </table>  
+                        </div>
+                        <div class="col-sm-6">
+                        <table class="table table-borderless">
+                        <tr>
+                            <th scope="row"></th>
+                            <td><br></td>
+                        </tr> 
+                        <tr>
+                            <th scope="row"><?= __('Thời gian kết thúc:') ?></th>
+                            <td><?= h(date('H:i',strtotime($time->last_time)))  ?></td>
+                        </tr> 
+                        </table>  
+                        </div>
+                    
+                    </div>
                 <?php if (!empty($time->tests)): ?>
                     <div class="content_table">
                         <div class=" table-responsive p-0" style="height:400px">
@@ -136,7 +163,7 @@
                                 <td><?= $test->has('test_room') ? $test->test_room->total_computer: '' ?></td>
                                 <td class="actions">
                                     <?php $test_id = $test->id.' '.$time->id?>
-                                    <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['controller'=>'tests','action' => 'view',$test->id],['class' => 'btn btn-success', 'escape' => false]) ?>
+                                    <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['controller'=>'tests','action' => 'view',$test_id],['class' => 'btn btn-success', 'escape' => false]) ?>
                                     <?= $this->Form->postLink('<i class="far fa-trash-alt"></i>', ['action' => 'deleteTest', $test_id], ['confirm' => __('Bạn chắc chắn xóa # {0}?', $test_id),'class' => 'btn btn-danger', 'escape' => false]) ?>
                                 </td>
                             </tr>

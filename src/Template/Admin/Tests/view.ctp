@@ -17,6 +17,11 @@
                 '/admin/times',
                 ['escape' => false]
             ) ?></li>
+            <li class="breadcrumb-item"><?= $this->Html->link(
+                ' Ca thi',
+                ['controller' => 'Times', 'action' => 'view', $time_id],
+                ['escape' => false]
+            ) ?></li>
           <li class="breadcrumb-item active">Môn thi</li>
         </ol>
       </div><!-- /.col -->
@@ -71,7 +76,7 @@
                 </tr>
                 <tr>
                     <th scope="row"><?= __('Máy đã đăng ký:') ?></th>
-                    <td><?= $this->Number->format($test->computer_registered) ?></td>
+                    <td><?= $this->Number->format($test->computer_registered) .'/'. $this->Number->format($test->test_room->total_computer)?></td>
                 </tr> 
                 </table>  
                 </div>
