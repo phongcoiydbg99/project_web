@@ -28,7 +28,7 @@ class TimesController extends AppController
             'contain' => ['Tests','Tests.Subjects','Tests.TestRooms']
         ];
         $session_id = $this->request->session()->read('Auth.session_id');
-        $times = $this->paginate($this->Times->find()->where(['Times.session_id'=>$session_id])->order(['test_day'=>'ASC']));
+        $times = $this->paginate($this->Times->find()->where(['Times.session_id'=>$session_id])->order(['test_day'=>'ASC']),['limit'=>15]);
 
         $this->set(compact('times'));
     }
@@ -146,7 +146,7 @@ class TimesController extends AppController
 
                         return $this->redirect(['action' => 'index']);
                     }
-                    // else{debug($time->errors()); die;}
+                    else{debug($time->errors()); die;}
                     $this->Flash->error(__('The time could not be saved. Please, try again.'));
                 }
             }

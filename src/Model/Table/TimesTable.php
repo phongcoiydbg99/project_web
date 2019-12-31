@@ -57,10 +57,6 @@ class TimesTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
-        $validator
-            ->integer('name')
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name','Bạn chưa điền đầy đủ thông tin');
 
         $validator
             ->date('test_day')

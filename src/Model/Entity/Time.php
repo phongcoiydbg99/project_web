@@ -25,7 +25,6 @@ class Time extends Entity
      */
     protected $_accessible = [
         'session_id' => true,
-        'name' => true,
         'start_time' => true,
         'last_time' => true,
         'test_day' => true,
