@@ -118,7 +118,7 @@ class SubjectsController extends AppController
                 $test = $tests->get($value);
                 $test_room = $test_rooms->get($test->test_room_id);
                 $test->computer_registered++;
-                
+
                 if($test_room->total_computer >= $test->computer_registered)
                 {
                     $tests->save($test);
@@ -189,9 +189,9 @@ class SubjectsController extends AppController
     {
         $sessions = TableRegistry::getTableLocator()->get('sessions');
         $session = $sessions->find()->where(['choose'=> 1])->first();
-        $session_id = $session['choose'];
+        $session_id = $session['id'];
         
-         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Tests.Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
+        $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Tests.Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;})->where(['Subjects.session_id'=>$session_id])->order(['Times.test_day' => 'ASC']);
         $subjects = $this->paginate($query);
         $id = $this->Auth->user('id');
