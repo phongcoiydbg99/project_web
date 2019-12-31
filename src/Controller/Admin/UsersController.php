@@ -445,6 +445,7 @@ class UsersController extends AppController
     }
     public function profile()
     {
+      $this->viewBuilder()->setLayout('admin');
         $users = $this->paginate($this->Users);
         $user = $this->Users->get($this->Auth->user('id'), [
             'contain' => ['Subjects', 'Tests']
