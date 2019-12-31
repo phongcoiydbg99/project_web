@@ -248,8 +248,8 @@ class UsersController extends AppController
             }
             else {
                 $check =true;
-                $this->Flash->error($user->errors()['email']['vaildFormat']);
-                //debug($user->errors()['email']['vaildFormat']); die;
+                // $this->Flash->error($user->errors()['email']['vaildFormat']);
+                // debug($user->errors()['email']['vaildFormat']); die;
 
             }
             if(!$check)

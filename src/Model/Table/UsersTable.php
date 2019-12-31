@@ -271,7 +271,7 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username'],'Tên đăng nhập đã có người sử dụng'));
-        $rules->add($rules->isUnique(['email'],'email đã có người sử dụng'));
+        $rules->add($rules->isUnique(['email'],'Email đã có người sử dụng'));
 
         return $rules;
     }
