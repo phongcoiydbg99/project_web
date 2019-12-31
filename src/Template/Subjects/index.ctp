@@ -7,7 +7,7 @@
 
 <?php 
 $check_test = false;
-if (date('d/m/Y, h:i A') > date('d/m/Y, h:i A',strtotime($session['last_time'])))
+if (date('Y-m-d H:i:s') >date('Y-m-d H:i:s',strtotime($session['last_time'])))
    {
     echo '<div class="content-header">
   <div class="container-fluid">

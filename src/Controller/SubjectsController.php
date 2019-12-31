@@ -26,7 +26,6 @@ class SubjectsController extends AppController
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['id'];
         $this->request->session()->write('Auth.session_id', $session_id); 
-        dd(date('d/m/Y, h:i A',strtotime($session['last_time'])));
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;
         })->where(['Subjects.session_id'=>$session_id])->group('Subjects.code')->order(['Times.test_day' => 'ASC']);
