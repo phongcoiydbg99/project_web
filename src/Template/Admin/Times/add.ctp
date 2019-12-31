@@ -44,9 +44,9 @@
                         // echo $this->Form->control('subject_id', ['options' => $subjects]);
                         // echo $this->Form->control('test_room_id', ['options' => $testRooms]);
                         // echo $this->Form->control('test_room_id', ['options' => $testRooms,'class'=>"form-control",'label'=>'Phòng thi']);
-                        echo $this->Form->control('test_day' , ['class' => 'form-control datepicker','required' => false,'type'=> 'text','label' => ['text'=>'Ngày thi']]);
-                        echo $this->Form->control('start_time',['class' => 'form-control','type'=> 'text','id'=>'start_time','label'=>'Thời gian bắt đầu']);
-                        echo $this->Form->control('last_time',['class' => 'form-control','type'=> 'text','id'=>'last_time','label'=>'Thời gian kết thúc']);
+                        echo $this->Form->control('test_day' , ['class' => 'form-control datepicker','required' => false,'type'=> 'text','placeholder'=>'yyyy-mm-dd','label' => ['text'=>'Ngày thi']]);
+                        echo $this->Form->control('start_time',['class' => 'form-control','type'=> 'text','id'=>'start_time','placeholder'=>'hh:mm','label'=>'Thời gian bắt đầu']);
+                        echo $this->Form->control('last_time',['class' => 'form-control','type'=> 'text','id'=>'last_time','placeholder'=>'hh:mm','label'=>'Thời gian kết thúc']);
                         $i = 0;
                     ?>
                     </div>
