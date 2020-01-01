@@ -46,18 +46,21 @@ class TimesController extends AppController
             'contain' => ['Tests','Tests.Subjects','Tests.TestRooms'],
         ]);
         $test = $this->Times->Tests->newEntity();
+        //Lấy id và last-time của session
         $session_id = $this->request->session()->read('Auth.session_id');
         $session_last_time = $this->request->session()->read('Auth.last_time');
         $session_last_time = date("Y-m-d", strtotime($session_last_time));
         if ($this->request->is(['patch', 'post', 'put'])) {
             $last_time = $this->request->getData('test_day');
             $data = $this->request->getData();
+            // Ngày phải lớn hơn ngày cuối cùng đang kí
             if($session_last_time < $last_time)
             {
               $check = false;
               $test_day =  $data['test_day'];
               $start_time= $data['start_time'];
               $last_time= $data['last_time'];
+              //Tìm ngày đã đang kí và so sánh
               $check_times = $this->Times->find()->where(['test_day'=>$data['test_day']]);
               foreach ($check_times as $check_time) {
                 if($check_time->id != $id)
@@ -85,6 +88,7 @@ class TimesController extends AppController
               } else $this->Flash->error(__('Ca thi đã trùng'));
             } else  $this->Flash->error(__('Thời gian thi nhỏ hơn thời gian đăng ký'));
         }
+        // Lấy danh sách môn thi và phòng thi
         $subjects = $this->Times->Tests->Subjects->find('list',['keyField' => 'id',
         'valueField' => function ($e) {
               return $e->code . '- ' . $e->name ;
@@ -117,19 +121,21 @@ class TimesController extends AppController
             $data = $this->request->getData();
             $session_last_time = date("Y-m-d", strtotime($session_last_time));
             // dd($data); die;
+            // Điều kiện ngày thếm lớn hơn ngày cuối cùng đăng kí
             if($session_last_time < $data['test_day'])
             {
               $data_new = array();
               $data_new = array_merge($data_new,['test_day'=>$data['test_day']]);
               $data_new = array_merge($data_new,['start_time'=>$data['start_time']]);
               $data_new = array_merge($data_new,['last_time'=>$data['last_time']]);
-              
+              //Lập mảng phòng thi
               $test_room = array();
               foreach ($data['testRooms'] as $testRooms) {
                 foreach ($testRooms as $key => $value) {
                   array_push($test_room,$key);
                 }
               }
+              //Lập bảng môn thi
               $subject = array();
               foreach ($data['subjects'] as $subjects) {
                 foreach ($subjects as $key => $value) {
@@ -139,6 +145,7 @@ class TimesController extends AppController
               $n = count($subject);
               $data_save = array();
               $tests = array();
+              // Tạo data import vào ca thi
               $data_save = array_merge($data_save,$data_new);
               for ($i=0; $i < $n; $i++) { 
                 $temp = array();
@@ -154,10 +161,11 @@ class TimesController extends AppController
               $test_day =  $data['test_day'];
               $start_time= $data['start_time'];
               $last_time= $data['last_time'];
-
+              // So sánh trùng thời gian các ca thi
               for ($i=0; $i < $n; $i++) { 
                   $subject_id = $tests[$i]['subject_id'];
                   $test_room_id = $tests[$i]['test_room_id'];
+                  // Danh sách ca thi cùng ngày thi
                   $times = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room_id){ return $q->where(['Tests.test_room_id' => $test_room_id]);});
                   $test_time = array();
                   foreach ($times as $check_time) {
@@ -226,11 +234,12 @@ class TimesController extends AppController
             $test_day =  date("Y-m-d", strtotime($check['test_day']));
             $start_time= date('H:i',strtotime($check['start_time']));
             $last_time= date('H:i',strtotime($check['last_time']));
-            
+            // Xét điều kiện có ca nào trùng hay trùng phòng hay không
             if(empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.subject_id'=>$subject,'Tests.test_room_id'=>$test_room])->toArray()) && empty($this->Times->Tests->find()->where(['Tests.time_id'=>$id,'Tests.test_room_id'=>$test_room])->toArray()))
             {
                 $time = $this->Times->find()->contain(['Tests','Tests.Subjects','Tests.TestRooms'])->where(['Times.test_day'=>$test_day])->matching('Tests', function($q) use($test_room){ return $q->where(['Tests.test_room_id' => $test_room]);});
                 $test_time = array();
+                // Xét điều kiện thời gian xem có trùng nhau hay k
                 foreach ($time as $check_time) {
                     $test_time[1] = date('H:i',strtotime($check_time['start_time']));
                     $test_time[2] = date('H:i',strtotime($check_time['last_time']));
@@ -248,6 +257,7 @@ class TimesController extends AppController
                $test->time_id = $id;
                $test->subject_id = $subject;
                $test->test_room_id = $test_room;
+               //Lưu môn thi cào ca thi
                 if ($this->Times->Tests->save($test)) {
                     $this->Flash->success(__('Bạn đã thêm thành công'));
                     return $this->redirect(['action' => 'view',$id]);

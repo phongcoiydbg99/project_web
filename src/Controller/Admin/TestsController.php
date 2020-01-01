@@ -58,10 +58,12 @@ class TestsController extends AppController
                     $check = $users_tests->find()->where(['user_id'=>$key,'test_id'=>$test_id])->first();
                     if(empty($check))
                     {
+                      // Danh sách đã đăng kí của sinh viên
                         $user_test= $this->Tests->find()->contain('Times')->matching('Subjects', function($q) use ($session_id){ return $q->where(['Subjects.session_id' => $session_id]);})->matching('Users', function($q) use ($key){ return $q->where(['Users.id' => $key]);});
 
                         if(!empty($user_test))
                         {
+                          // SO sánh thời gian vs các môn mà sinh viên đã đăng kí
                           foreach ($user_test as $key) {
                               if($key->subject_id != $test->subject_id)
                               {
@@ -83,6 +85,7 @@ class TestsController extends AppController
                               }                            
                           }
                         } 
+                        // thêm tăng chỉ số của số máy
                         $test->computer_registered++;
                         if ($users_tests->save($add))
                         {
