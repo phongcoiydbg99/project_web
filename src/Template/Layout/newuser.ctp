@@ -105,11 +105,12 @@ $cakeDescription = 'ABCUni';
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-           <li class="nav-item">
-            <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý ca thi</p>', ['controller'=>'times','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
-          </li>
+           
           <li class="nav-item">
                 <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý sinh viên </p>', ['controller'=>'users','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
+          </li>
+          <li class="nav-item">
+            <?= $this->Html->link('<i class="nav-icon fas fa-th"></i> <p>Quản lý ca thi</p>', ['controller'=>'times','action' => 'index'],['class' => 'nav-link', 'escape' => false]) ?>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">

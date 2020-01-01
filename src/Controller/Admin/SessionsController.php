@@ -42,7 +42,7 @@ class SessionsController extends AppController
         $session->write('Auth.session_id', $id); 
         $session->write('Auth.last_time', $last_time); 
         $this->set('session', $session);
-        return $this->redirect(['controller'=>'times','action' => 'index']);
+        return $this->redirect(['controller'=>'users','action' => 'index']);
     }
 
     /**
