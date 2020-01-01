@@ -309,6 +309,7 @@ class UsersController extends AppController
                 {
                     if($data['password2'] === $data['password3'])
                     {
+                        $user->password = $data['password2'];
                         if ($this->Users->save($user)) {
                             $this->Flash->success(__('Thông tin đã được lưu.'));
 
