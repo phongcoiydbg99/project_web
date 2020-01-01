@@ -62,11 +62,13 @@ class UsersController extends AppController
         $session_id = $this->request->session()->read('Auth.session_id');
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            // Xét xem có đăng kí môn nào k
             if(!empty($data['subjects']))
             {
               $key = $data['subjects'];
               unset($data['subjects']);
               $data['subjects']['_ids'] = array();
+              // tại data để lưu
               foreach ($key as $index => $value) {
                       if($index == 0) $check_edit = true;
                       array_push($data['subjects']['_ids'],(string)$index);
@@ -115,6 +117,7 @@ class UsersController extends AppController
             $data = $this->request->getData();
             if(!empty($data['subjects']))
             {
+              // Tạo data
               $key = $data['subjects'];
               unset($data['subjects']);
               $data['subjects']['_ids'] = array();
@@ -169,6 +172,7 @@ class UsersController extends AppController
     }
     public function deleteTest($user_test)
     {
+      // Xóa đăng kí môn
         $this->request->allowMethod(['post', 'delete']);
         $user_test = explode(" ",$user_test);
         $time_id = $user_test[1];
@@ -192,7 +196,7 @@ class UsersController extends AppController
         {
             $check_import = $this->request->getData();
             $filename = $check_import['csv']['tmp_name'];
-            
+            //xét loại cải file nhận vào
             if (!isset($filename) || !in_array($check_import['csv']['type'], [
               'text/x-comma-separated-values', 
               'text/comma-separated-values', 
@@ -209,12 +213,13 @@ class UsersController extends AppController
             ])) {
               die("Invalid file type");
             }
-            
+            // tạo file excel 
             if (pathinfo($check_import['csv']['name'], PATHINFO_EXTENSION) == 'csv') {
               $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
             } else if (pathinfo($check_import['csv']['name'], PATHINFO_EXTENSION) == 'xlsx'){
               $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
             } else {$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();}
+            // ĐỌc file 
             $spreadsheet = $reader->load($filename);
             $worksheet = $spreadsheet->getActiveSheet();
             $i = 0;
@@ -229,6 +234,7 @@ class UsersController extends AppController
             $subject->name = $name;
             $subject->test_day = date("Y-m-d", strtotime($test_day));
             $subject->session_id = $this->request->session()->read('Auth.session_id');
+            // lưu môn thi
             if($subjects->save($subject))
             {
               foreach ($worksheet->getRowIterator(10) as $row) {
@@ -241,6 +247,7 @@ class UsersController extends AppController
                   $data[] = $cell->getFormattedValue();
                 }
                 // Insert database
+                // Lưu sinh viên cùng môn thi
                 $user = $this->Users->newEntity();
                 $user->username = $data[1];
                 $user->password = $data[1];
@@ -404,6 +411,7 @@ class UsersController extends AppController
       $session_id = $this->request->session()->read('Auth.session_id');
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
+          // Tìm kiểm xem chứa kí tự giống
           $query = $this->Users->find('all',[
               'conditions' => ['or'=>['first_name LIKE' => '%'.$data['name'].'%','last_name LIKE' => '%'.$data['name'].'%','username LIKE' => '%'.$data['name'].'%']]
           ])->where(['Users.role' => 'user']);
@@ -444,6 +452,7 @@ class UsersController extends AppController
       $this->layout = false;
       if ($this->request->is('ajax')) {
           $data = $this->request->getData();
+          // Xóa môn học cửa sv
           $users_subjects = TableRegistry::getTableLocator()->get('users_subjects');
           $test = $users_subjects->get($data['id']);
           $users_subjects->delete($test);
