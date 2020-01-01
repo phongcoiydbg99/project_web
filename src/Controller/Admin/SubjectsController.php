@@ -26,23 +26,23 @@ class SubjectsController extends AppController
         $subjects = $this->paginate($query);
         $add =  $this->Subjects->newEntity();
         
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $data = $this->request->getData();
-            foreach ($data['subject'] as $key => $value) {
-            $subject = $this->Subjects->get($key, [
-            'contain' => []
-            ]);
-            $subject = $this->Subjects->patchEntity($subject, $value);
-            if ($this->Subjects->save($subject)) {
-                $this->Flash->success(__('Sửa môn thi thành công'));
+        // if ($this->request->is(['patch', 'post', 'put'])) {
+        //     $data = $this->request->getData();
+        //     foreach ($data['subject'] as $key => $value) {
+        //     $subject = $this->Subjects->get($key, [
+        //     'contain' => []
+        //     ]);
+        //     $subject = $this->Subjects->patchEntity($subject, $value);
+        //     if ($this->Subjects->save($subject)) {
+        //         $this->Flash->success(__('Sửa môn thi thành công'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Sửa môn thi không thành công'));
-            }
-        }
+        //         return $this->redirect(['action' => 'index']);
+        //     }
+        //     $this->Flash->error(__('Sửa môn thi không thành công'));
+        //     }
+        // }
         // $this->set(compact('subject'));
-        $this->set(compact('subjects','add'));
+        $this->set(compact('subjects'));
     }
 
     /**
