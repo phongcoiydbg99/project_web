@@ -62,7 +62,9 @@ class TestRoomsTable extends Table
         $validator
             ->integer('total_computer')
             ->requirePresence('total_computer', 'create')
-            ->notEmptyString('total_computer');
+            ->notEmptyString('total_computer')
+            ->add('total_computer','vaildFormat',['rule' => array('custom', '/^[0-9]{1,2}$/'),
+                'message' => 'tổng số máy tính nhập sai.']);
 
         return $validator;
     }
