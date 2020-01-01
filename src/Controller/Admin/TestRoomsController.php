@@ -17,6 +17,7 @@ class TestRoomsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    //Xem thông tin các phòng thi
     public function index()
     {
         $testRooms = $this->paginate($this->TestRooms);
@@ -45,6 +46,7 @@ class TestRoomsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+    //Thêm 1 phòng thi
     public function add()
     {
         $testRoom = $this->TestRooms->newEntity();
@@ -67,6 +69,8 @@ class TestRoomsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    
+    //Sửa thông tin về 1 phòng thi
     public function edit($id = null)
     {
         $testRoom = $this->TestRooms->get($id, [
@@ -91,6 +95,8 @@ class TestRoomsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
+    //Xóa 1 phòng thi
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

@@ -70,7 +70,6 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/lich-thi', ['controller' => 'subjects', 'action' => 'view_test']);
     // $routes->connect('/users/subjects/delete_test', ['controller' => 'subjects', 'action' => 'delete_test']);
     $routes->connect('/tai-khoan/quen-mat-khau', ['controller' => 'users', 'action' => 'forgotpassword']);
-    // $routes->connect('/tai-khoan/dat-lai-mat-khau', ['controller' => 'users', 'action' => 'resetpassword']);
     $routes->connect('/tai-khoan/thay-doi-mat-khau', ['controller' => 'users', 'action' => 'changepassword']);
     $routes->connect('/tai-khoan/ho-so', ['controller' => 'users', 'action' => 'profile']);
     
@@ -115,8 +114,8 @@ Router::prefix('admin', function (RouteBuilder $routes) {
     ['id' => '\d+', 'pass' => ['id']]);
     
     $routes->connect('/quan-ly-sinh-vien', ['controller' => 'users', 'action' => 'index']);
-    $routes->connect('/phong-thi', ['controller' => 'TestRooms', 'action' => 'index']);
-    $routes->connect('/phong-thi/them-phong-thi', ['controller' => 'TestRooms', 'action' => 'add']);
+    $routes->connect('/test-rooms', ['controller' => 'TestRooms', 'action' => 'index']);
+    $routes->connect('/test-rooms-thi/them-phong-thi', ['controller' => 'TestRooms', 'action' => 'add']);
     $routes->connect('/mon-thi', ['controller' => 'subjects', 'action' => 'index']);
     $routes->connect('/ki-thi/them-ki-thi', ['controller' => 'sessions', 'action' => 'add']);
     $routes->connect('/ki-thi/sua-ki-thi/:id', ['controller' => 'sessions', 'action' => 'edit'],['id' => '\d+', 'pass' => ['id']]);
@@ -124,7 +123,7 @@ Router::prefix('admin', function (RouteBuilder $routes) {
 
     $routes->connect('/quan-ly-sinh-vien/sua-sinh-vien/:id',['controller' => 'users', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);
-    $routes->connect('/phong-thi/sua-phong-thi/:id',['controller' => 'TestRooms', 'action' => 'edit'],
+    $routes->connect('/test-rooms/sua-phong-thi/:id',['controller' => 'TestRooms', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);
     $routes->connect('/mon-thi/sua-mon-thi/:id',['controller' => 'subjects', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);

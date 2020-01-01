@@ -45,7 +45,7 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-
+        // xác thực người dùng và chuyển hướng
         $this->loadComponent('Auth', [
             'authError'    => 'Bạn không có quyền truy cập.',
             'authenticate' => [
@@ -60,30 +60,32 @@ class AppController extends Controller
             'loginAction' => '/login',
             // 'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
-            'authorize' => 'Controller', // Added this line
+            'authorize' => 'Controller', 
         ]);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+
+        // gán thông tin tài khoản đang đăng nhập vào biến current
         $this->set('current',$this->Auth->user());
     }
     public function isAuthorized($user = null)
     {
-        // Any registered user can access public functions
+        // bất kỳ tài khoản đăng ký nào cũng có thể truy cập vào chức năng dành cho user
         if (!$this->request->getParam('prefix')) {
             return true;
         }
-        // Only admins can access admin functions
+        // chỉ admin mới được truy cập chức năng quản lý
         if ($this->request->getParam('prefix') === 'admin') {
            
             return (bool)($user['role'] === 'admin');
         }
 
-        // Default deny
         return false;
     }
+
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);

@@ -28,20 +28,21 @@ class UsersController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
+        // bất kỳ ai cũng có thể truy cập kể cả khi không có tài khoản
         $this->Auth->allow(['login','logout','forgotpassword','resetpassword']);
     }
     public function isAuthorized($user = null)
     {
-        // All registered users can add articles
-        // Admin can access every action
-        // 
+        // admin và user đều có thể xem sửa thông tin cá nhân
         if($this->request->action === 'profile' || $this->request->action === 'editProfile' || $this->request->action === 'firstlogin'||$this->request->action === 'changepassword'){
             return true;
         }
+        // nếu tài khoản đăng nhập là user cho phép tài khoản có thể truy cập vào chức năng của user
         if (isset($user['role']) && $user['role'] === 'user') {
             $this->redirect(array('controller' => 'users', 'action' => 'index','scope' => '/'));
             return true;
         }
+        // nếu tài khoản đăng nhập là admin chuyển hướng tới trang quản lý
         if (isset($user['role']) && $user['role'] === 'admin') {
             $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
         }
@@ -61,6 +62,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
@@ -74,6 +76,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+
     public function add()
     {
         $user = $this->Users->newEntity();
@@ -132,13 +135,14 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    // đăng nhập
     public function login()
     {
         $this->viewBuilder()->setLayout('login');
         if($this->Auth->user('id'))
         {
-            // user already login
-            // return $this->redirect($this->Auth->redirectUrl());
+            // nếu user đã đăng nhập => trở về trang chủ
             return $this->redirect(['controller' => 'subjects', 'action' => 'view_test']);
         }
         else{
@@ -147,7 +151,7 @@ class UsersController extends AppController
             if ($this->request->is('post') AND !empty($this->request->getData())) {
                 $check_login = $this->Users->patchEntity($login, $this->request->getData(),['validate' => 'login']);
                 $validator = $check_login->errors();
-
+                // nếu có lỗi xảy ra đưa ra thông báo lỗi
                 if (!empty($validator))
                 {
                    $this->Flash->error("Bạn chưa điền đủ thông tin");
@@ -157,10 +161,13 @@ class UsersController extends AppController
                     $cuser = $this->Auth->identify();
                     if ($cuser) {
                         $this->Auth->setUser($cuser);
+                        // nếu tài khoản là admin chuyển hướng đến trang quản lý
                         if($this->Auth->user('role') === 'admin')
                         {
                            return $this->redirect(['controller' => 'sessions', 'action' => 'index','prefix'=>'admin']);
                         }
+                        // nếu là user đăng nhập lần đầu(chưa có email) chuyển hướng tới trang đổi mật khẩu và thêm email
+                        // nếu đã đăng nhập trước đó chuyển hướng đến trang chủ của user
                         else
                         {
                             // dd($this->Auth->user('email'));
@@ -177,14 +184,20 @@ class UsersController extends AppController
             $this->set('user',$login);
         }
     }
+    // đăng xuất
     public function logout()
     {
         $this->request->session()->write('Auth.session_id', 0); 
         return $this->redirect($this->Auth->logout());
     }
+    // quên mật khẩu
     public function forgotpassword(){
         $this->viewBuilder()->setLayout('login');
         $users = $this->Users->newEntity();
+        // tạo 1 mã token và gán cho tài khoản có địa chỉ email nhập vào token này
+        // nếu không tài khoản nào đăng ký email này thì thông báo lỗi
+        // nếu email tồn tại gửi thư kèm link reset password
+        // link reset password có chứa token được gán vào tài khoản
         if ($this->request->is('post')){
             $myemail = $this->request->getData('email');
             $mytoken = Security::hash(Security::randomBytes(25));
@@ -198,7 +211,7 @@ class UsersController extends AppController
                     $user->token = $mytoken;
                     $users = $user;
                     if($userTable->save($users)){
-                        $this->Flash->success('Reset password link have been sent');
+                        $this->Flash->success('địa chỉ thay đổi mật khẩu đã được gửi.');
                         
                         TransportFactory::setConfig('gmail', [
                             'host' => 'ssl://smtp.gmail.com',
@@ -222,10 +235,11 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
-    
+    // reset password
     public function resetpassword($token){
         $this->viewBuilder()->setLayout('login');
         $users = $this->Users->newEntity();
+        // tìm tài khoản muốn reset password bằng token đằng sau link url
         if($this->request->is('post')){
             $cuser = $this->Users->patchEntity($users, $this->request->getData(),['validate' => 'firstlogin']);
             $mypass = $this->request->getData('password');
@@ -245,6 +259,7 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
+    // những tài khoản lần đầu đăng nhập sẽ được chuyển hướng tới trang đổi mật khẩu và thêm email để tìm lại mật khẩu sau này
     public function firstlogin()
     {
         $user = $this->Users->get($this->Auth->user('id'), [
@@ -273,6 +288,8 @@ class UsersController extends AppController
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
         $this->set(compact('user', 'subjects'));
     }
+
+    // hiển thị thông tin user
     public function profile()
     {
         $users = $this->paginate($this->Users);
@@ -293,6 +310,8 @@ class UsersController extends AppController
         $this->set(compact('user', 'subjects', 'tests'));
         $this->set(compact('users'));
     }
+
+    // chỉnh sửa thông tin user
     public function editProfile($id = null)
     {
         $this->layout = false;
@@ -306,6 +325,8 @@ class UsersController extends AppController
         }
         
     }
+
+    // đổi mật khẩu
     public function changepassword()
     {
         $user = $this->Users->newEntity();

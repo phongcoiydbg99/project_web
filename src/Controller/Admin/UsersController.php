@@ -25,6 +25,8 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+
+    // hiển thị thông tin sinh viên
     public function index()
     {
         $users = $this->paginate($this->Users->find()->where(['Users.role' => 'user'])->order(['Users.username' => 'ASC']),['limit'=>15]);
@@ -41,6 +43,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
@@ -55,6 +58,8 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+
+    // thêm sinh viên
     public function add()
     {
         $user = $this->Users->newEntity();
@@ -106,6 +111,8 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
+    // chỉnh sửa thông tin sinh viên
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
@@ -158,6 +165,8 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
+    // xóa sinh viên
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -170,6 +179,8 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
     public function deleteTest($user_test)
     {
       // Xóa đăng kí môn
@@ -458,6 +469,8 @@ class UsersController extends AppController
           $users_subjects->delete($test);
       }
     }
+
+    // hiển thị thông tin của admin 
     public function profile()
     {
       $this->viewBuilder()->setLayout('admin');
@@ -480,6 +493,8 @@ class UsersController extends AppController
         $this->set(compact('user', 'subjects', 'tests'));
         $this->set(compact('users'));
     }
+
+    // sửa thông tin admin
     public function editProfile($id = null)
     {
         $this->layout = false;
