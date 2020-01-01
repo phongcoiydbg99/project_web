@@ -34,7 +34,7 @@ class SubjectsController extends AppController
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['id'];
         $this->request->session()->write('Auth.session_id', $session_id); 
-
+        // Danh sách môn học của sinh viên
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;
         })->where(['Subjects.session_id'=>$session_id])->group('Subjects.code')->order(['Times.test_day' => 'ASC']);
@@ -59,7 +59,7 @@ class SubjectsController extends AppController
                 $test_day = date('d:m:Y',strtotime($test_temp['time']['test_day']));
                 $start_time = date('H:i',strtotime($test_temp['time']['start_time']));
                 $last_time = date('H:i',strtotime($test_temp['time']['last_time']));
-
+                // so sánh thời gian đăng kí có trùng nhau không
                 if (!empty($test_times))
                 {
                     foreach($test_times as $test_time)
@@ -76,6 +76,7 @@ class SubjectsController extends AppController
                 }
                 array_push($test_times,[$test_day,$start_time,$last_time]); 
             }
+            // Danh sách id các môn đã đăng kí
             $arr_id = array();
             foreach ($subjects as $subject)
             {
@@ -97,6 +98,7 @@ class SubjectsController extends AppController
              // die;
             $check_error = false;
             $check_user_test = $users_tests->find()->where(['user_id'=> $this->Auth->user('id')])->toArray();
+            // Trừ các môn dăng kí khí có đăng kí mới
             if (!empty($arr_id)) {
                     foreach ($arr_id as $key) {
                         $test = $tests->get($key);
@@ -108,6 +110,7 @@ class SubjectsController extends AppController
             $user_test_id = '';
             $test_id = '';
             foreach ($data['subject'] as $index => $value) {
+                // TÌm id của môn đã đăng kí
                 if (!empty($check_user_test)) {
                     foreach ($check_user_test as $key) {
                         if($key['test_id'] == $value) 
@@ -117,7 +120,7 @@ class SubjectsController extends AppController
 
                     }
                 }
-
+                // Nếu tìm thấy thì get user)test của môn đó còn không thì tạo 1 lượt đăng kkis mới
                 if ($user_test_id != '') $users_test = $users_tests->get($user_test_id);
                 else $users_test = $users_tests->newEntity();
 
@@ -127,7 +130,7 @@ class SubjectsController extends AppController
                 $test = $tests->get($value);
                 $test_room = $test_rooms->get($test->test_room_id);
                 $test->computer_registered++;
-
+                // So sánh khi số lượng đăng kí nhỏ hơn tổng số
                 if($test_room->total_computer >= $test->computer_registered)
                 {
                     $tests->save($test);
@@ -148,11 +151,12 @@ class SubjectsController extends AppController
                         $check_error = true;
                     }
                 }
-                else {
+                else { // số lượng đăng kí lớn hơn tổng số
                         $check_error = true;
                         $test = $tests->get($value);
                         foreach ($arr_id as $key) {
                             $check_test = $tests->get($key);
+                            // tìm id lúc trcs đăng kí vào công thêm vào số lượng
                             if($check_test->subject_id == $test->subject_id)
                             {
                                 $check_test->computer_registered++;
