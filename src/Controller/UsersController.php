@@ -231,10 +231,12 @@ class UsersController extends AppController
             $user = $userTable->find('all')->where(['token'=>$token])->first();
             $user->password = $mypass;
             $cuser = $user;
-            if($userTable->save($cuser) && !$users->errors())    
-            {  
-                $this->Flash->success(__('Thông tin đã được lưu.'));
-                return $this->redirect(['action'=>'login']);
+            if(!$users->errors()){
+                if($userTable->save($cuser))    
+                {  
+                    $this->Flash->success(__('Thông tin đã được lưu.'));
+                    return $this->redirect(['action'=>'login']);
+                }
             }
             else $this->Flash->error('Thông tin chưa được lưu.');
         }
