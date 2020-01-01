@@ -117,9 +117,9 @@ class SessionsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $session = $this->Sessions->get($id,['contain'=>'Subjects']);
         if ($this->Sessions->delete($session)) {
-            $this->Flash->success(__('The session has been deleted.'));
+            $this->Flash->success(__('Xóa thành công'));
         } else {
-            $this->Flash->error(__('The session could not be deleted. Please, try again.'));
+            $this->Flash->error(__('Xóa thất bại.'));
         }
 
         return $this->redirect(['action' => 'index']);
