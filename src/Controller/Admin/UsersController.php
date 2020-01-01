@@ -163,9 +163,9 @@ class UsersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $this->Flash->success(__('Xóa sinh viên thành công.'));
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error(__('Có lỗi xảy ra xin thử lại.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -279,8 +279,8 @@ class UsersController extends AppController
                 }
               }
               if($i === $dem ){
-                $this->Flash->set('The user has been saved.',['element' =>'success',]);
-              } else  $this->Flash->set('The user could not be saved. Please, try again.',['element' =>'error',]);
+                $this->Flash->set('Thêm sinh viên và môn học thành công.',['element' =>'success',]);
+              } else  $this->Flash->set('Có lỗi xảy ra xin thử lại.',['element' =>'error',]);
             }
             else $this->Flash->set('Môn của bạn bị trùng',['element' =>'error',]);
             
@@ -469,11 +469,11 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Auth->setUser($user);
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('Lưu thông tin thành công.'));
 
                 return $this->redirect(['controller'=>'users','action' => 'profile']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('Có lỗi xảy ra, xin thử lại.'));
         }
         $subjects = $this->Users->Subjects->find('list', ['limit' => 200]);
         $tests = $this->Users->Tests->find('list', ['limit' => 200]);

@@ -60,12 +60,12 @@ class SessionsTable extends Table
             ->scalar('name')
             ->maxLength('name', 60)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->notEmptyString('name','Bạn cần điền đủ thông tin');
 
         $validator
-            // ->scalar('year')
+            ->scalar('year')
             ->requirePresence('year', 'create')
-            ->notEmptyString('year');
+            ->notEmptyString('year','Bạn cần điền đủ thông tin');
 
         $validator
             ->dateTime('start_time')
