@@ -17,6 +17,7 @@ class SubjectsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    //Hiển thị các môn học
     public function index()
     {
         $session = $this->request->session();
@@ -24,24 +25,7 @@ class SubjectsController extends AppController
 
         $query = $this->Subjects->find() ->where(['Subjects.session_id'=>$session_id]);
         $subjects = $this->paginate($query);
-        $add =  $this->Subjects->newEntity();
         
-        // if ($this->request->is(['patch', 'post', 'put'])) {
-        //     $data = $this->request->getData();
-        //     foreach ($data['subject'] as $key => $value) {
-        //     $subject = $this->Subjects->get($key, [
-        //     'contain' => []
-        //     ]);
-        //     $subject = $this->Subjects->patchEntity($subject, $value);
-        //     if ($this->Subjects->save($subject)) {
-        //         $this->Flash->success(__('Sửa môn thi thành công'));
-
-        //         return $this->redirect(['action' => 'index']);
-        //     }
-        //     $this->Flash->error(__('Sửa môn thi không thành công'));
-        //     }
-        // }
-        // $this->set(compact('subject'));
         $this->set(compact('subjects'));
     }
 
@@ -65,6 +49,7 @@ class SubjectsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+    //Thêm 1 môn học
     public function add()
     {
         $subject = $this->Subjects->newEntity();
@@ -218,6 +203,8 @@ class SubjectsController extends AppController
         $users = $this->Subjects->Users->find('list', ['limit' => 200]);
         $this->set(compact('subject', 'testRooms', 'users'));
     }
+
+    //Sửa thông tin về 1 môn học
     public function edit($id = null)
     {
         $subject = $this->Subjects->get($id, [
