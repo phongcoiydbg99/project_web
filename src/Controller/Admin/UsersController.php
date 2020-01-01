@@ -113,22 +113,27 @@ class UsersController extends AppController
         $check_edit = false; 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $key = $data['subjects'];
-            unset($data['subjects']);
-            $data['subjects']['_ids'] = array();
-            foreach ($key as $index => $value) {
-                  if($index == 0) $check_edit = true;
+            if(!empty($data['subjects']))
+            {
+              $key = $data['subjects'];
+              unset($data['subjects']);
+              $data['subjects']['_ids'] = array();
+              foreach ($key as $index => $value) {
+                    if($index == 0) $check_edit = true;
                     array_push($data['subjects']['_ids'],(string)$index);
-                }
+                  }
+            }
+            // dd($data); die;
             if (!$check_edit)
             {
               $user = $this->Users->patchEntity($user, $data,['validate' => 'add']);
+              // dd($user); die;
               if ($this->Users->save($user)) {
-                  $this->Flash->success(__('The user has been saved.'));
+                  $this->Flash->success(__('Lưu sinh viên thành công'));
 
                   return $this->redirect(['action' => 'index']);
               }else{
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                $this->Flash->error(__('Có lỗi xảy ra xin thử lại'));
                 // debug($user->errors()); die;
               }
             }

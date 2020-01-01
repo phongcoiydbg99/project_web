@@ -62,7 +62,7 @@ else {?>
     <div class="card">
         <div class="card-header"><h3>Đăng kí thi</h3></div>
         <?= $this->Form->create() ?>
-        <div class="card-body table-responsive p-0" style="height:250px">
+        <div class="card-body table-responsive p-0" style="height:300px">
             <table class="table table-head-fixed" cellpadding="0" cellspacing="0">
                 <thead class="thead-light">
                 <tr>

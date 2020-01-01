@@ -49,7 +49,7 @@
                         echo $this->Form->controls(
                             ['username' => ['class' => 'form-control','required' => false,'id' => 'username','label' => ['text'=>'Mã sinh viên']],
                                                 
-                             'password' => ['class' => 'form-control','required' => false,'id' => 'password','label' => ['text'=>'Mật khẩu']],
+                             'password' => ['class' => 'form-control','required' => false,'id' => 'password','label' => ['text'=>'Mật khẩu'],'value'=> $user->password],
                              'first_name' => ['class' => 'form-control','required' => false,'id' => 'first_name','label' => ['text'=>'Họ và tên đệm']],
                              'last_name' => ['class' => 'form-control','required' => false,'id' => 'last_name','label' => ['text'=>'Tên']],
                              'date_birth' => ['class' => 'form-control datepicker','required' => false,'type'=> 'text','id'=>'datepicker','value'=>date("Y-m-d", strtotime($user->date_birth)),'label' => ['text'=>'Ngày sinh']],
@@ -93,8 +93,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                     <!-- <?= $this->Form->button('<i class="far fa-trash-alt">',['class' => "btn btn-danger ml-2",'onclick'=>'deleteTests('.$i.','.$subject->_joinData->id.')','escape' => false]) ?> -->
-                                     <button type="button" class="ml-2 btn btn-danger" onclick="deleteTests(<?=$i?>,<?=$subject->_joinData->id?>)"><i class="far fa-trash-alt"></i></button>
+                                     <button type="button" class="ml-2 btn btn-danger" onclick="deleteTests(<?=$i?>,<?=$subject['_joinData']['id']?>)"><i class="far fa-trash-alt"></i></button>
                                 </td>
                             </tr>    
                         <?php } ?>

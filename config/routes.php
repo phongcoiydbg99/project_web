@@ -114,8 +114,8 @@ Router::prefix('admin', function (RouteBuilder $routes) {
     ['id' => '\d+', 'pass' => ['id']]);
     
     $routes->connect('/quan-ly-sinh-vien', ['controller' => 'users', 'action' => 'index']);
-    $routes->connect('/phong-thi', ['controller' => 'testRooms', 'action' => 'index']);
-    $routes->connect('/phong-thi/them-phong-thi', ['controller' => 'testRooms', 'action' => 'add']);
+    $routes->connect('/phong-thi', ['controller' => 'TestRooms', 'action' => 'index']);
+    $routes->connect('/phong-thi/them-phong-thi', ['controller' => 'TestRooms', 'action' => 'add']);
     $routes->connect('/mon-thi', ['controller' => 'subjects', 'action' => 'index']);
     $routes->connect('/ki-thi/them-ki-thi', ['controller' => 'sessions', 'action' => 'add']);
     $routes->connect('/ki-thi/sua-ki-thi', ['controller' => 'sessions', 'action' => 'edit']);
@@ -123,7 +123,7 @@ Router::prefix('admin', function (RouteBuilder $routes) {
 
     $routes->connect('/quan-ly-sinh-vien/sua-sinh-vien/:id',['controller' => 'users', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);
-    $routes->connect('/phong-thi/sua-phong-thi/:id',['controller' => 'testRooms', 'action' => 'edit'],
+    $routes->connect('/phong-thi/sua-phong-thi/:id',['controller' => 'TestRooms', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);
     $routes->connect('/mon-thi/sua-mon-thi/:id',['controller' => 'subjects', 'action' => 'edit'],
     ['id' => '\d+', 'pass' => ['id']]);
