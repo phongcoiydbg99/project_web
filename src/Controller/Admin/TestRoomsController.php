@@ -51,11 +51,11 @@ class TestRoomsController extends AppController
         if ($this->request->is('post')) {
             $testRoom = $this->TestRooms->patchEntity($testRoom, $this->request->getData());
             if ($this->TestRooms->save($testRoom)) {
-                $this->Flash->success(__('The test room has been saved.'));
+                $this->Flash->success(__('Đã thêm phòng thi.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The test room could not be saved. Please, try again.'));
+            $this->Flash->error(__('Thêm phòng thi bị lỗi. Xin thử lại!'));
         }
         $this->set(compact('testRoom'));
     }
@@ -75,11 +75,11 @@ class TestRoomsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $testRoom = $this->TestRooms->patchEntity($testRoom, $this->request->getData());
             if ($this->TestRooms->save($testRoom)) {
-                $this->Flash->success(__('The test room has been saved.'));
+                $this->Flash->success(__('Sửa phòng thi thành công.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The test room could not be saved. Please, try again.'));
+            $this->Flash->error(__('Sửa phòng thi thất bại. Xin thử lại!'));
         }
         $this->set(compact('testRoom'));
     }
@@ -96,9 +96,9 @@ class TestRoomsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $testRoom = $this->TestRooms->get($id);
         if ($this->TestRooms->delete($testRoom)) {
-            $this->Flash->success(__('The test room has been deleted.'));
+            $this->Flash->success(__('Xóa thành công.'));
         } else {
-            $this->Flash->error(__('The test room could not be deleted. Please, try again.'));
+            $this->Flash->error(__('Xóa thất bại. Xin thử lại!'));
         }
 
         return $this->redirect(['action' => 'index']);
