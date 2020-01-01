@@ -32,7 +32,7 @@
                     echo $this->Form->controls(
                         ['name' => ['class' => 'form-control ','required' => false,'id' => 'name','label' => ['text'=>'Tên kì thi:']],
                                             
-                         'year' => ['class' => 'form-control ','type'=>'year','minYear'=>'2014','maxYear'=>'2030','required' => false,'id' => 'year','value'=>$session->year,'label' => ['text'=>'Năm:']],
+                         'year' => ['class' => 'form-control ','type'=>'year','required' => false,'id' => 'year','value'=>$session->year,'label' => ['text'=>'Năm:']],
                          'start_time' => ['class' => 'form-control','required' => false,'type'=> 'text','value'=>date("Y-m-d H:i:s", strtotime($session->start_time)),'label' => ['text'=>'Thời gian bắt đầu:']],
                          'last_time' => ['class' => 'form-control','required' => false,'type'=> 'text','value'=>date("Y-m-d H:i:s", strtotime($session->last_time)),'label' => ['text'=>'Thời gian kết thúc:']],
                         ],['legend' => '']
