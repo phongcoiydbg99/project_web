@@ -17,6 +17,14 @@ class TestsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    public function isAuthorized($user = null)
+    {
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            $this->redirect('/admin/ki-thi');
+        }
+        return parent::isAuthorized($user);
+    }
+    
     public function index()
     {
         $this->paginate = [

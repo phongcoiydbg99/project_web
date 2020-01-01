@@ -102,7 +102,7 @@
                             </tbody>
                         </table>  
                     <div class="card-footer">
-                    <?= $this->Form->button('Submit',['class'=>'btn btn-primary float-right']) ?>
+                    <?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary float-right']) ?>
                     </div>
                 </div>
             </div>
