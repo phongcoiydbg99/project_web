@@ -62,14 +62,15 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
+    // Định tuyến URL phần user
     $routes->connect('/', ['controller' => 'users', 'action' => 'login']);
     $routes->connect('/login', ['controller' => 'users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'users', 'action' => 'logout']);
     $routes->connect('/dang-ki', ['controller' => 'subjects', 'action' => 'index']);
     $routes->connect('/lich-thi', ['controller' => 'subjects', 'action' => 'view_test']);
-    $routes->connect('/users/subjects/delete_test', ['controller' => 'subjects', 'action' => 'delete_test']);
+    // $routes->connect('/users/subjects/delete_test', ['controller' => 'subjects', 'action' => 'delete_test']);
     $routes->connect('/tai-khoan/quen-mat-khau', ['controller' => 'users', 'action' => 'forgotpassword']);
-    $routes->connect('/tai-khoan/dat-lai-mat-khau', ['controller' => 'users', 'action' => 'resetpassword']);
+    // $routes->connect('/tai-khoan/dat-lai-mat-khau', ['controller' => 'users', 'action' => 'resetpassword']);
     $routes->connect('/tai-khoan/thay-doi-mat-khau', ['controller' => 'users', 'action' => 'changepassword']);
     $routes->connect('/tai-khoan/ho-so', ['controller' => 'users', 'action' => 'profile']);
     
@@ -101,6 +102,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
 
+// Định tuyến URL phần admin
 Router::prefix('admin', function (RouteBuilder $routes) {
     // Because you are in the admin scope,
     // you do not need to include the /admin prefix
@@ -117,7 +119,7 @@ Router::prefix('admin', function (RouteBuilder $routes) {
     $routes->connect('/phong-thi/them-phong-thi', ['controller' => 'TestRooms', 'action' => 'add']);
     $routes->connect('/mon-thi', ['controller' => 'subjects', 'action' => 'index']);
     $routes->connect('/ki-thi/them-ki-thi', ['controller' => 'sessions', 'action' => 'add']);
-    $routes->connect('/ki-thi/sua-ki-thi', ['controller' => 'sessions', 'action' => 'edit']);
+    $routes->connect('/ki-thi/sua-ki-thi/:id', ['controller' => 'sessions', 'action' => 'edit'],['id' => '\d+', 'pass' => ['id']]);
     $routes->connect('/quan-ly-sinh-vien/them-sinh-vien', ['controller' => 'users', 'action' => 'add']);
 
     $routes->connect('/quan-ly-sinh-vien/sua-sinh-vien/:id',['controller' => 'users', 'action' => 'edit'],

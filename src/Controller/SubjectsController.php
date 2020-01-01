@@ -20,12 +20,14 @@ class SubjectsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+    // Đăng ký
     public function index()
     {
         $sessions = TableRegistry::getTableLocator()->get('sessions');
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['id'];
         $this->request->session()->write('Auth.session_id', $session_id); 
+
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Users','Tests.Times'])->matching('Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;
         })->where(['Subjects.session_id'=>$session_id])->group('Subjects.code')->order(['Times.test_day' => 'ASC']);
@@ -187,10 +189,12 @@ class SubjectsController extends AppController
     }
     public function viewTest()
     {
+        // Lấy bảng sessions
         $sessions = TableRegistry::getTableLocator()->get('sessions');
+        // Lấy session đang được chọn
         $session = $sessions->find()->where(['choose'=> 1])->first();
         $session_id = $session['id'];
-        
+        // Lấy thông tin về môn học đã đăng ký của sinh viên
         $query = $this->Subjects->find()->contain(['Tests.TestRooms','Tests.Times','Tests.Users'])->matching('Tests.Users', function($q){ return $q->where(['Users.id' => $this->Auth->user('id')]);
         })->matching('Tests.Times', function($q){ return $q;})->where(['Subjects.session_id'=>$session_id])->order(['Times.test_day' => 'ASC']);
         $subjects = $this->paginate($query);
