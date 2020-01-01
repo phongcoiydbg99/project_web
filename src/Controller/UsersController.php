@@ -42,10 +42,12 @@ class UsersController extends AppController
             $this->redirect(array('controller' => 'users', 'action' => 'index','scope' => '/'));
             return true;
         }
-
-        $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            $this->redirect(array('controller' => 'users', 'action' => 'index','prefix' => 'admin'));
+        }
         return parent::isAuthorized($user);
     }
+
     public function index()
     {
         $users = $this->paginate($this->Users);
