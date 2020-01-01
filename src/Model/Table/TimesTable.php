@@ -75,4 +75,10 @@ class TimesTable extends Table
 
         return $validator;
     }
+    public function buildRules(RulesChecker $rules)
+    {
+        // $rules->add($rules->isUnique(['test_day','start_time','last_time']));
+
+        return $rules;
+    }
 }

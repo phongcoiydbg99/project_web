@@ -51,16 +51,38 @@ class TimesController extends AppController
         $session_last_time = date("Y-m-d", strtotime($session_last_time));
         if ($this->request->is(['patch', 'post', 'put'])) {
             $last_time = $this->request->getData('test_day');
+            $data = $this->request->getData();
             if($session_last_time < $last_time)
             {
-              $time = $this->Times->patchEntity($time, $this->request->getData());
-              $time->test_day = $this->request->getData('test_day');
-              if ($this->Times->save($time)) {
-                  $this->Flash->success(__('Ca thi đã được sửa'));
-
-                  return $this->redirect(['action' => 'view',$id]);
+              $check = false;
+              $test_day =  $data['test_day'];
+              $start_time= $data['start_time'];
+              $last_time= $data['last_time'];
+              $check_times = $this->Times->find()->where(['test_day'=>$data['test_day']]);
+              foreach ($check_times as $check_time) {
+                if($check_time->id != $id)
+                {
+                  $test_time[1] = date('H:i',strtotime($check_time['start_time']));
+                  $test_time[2] = date('H:i',strtotime($check_time['last_time']));
+                  // dump($test_time[1].' '.$test_time[2]);
+                  if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
+                  {
+                      $check = true;
+                  }
+                }
               }
-              $this->Flash->error(__('Kiểu thời gian của bạn không đúng'));
+              // die;
+              if (!$check)
+              {
+                $time = $this->Times->patchEntity($time, $this->request->getData());
+                $time->test_day = $this->request->getData('test_day');
+                if ($this->Times->save($time)) {
+                    $this->Flash->success(__('Ca thi đã được sửa'));
+
+                    return $this->redirect(['action' => 'view',$id]);
+                }
+                $this->Flash->error(__('Kiểu thời gian của bạn không đúng'));
+              } else $this->Flash->error(__('Ca thi đã trùng'));
             } else  $this->Flash->error(__('Thời gian thi nhỏ hơn thời gian đăng ký'));
         }
         $subjects = $this->Times->Tests->Subjects->find('list',['keyField' => 'id',
@@ -259,13 +281,34 @@ class TimesController extends AppController
             'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = $this->Times->patchEntity($time, $this->request->getData());
-            if ($this->Times->save($time)) {
-                $this->Flash->success(__('The time has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            $data = $this->request->getData();
+            $check = false;
+            $test_day =  $data['test_day'];
+            $start_time= $data['start_time'];
+            $last_time= $data['last_time'];
+            $check_times = $this->Times->find()->where(['test_day'=>$data['test_day']]);
+            foreach ($check_times as $check_time) {
+              if($check_time->test_day == $data['test_day'])
+              {
+                $test_time[1] = date('H:i',strtotime($check_time['start_time']));
+                $test_time[2] = date('H:i',strtotime($check_time['last_time']));
+                if (($start_time > $test_time[1] && $start_time < $test_time[2])||($last_time > $test_time[1]&& $last_time < $test_time[2]) || ($start_time == $test_time[1] && $last_time == $test_time[2]))
+                {
+                    $check = true;
+                }
+              }
             }
-            $this->Flash->error(__('The time could not be saved. Please, try again.'));
+            if (!$check)
+            {
+              $time = $this->Times->patchEntity($time, $this->request->getData());
+              if ($this->Times->save($time)) {
+                  $this->Flash->success(__('Ca thi đã sửa thành công.'));
+
+                  return $this->redirect(['action' => 'index']);
+              }
+              $this->Flash->error(__('Xảy ra lỗi yêu cầu nhập lại'));
+            }
+            else $this->Flash->error(__('Ca thi đã trùng'));
         }
         $this->set(compact('time'));
     }
