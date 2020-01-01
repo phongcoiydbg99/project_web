@@ -223,15 +223,22 @@ class UsersController extends AppController
     
     public function resetpassword($token){
         $this->viewBuilder()->setLayout('login');
+        $users = $this->Users->newEntity();
         if($this->request->is('post')){
+            $cuser = $this->Users->patchEntity($users, $this->request->getData(),['validate' => 'firstlogin']);
             $mypass = $this->request->getData('password');
             $userTable = TableRegistry::get('users');
             $user = $userTable->find('all')->where(['token'=>$token])->first();
             $user->password = $mypass;
-            if($userTable->save($user)){
+            $cuser = $user;
+            if($userTable->save($cuser) && !$users->errors())    
+            {  
+                $this->Flash->success(__('Thông tin đã được lưu.'));
                 return $this->redirect(['action'=>'login']);
             }
+            else $this->Flash->error('Thông tin chưa được lưu.');
         }
+        $this->set(compact('users'));
     }
 
     public function firstlogin()
