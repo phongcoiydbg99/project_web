@@ -45,6 +45,7 @@ $cakeDescription = 'ABCUni';
     <?= $this->Html->script('alertify.min.js') ?>
     <?= $this->Html->script('adminlte.min.js') ?>
     <?= $this->Html->script('myfile.js') ?>
+    <?= $this->Html->script('common.js') ?>
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 

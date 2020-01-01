@@ -65,7 +65,6 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/', ['controller' => 'users', 'action' => 'login']);
     $routes->connect('/login', ['controller' => 'users', 'action' => 'login']);
     $routes->connect('/logout', ['controller' => 'users', 'action' => 'logout']);
-    $routes->connect('/index', ['controller' => 'users', 'action' => 'index']);
     $routes->connect('/dang-ki', ['controller' => 'subjects', 'action' => 'index']);
     $routes->connect('/lich-thi', ['controller' => 'subjects', 'action' => 'view_test']);
     $routes->connect('/users/subjects/delete_test', ['controller' => 'subjects', 'action' => 'delete_test']);
