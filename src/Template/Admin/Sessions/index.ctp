@@ -37,8 +37,8 @@
                         <tr>
                             <td><?= h($session->name) ?></td>
                             <td><?= h($session->year) ?></td>
-                            <td><?= h($session->start_time) ?></td>
-                            <td><?= h($session->last_time) ?></td>
+                            <td><?= date('d/m/Y, h:i A',strtotime($session['start_time'])) ?></td>
+                            <td><?= date('d/m/Y, h:i A',strtotime($session['last_time'])) ?></td>
                             <td class="actions"> 
                                 <?= $this->Html->link('<i class="fas fa-tasks"></i>', ['action' => 'view', $session->id],['class' => 'btn btn-success', 'escape' => false]) ?>
                                 <?= $this->Html->link('<i class="fas fa-pencil-alt"></i>', ['action' => 'edit', $session->id],['class' => 'btn btn-warning', 'escape' => false]) ?>

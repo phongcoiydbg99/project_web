@@ -56,9 +56,12 @@ class SessionsController extends AppController
         $session = $this->Sessions->newEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            // dump($data['year']['year']);
             if ($data['start_time'] < $data['last_time'])
             {
                 $session = $this->Sessions->patchEntity($session, $this->request->getData());
+                $session->year = $data['year']['year'];
+                // dd($session);die;
                 if ($this->Sessions->save($session)) {
                     $this->Flash->success(__('Bạn đã lưu thành công.'));
 

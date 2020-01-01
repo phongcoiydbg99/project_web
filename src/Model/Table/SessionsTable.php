@@ -63,7 +63,7 @@ class SessionsTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->scalar('year')
+            // ->scalar('year')
             ->requirePresence('year', 'create')
             ->notEmptyString('year');
 

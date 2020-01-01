@@ -56,6 +56,7 @@ class AppController extends Controller
                     ]
                 ]
             ],
+            'unauthorizedRedirect' => 'false',
             'loginAction' => '/login',
             // 'loginRedirect' => ['controller' => 'subjects', 'action' => 'view_test'],
             'logoutRedirect' => ['controller' => 'Users', 'action' =>'login'],
@@ -76,6 +77,7 @@ class AppController extends Controller
         }
         // Only admins can access admin functions
         if ($this->request->getParam('prefix') === 'admin') {
+
             return (bool)($user['role'] === 'admin');
         }
 
