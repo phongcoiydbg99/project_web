@@ -47,6 +47,7 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $this->loadComponent('Auth', [
+            'authError'    => 'Bạn không có quyền truy cập.',
             'authenticate' => [
                 'Form' => [
                     'fields' => [
