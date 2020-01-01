@@ -37,4 +37,10 @@
 </fieldset>
 <?= $this->Form->button('Xác nhận',['class'=>'btn btn-primary']) ?>
 <?= $this->Form->end() ?>
-
+<script>
+    $('.datepicker').datepicker({
+                uiLibrary: 'bootstrap4',
+                format: 'yyyy-mm-dd',
+                iconsLibrary: 'fontawesome',
+            });
+</script>

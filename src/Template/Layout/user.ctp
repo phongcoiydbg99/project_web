@@ -40,6 +40,9 @@ $cakeDescription = 'ABCUni';
     <?= $this->Html->script('jquery-3.4.1.js') ?>
     <?= $this->Html->script('alertify.min.js') ?>
     <?= $this->Html->script('myfile.js') ?>
+     <?= $this->Html->script('common.js') ?>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         var csrfToken = "<?= $this->request->getParam('_csrfToken') ?>"
         var baseUrl = "<?= $this->Url->build('/', true) ?>";
