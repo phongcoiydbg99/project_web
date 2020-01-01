@@ -16,8 +16,7 @@
         <div class="card-body">
             <div class="row">
                 <?= $this->Form->control('<i class="fas fa-print"></i> In kết quả',['class'=>'btn btn-primary ','type'=> 'button','id'=>'search','label'=>false,'onclick'=>'printTest()']) ?>
-            <!-- <?= $this->Form->control('<i class="far fa-save"></i> Xuất kết quả ra file Word',['class'=>'btn btn-success float-left ml-2','type'=> 'button','id'=>'export','label'=>false,'onclick'=>'exportNote()']) ?> 
- -->
+            <!-- <?= $this->Form->control('<i class="far fa-save"></i> Xuất kết quả ra file Word',['class'=>'btn btn-success float-left ml-2','type'=> 'button','id'=>'export','label'=>false,'onclick'=>'exportNote()']) ?> -->
             </div>
             <div class="print_area mt-5" id = 'print_area'>
                 <table style="width: 100%; border: none; border-collapse: collapse;">

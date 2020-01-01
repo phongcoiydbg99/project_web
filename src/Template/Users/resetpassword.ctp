@@ -7,7 +7,7 @@
 		    <div class="card-body">
 		    <?php
 		        echo $this->Form->create();
-		        echo $this->Form->input('password', ['autofocus' => true, 'label' => 'Mật khẩu mới', 'required' => true,'class' => 'form-control is-invalid','placeholder' => 'Nhập password']);
+		        echo $this->Form->input('password', ['autofocus' => true, 'label' => 'Mật khẩu mới', 'required' => true,'class' => 'form-control','placeholder' => 'Nhập password']);
 			    echo $this->Form->button('Xác nhận',array('class' =>'btn btn-primary','style'=>'margin-top: 20px;'));
 		        echo $this->Form->end();
 		    ?>

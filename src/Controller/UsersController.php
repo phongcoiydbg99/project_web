@@ -182,38 +182,42 @@ class UsersController extends AppController
     }
     public function forgotpassword(){
         $this->viewBuilder()->setLayout('login');
+        $users = $this->Users->newEntity();
         if ($this->request->is('post')){
             $myemail = $this->request->getData('email');
             $mytoken = Security::hash(Security::randomBytes(25));
             $userTable = TableRegistry::get('Users');
             $user = $userTable->find('all')->where(['email'=>$myemail])->first();
-            if(!empty($user))
+            if(!empty($myemail))
             {
-                $user->password = '';
-                $user->token = $mytoken;
-                if($userTable->save($user)){
-                    $this->Flash->success('reset password link have been sent');
-                    
-                    TransportFactory::setConfig('gmail', [
-                        'host' => 'ssl://smtp.gmail.com',
-                        'port' => 465,
-                        'username' => 'projectweb.993@gmail.com',
-                        'password' => 'phongcoibg99',
-                        'className' => 'Smtp'
-                    ]);
+                if(!empty($user))
+                {
+                    $user->password = '';
+                    $user->token = $mytoken;
+                    $users = $user;
+                    if($userTable->save($users)){
+                        $this->Flash->success('Reset password link have been sent');
+                        
+                        TransportFactory::setConfig('gmail', [
+                            'host' => 'ssl://smtp.gmail.com',
+                            'port' => 465,
+                            'username' => 'projectweb.993@gmail.com',
+                            'password' => 'phongcoibg99',
+                            'className' => 'Smtp'
+                        ]);
+                    }
+                    $email = new Email('default');
+                    $email->Transport('gmail');
+                    $email->emailFormat('html');
+                    $email->from('projectweb.993@gmail.com', 'Admin');
+                    $email->subject('please confirm your reset password');
+                    $email->to($myemail);
+                    $email->send('hello ' . $myemail . '<br/>Plese click link below to reset your password<br/><br?> <a href="http://localhost/project_web/users/resetpassword/'. $mytoken.'" >Click</a>');  
                 }
-                $email = new Email('default');
-                $email->Transport('gmail');
-                $email->emailFormat('html');
-                $email->from('projectweb.993@gmail.com', 'Admin');
-                $email->subject('please confirm your reset password');
-                $email->to($myemail);
-                $email->send('hello ' . $myemail . '<br/>Plese click link below to reset your password<br/><br?> <a href="http://localhost/project_web/users/resetpassword/'. $mytoken.'" >Click</a>');  
-            }
-            else $this->Flash->error('Email của bạn không tồn tại');            
+                else $this->Flash->error('Email của bạn không tồn tại');     
+            } else $this->Flash->error('Bạn chưa điền đủ thông tin');         
         }
-
-
+        $this->set(compact('users'));
     }
 
     

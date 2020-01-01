@@ -217,3 +217,142 @@ function deleteTest(id)
         $(".subject_content"+id).remove();
     }
     
+function selectTestday(check_name,subject_id){
+        var check_day = check_name.value;
+        console.log(check_day);
+    $.ajax({
+        url: baseUrl + '/subjects/checkTestday',
+        type: 'post',
+        data: {
+            check_name: check_name.value,
+            subject_id: subject_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        dataType: 'html',
+        success: function (res) {
+            $('.content_subject'+subject_id).html(res); 
+        },
+        error: function () {
+
+        }
+    })    
+    }
+    function selectTesttime(check_name,subject_id){
+        console.log($('#test_day'+subject_id).val());
+        var chech_day = $('#test_day'+subject_id).val();
+    $.ajax({
+        url: baseUrl + '/subjects/checkTesttime',
+        type: 'post',
+        data: {
+            check_day: chech_day,
+            check_name: check_name.value,
+            subject_id: subject_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        dataType: 'html',
+        success: function (res) {
+            $('#test_time_'+subject_id).html(res);
+            console.log($('#test_time_'+subject_id).val());
+            var id = $('#test_time_'+subject_id).val();
+            $.ajax({
+                url: baseUrl + '/subjects/checkTest',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                dataType: 'html',
+                success: function (ress) {
+                    $('.test'+subject_id).html(ress);
+                },
+                error: function () {
+
+                }
+            })    
+        },
+        error: function () {
+
+        }
+    })    
+    }
+        
+    function selectTest(check_test,subject_id)
+    {
+        var id = $(check_test).val();
+        $.ajax({
+            url: baseUrl + '/subjects/checkTest',
+            type: 'post',
+            data: {
+                id: id
+            },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            dataType: 'html',
+            success: function (ress) {
+                $('.test'+subject_id).html(ress);
+            },
+            error: function () {
+
+            }
+        })    
+    }
+
+
+    function testCheckBox(check,subject_id,test_room_id,id) {
+        if ($(check).is(':checked'))
+        {
+            var subject_code = $(check).parent().parent().find('.subject_code').text();
+            var test_day = $(check).parent().parent().find('.test_day').text();
+            var test_time = $(check).parent().parent().find('.test_time').text();
+            arrCheck.push([subject_code,test_day,test_time.slice(0,5),test_time.slice(-5)]);
+            console.log(arrCheck);
+                $( ".checkBox" ).each(function(index) {
+                    var check_code = $(this).parent().parent().find('.subject_code').text();
+                    var check_day = $(this).parent().parent().find('.test_day').text();
+                    var check_time = $(this).parent().parent().find('.test_time').text();
+                    var start_time = check_time.slice(0,5);
+                    var last_time = check_time.slice(-5);
+                    if ( subject_code == check_code)
+                    {
+                        $(this).prop('disabled',true);
+                    }
+                    else {
+                        for (var i =0 ; i < arrCheck.length;i++)
+                        {
+                            if (check_day == arrCheck[i][1])
+                            {
+                                if ((start_time >= arrCheck[i][2]&& start_time <= arrCheck[i][3])||(last_time >= arrCheck[i][2]&& last_time <= arrCheck[i][3]))
+                                    $(this).prop('disabled',true);
+                            }
+                        }
+                    }
+                    // $(check).prop('disabled',false);
+                });
+            $.ajax({
+                url: baseUrl + '/subjects/checkBox',
+                type: 'post',
+                data: {
+                    subject_id: subject_id,
+                    test_room_id: test_room_id,
+                    id : id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                dataType: 'html',
+                success: function (res) {
+                    $('.check_content').append(res);
+                },
+                error: function () {
+
+                }
+            })
+        }
+    }
